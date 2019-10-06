@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
 @Entity
-public class User {
+public class UserModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ package murraco;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import murraco.model.UserModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import murraco.model.Role;
-import murraco.model.User;
 import murraco.service.UserService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -40,7 +40,7 @@ public class JwtAuthServiceApp implements CommandLineRunner {
 
   @Override
   public void run(String... params) throws Exception {
-    User admin = new User();
+    UserModel admin = new UserModel();
     admin.setUsername("admin");
     admin.setPassword("admin");
     admin.setEmail("admin@email.com");
@@ -48,7 +48,7 @@ public class JwtAuthServiceApp implements CommandLineRunner {
 
     userService.signup(admin);
 
-    User client = new User();
+    UserModel client = new UserModel();
     client.setUsername("client");
     client.setPassword("client");
     client.setEmail("client@email.com");
