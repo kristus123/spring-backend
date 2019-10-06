@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Bean;
 import murraco.model.Role;
 import murraco.model.User;
 import murraco.service.UserService;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @SpringBootApplication
 public class JwtAuthServiceApp implements CommandLineRunner {
@@ -20,8 +24,13 @@ public class JwtAuthServiceApp implements CommandLineRunner {
   @Autowired
   UserService userService;
 
+
+
+
+
   public static void main(String[] args) {
     SpringApplication.run(JwtAuthServiceApp.class, args);
+
   }
 
   @Bean
