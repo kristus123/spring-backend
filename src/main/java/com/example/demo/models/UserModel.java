@@ -18,7 +18,7 @@ public class UserModel {
         this.password = password;
     }
 
-    @Id @GeneratedValue private int id;
+    @Id @GeneratedValue private Integer id;
 
     @Column
     private String username;
@@ -29,5 +29,8 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole userRole;
+
+    @Transient
+    private String passwordConfirm;
 
 }
