@@ -1,0 +1,12 @@
+language: java
+dist: trusty
+jdk:
+  oraclejdk8
+
+before_install: chmod +x mvnw
+
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      script:  mvn clean verify
