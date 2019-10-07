@@ -3,5 +3,6 @@ jdk:
   oraclejdk8
 jobs:
   include:
-    - stage: test
-      script mvn clean verify
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: mvn clean verify
