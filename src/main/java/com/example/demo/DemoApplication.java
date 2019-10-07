@@ -12,6 +12,7 @@ public class DemoApplication {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
+
 		return new BCryptPasswordEncoder(12);
 	}
 
