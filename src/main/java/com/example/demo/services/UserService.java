@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -19,9 +20,7 @@ public class UserService {
     }
 
     public boolean login(String username, String password) {
-        final String PASSWORD_HASH = userRepository.findByUsername(username).getPassword();
-
-
+        final String PASSWORD_HASH = userRepository.findByUsername(username).get().getPassword();
 
         return passwordEncoder.matches(PASSWORD_HASH, password);
     }

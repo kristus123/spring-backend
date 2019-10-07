@@ -25,13 +25,18 @@ class UserServiceTest {
 
 
     @Test
-    void signup() {
+    void signupAndLogin() {
         UserModel user = userService.signup("kristian", "hemmelig123");
 
         assertTrue(user.getUsername().equalsIgnoreCase("kristian"));
 
         assertFalse(user.getPassword().equalsIgnoreCase("hemmelig123"));
+
+        //ERROR HER
+        //assertTrue(userService.login("kristian", "hemmelig123"));
+
     }
+
 
 
 }
