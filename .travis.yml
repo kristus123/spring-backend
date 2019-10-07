@@ -3,10 +3,13 @@ dist: trusty
 jdk:
   oraclejdk8
 
-before_install: chmod +x mvnw
+before_install:
+  - chmod +x mvnw
+  - pip install --user codecov
 
 jobs:
   include:
     - stage: "Tests"
       name: "Unit Tests"
-      script:  mvn clean verify
+      script:  mvn jacoco:prepare-agent test jacoco:report
+      after_success: codecov
