@@ -3,8 +3,10 @@ package com.example.demo.models;
 import com.example.demo.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -23,7 +25,9 @@ public class UserModel {
     @Column
     private String username;
 
-    @Column
+    @Transient
+    @Column(length = 80)
+    @Size(min = 8 , max = 60)
     private String password;
 
     @Enumerated(EnumType.STRING)
