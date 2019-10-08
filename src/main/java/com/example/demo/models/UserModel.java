@@ -7,34 +7,44 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="USER_MODEL")
 @Getter
 @Setter
 public class UserModel {
+  
+    public UserModel() {}
+    public UserModel(String username, String password, UserRole... roles) {
+        this.username = username;
+        this.password = password;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+        String[] liste = new String[roles.length];
+
+        for (int i = 0 ; i < roles.length ; i++) {
+            liste[i] = roles[i].getRole();
+        }
+
+        this.roles = liste;
+
+        System.out.println(this.roles);
+    }
+
+
+
+    @Id @GeneratedValue private int id;
+ 
 
     private String username;
 
-    private String password;
-
-    @Enumerated(EnumType.STRING)
     @Column
-    private UserRole userRole;
+    private String[] roles;
 
-    public UserModel() {}
-    public UserModel(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
-    public UserModel(String username, String password, UserRole userRole) {
-        this.username = username;
-        this.password = password;
-        this.userRole = userRole;
-    }
+    @Transient
+    @Column(length = 80)
+    @Size(min = 8 , max = 60)
+    private String password;
 }

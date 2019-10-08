@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -26,7 +27,7 @@ class UserControllerTest {
 
     @Test
     void signup() throws Exception {
-        mockMvc.perform(get("/v1/users/signup")
+        mockMvc.perform(post("/v1/users/signup")
             .param("username", "kristian")
             .param("password", "password"))
             .andExpect(content().json("{'username' : 'kristian'}")
