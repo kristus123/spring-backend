@@ -10,10 +10,12 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -28,7 +30,7 @@ public class AssociationController {
 
 
     @PostMapping("/create/association")
-    public Resource<AssociationModel> newPlayer(@RequestBody AssociationModel associationModel) throws URISyntaxException {
+    public Resource<AssociationModel> newAssociation(@RequestBody AssociationModel associationModel) throws URISyntaxException {
 
         Resource<AssociationModel> resource = associationResourceAssembler.toResource(associationService.save(associationModel));
         /*
@@ -40,8 +42,34 @@ public class AssociationController {
         return resource;
     }
 
+    @PutMapping("/update/association/{id}")
+    public Resource<AssociationModel> updateAssociation(@PathVariable Integer id, @RequestBody AssociationModel associationModel) {
+        if (!associationService.findById(id).isPresent()) {
+            //ResponseEntity.badRequest().build();
+        }
+
+        // TODO PANDA: check IDs between the two instances??
+
+        //return ResponseEntity.ok(associationService.save(associationModel));
+        return associationResourceAssembler.toResource(associationService.save(associationModel));
+    }
+
+    @DeleteMapping("/delete/association/{id}")
+    public Resource<AssociationModel> deleteAssociation(@PathVariable Integer id) {
+        Optional<AssociationModel> association = associationService.findById(id);
+        if (!association.isPresent()) {
+            //ResponseEntity.badRequest().build();
+        }
+
+        associationService.deleteById(id);
+
+        //return ResponseEntity.ok().build();
+        return associationResourceAssembler.toResource(association.get());
+    }
+
+
     @GetMapping("/browse/association/{id}")
-    public Resource<AssociationModel> onePlayer(@PathVariable Integer id) {
+    public Resource<AssociationModel> oneAssociation(@PathVariable Integer id) {
 
         AssociationModel association = associationService.findById(id)
                 .orElseThrow(() -> new AssociationNotFoundException(id));
@@ -50,7 +78,7 @@ public class AssociationController {
     }
 
     @GetMapping("/browse/associations")
-    public Resources<Resource<AssociationModel>> allPlayers() {
+    public Resources<Resource<AssociationModel>> allAssociations() {
 
         List<Resource<AssociationModel>> associations = associationService.findAll()
                 .stream()
@@ -58,6 +86,6 @@ public class AssociationController {
                 .collect(Collectors.toList());
 
         return new Resources<>(associations,
-                linkTo(methodOn(PlayerController.class).allPlayers()).withSelfRel());
+                linkTo(methodOn(AssociationController.class).allAssociations()).withSelfRel());
     }
 }

@@ -18,8 +18,8 @@ public class AssociationService {
         return associationRepository.save(association);
     }
 
-    public void delete(AssociationModel association) {
-        associationRepository.delete(association);
+    public void deleteById(Integer id) {
+        associationRepository.deleteById(id);
     }
 
     public Optional<AssociationModel> findById(Integer id) {
