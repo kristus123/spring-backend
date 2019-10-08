@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class TeamModel {
     @Id
     @GeneratedValue
-    private Integer team_id; // TODO PANDA: use String instead??
+    private Integer team_id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "association_id", referencedColumnName = "association_id")
