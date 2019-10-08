@@ -22,14 +22,15 @@ class UserManagementControllerTest {
     @Autowired
     UserManagementController userManagementController;
 
+    /*
     @Test
     void elevateUser() {
 
     }
+     */
 
     @Test
     void updateInfo() {
-        /*
         String username = "Panda";
         String updatedUsername = "Shifu";
         String password = "superhemmelig123";
@@ -45,9 +46,8 @@ class UserManagementControllerTest {
         }
         UserModel updatedUser = userService.findByUsername(updatedUsername).get();
 
-        assertEquals(user.getUser_id(), updatedUser.getUser_id());
+        assertEquals(user.getId(), updatedUser.getId());
         assertEquals(updatedUsername, updatedUser.getUsername());
 
-         */
     }
 }
