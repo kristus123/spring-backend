@@ -14,8 +14,11 @@ import java.io.Serializable;
 public class ResultModel implements Serializable {
 
     @Id
+    private Integer match_id;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id", referencedColumnName = "match_id")
+    @MapsId
     private MatchModel match;
 
     @OneToOne(cascade = CascadeType.ALL)
