@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.enums.UserRole;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,23 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+
+
     public UserModel signup(String username, String password) {
-        return userRepository.save(new UserModel(username, passwordEncoder.encode(password)));
+
+        System.out.println(password);
+        final String PASSWORD = passwordEncoder.encode(password);
+
+        UserModel user = new UserModel(username, PASSWORD, UserRole.STANDARD);
+
+        UserModel dbUser = userRepository.save(user);
+
+
+        System.out.println("AAAAAAAAAAAAAAAAAA");
+        System.out.println(userRepository.findByUsername(username).get().getPassword());
+        System.out.println("AAAAAAAAAAAAAAAAAA");
+
+        return dbUser;
     }
 
     public boolean login(String username, String password) {

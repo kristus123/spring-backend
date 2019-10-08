@@ -1,6 +1,5 @@
 package com.example.demo.configurations;
 
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
