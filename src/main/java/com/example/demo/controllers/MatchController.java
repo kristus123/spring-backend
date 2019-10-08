@@ -26,7 +26,7 @@ public class MatchController {
     private MatchResourceAssembler matchResourceAssembler;
 
     @PostMapping("/create/match")
-    public Resource<MatchModel> newTeam(@RequestBody MatchModel matchModel) throws URISyntaxException {
+    public Resource<MatchModel> newMatch(@RequestBody MatchModel matchModel) throws URISyntaxException {
 
         Resource<MatchModel> resource = matchResourceAssembler.toResource(matchService.save(matchModel));
         /*
