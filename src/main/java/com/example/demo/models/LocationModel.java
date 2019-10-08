@@ -15,7 +15,7 @@ public class LocationModel {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer location_id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 

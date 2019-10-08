@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.enums.UserRole;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.UserRepository;
 import org.junit.Before;
@@ -59,5 +60,19 @@ class UserServiceTest {
     }
 
 
+    @Test
+    void elevateUserToAdmin() {
 
+        UserModel userModel = userService.signup("kristian", "passord");
+
+        assertTrue(userModel.getRoles()[0].equals(UserRole.STANDARD.getRole()));
+
+
+        userService.elevateUserToAdmin(userModel);
+        System.out.println(userModel.getRoles()[0]);
+        userModel = userService.findByUsername(userModel.getUsername()).get();
+        assertTrue(userModel.getRoles()[0].equals(UserRole.ADMINISTRATOR.getRole()));
+
+
+    }
 }
