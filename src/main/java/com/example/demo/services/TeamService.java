@@ -14,12 +14,12 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
-    public TeamModel save(TeamModel player) {
-        return teamRepository.save(player);
+    public TeamModel save(TeamModel team) {
+        return teamRepository.save(team);
     }
 
-    public void delete(TeamModel player) {
-        teamRepository.delete(player);
+    public void delete(TeamModel team) {
+        teamRepository.delete(team);
     }
 
     public Optional<TeamModel> findById(Integer id) {

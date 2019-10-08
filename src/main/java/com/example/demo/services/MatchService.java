@@ -14,12 +14,12 @@ public class MatchService {
     @Autowired
     private MatchRepository matchRepository;
 
-    public MatchModel save(MatchModel player) {
-        return matchRepository.save(player);
+    public MatchModel save(MatchModel match) {
+        return matchRepository.save(match);
     }
 
-    public void delete(MatchModel player) {
-        matchRepository.delete(player);
+    public void delete(MatchModel match) {
+        matchRepository.delete(match);
     }
 
     public Optional<MatchModel> findById(Integer id) {
