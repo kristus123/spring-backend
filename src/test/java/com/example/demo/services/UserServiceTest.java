@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceTest {
 
-    @Autowired
-    UserRepository userRepository;
+
 
     @Autowired
     UserService userService;
@@ -35,6 +34,28 @@ class UserServiceTest {
         //ERROR HER
         //assertTrue(userService.login("kristian", "hemmelig123"));
 
+    }
+
+    @Test
+    void save() {
+        String username = "Panda";
+        String password = "superhemmelig123";
+
+        UserModel user = userService.signup(username, password);
+
+        user.setUsername("Shifu");
+        UserModel savedUser = userService.save(user);
+        assertTrue(user.getUsername().equalsIgnoreCase(savedUser.getUsername()));
+    }
+
+    @Test
+    void findByUsername() {
+        String username = "Panda";
+        String password = "superhemmelig123";
+
+        UserModel insertedUser = userService.signup(username, password);
+
+        assertTrue(username.equals(userService.findByUsername(username).get().getUsername()));
     }
 
 
