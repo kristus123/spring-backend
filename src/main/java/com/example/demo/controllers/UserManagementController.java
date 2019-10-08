@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/user/manage")
+@RequestMapping("/api/v1/user/manage")
 public class UserManagementController {
 
     @Autowired
@@ -24,28 +24,34 @@ public class UserManagementController {
     @Autowired
     private UserResourceAssembler assembler;
 
+    /*
     @GetMapping("/elevateUser/{userId}/{role}")
     public String elevateUser(@PathVariable Integer userId, @PathVariable String role) {
         return "elevated";
     }
+     */
 
-    @PostMapping("/updateInformation/{username}")
-    public ResponseEntity<?> updateInfo(@PathVariable String username, @RequestBody UserModel updatedUser) throws URISyntaxException {
+    @PostMapping("/update/{username}")
+    public Resource<UserModel> updateInfo(@PathVariable String username, @RequestBody UserModel updatedUser) throws URISyntaxException {
 
-        Optional<UserModel> user = userService.findByUsername(username);
+        UserModel user = userService.findByUsername(username).get();
         if (user == null)
             throw new UsernameNotFoundException(username);
 
-        user.get().setUsername(updatedUser.getUsername());
-        user.get().setPassword(updatedUser.getPassword());
+        user.setUsername(updatedUser.getUsername());
+        user.setPassword(updatedUser.getPassword());
 
-        userService.save(user.get());
+        userService.save(user);
 
-        Resource<UserModel> resource = assembler.toResource(user.get());
+        Resource<UserModel> resource = assembler.toResource(user);
 
-        return ResponseEntity
+        /*
+        ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
                 .body(resource);
+         */
+
+        return resource;
     }
 
 
