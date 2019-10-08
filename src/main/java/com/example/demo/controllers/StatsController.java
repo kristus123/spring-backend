@@ -1,8 +1,11 @@
 package com.example.demo.controllers;
 
 import com.example.demo.assembler.PlayerResourceAssembler;
+import com.example.demo.assembler.TeamResourceAssembler;
 import com.example.demo.models.PlayerModel;
+import com.example.demo.models.TeamModel;
 import com.example.demo.repositories.PlayerRepository;
+import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -22,11 +25,15 @@ public class StatsController {
 
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private PlayerResourceAssembler playerResourceAssembler;
+    @Autowired
+    private TeamResourceAssembler teamResourceAssembler;
 
-    @GetMapping("/browse/players")
+    @GetMapping("/players")
     public Resources<Resource<PlayerModel>> allPlayers() {
 
         List<Resource<PlayerModel>> players = playerRepository.findAll()
@@ -36,6 +43,18 @@ public class StatsController {
 
         return new Resources<>(players,
                 linkTo(methodOn(StatsController.class).allPlayers()).withSelfRel());
+    }
+
+    @GetMapping("/teams")
+    public Resources<Resource<TeamModel>> allTeams() {
+
+        List<Resource<TeamModel>> teams = teamRepository.findAll()
+                .stream()
+                .map(teamResourceAssembler::toResource)
+                .collect(Collectors.toList());
+
+        return new Resources<>(teams,
+                linkTo(methodOn(StatsController.class).allTeams()).withSelfRel());
     }
 
 

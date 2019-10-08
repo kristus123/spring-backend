@@ -12,8 +12,6 @@ public class UserValidator implements Validator {
     @Autowired
     private UserService userService;
 
-
-
     @Override
     public boolean supports(Class<?> aClass) {
         return UserModel.class.equals(aClass); // TODO PANDA: what does it mean? quack-quack
@@ -29,9 +27,9 @@ public class UserValidator implements Validator {
         if (userService.findByUsername(user.getUsername()) != null)
             errors.rejectValue("username", "Size.userForm.username");
 
+        /*
         if (!user.getPasswordConfirm().equals(user.getPassword()))
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
-
-
+         */
     }
 }
