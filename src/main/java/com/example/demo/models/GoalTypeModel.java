@@ -15,6 +15,14 @@ public class GoalTypeModel {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer goal_type_id;
 
-    @Column
+    @Column(nullable = false)
     private String type;
+
+
+    public GoalTypeModel() {
+    }
+
+    public GoalTypeModel(String type) {
+        this.type = type;
+    }
 }

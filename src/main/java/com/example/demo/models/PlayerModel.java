@@ -23,28 +23,27 @@ public class PlayerModel {
   @Column(unique = true, nullable = false)
   private String playername;
 
-  @Column(unique = true, nullable = false)
-  private String email;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+  private PersonModel person;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+  private TeamModel team;
+
+  private String normal_position;
+
+  private Integer player_number;
 
 
-
-  @ElementCollection(fetch = FetchType.EAGER)
-  List<UserRole> roles;
-
-  public Integer getId() {
-    return player_id;
+  public PlayerModel() {
   }
 
-  public void setId(Integer player_id) {
-    this.player_id = player_id;
+  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normal_position, Integer player_number) {
+    this.playername = playername;
+    this.person = person;
+    this.team = team;
+    this.normal_position = normal_position;
+    this.player_number = player_number;
   }
-
-  public List<UserRole> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<UserRole> roles) {
-    this.roles = roles;
-  }
-
 }

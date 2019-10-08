@@ -19,7 +19,14 @@ public class CoachModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer coach_id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    private List<PersonModel> coachedPlayers = new ArrayList<PersonModel>();
+    private PersonModel person;
+
+    public CoachModel() {
+    }
+
+    public CoachModel(PersonModel person) {
+        this.person = person;
+    }
 }

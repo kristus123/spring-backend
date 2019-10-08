@@ -17,9 +17,19 @@ public class LocationModel {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
-    private int address_id;
+    private AddressModel address;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
+    private String description;
+
+    public LocationModel() {
+    }
+
+    public LocationModel(AddressModel address, String name, String description) {
+        this.address = address;
+        this.name = name;
+        this.description = description;
+    }
 }

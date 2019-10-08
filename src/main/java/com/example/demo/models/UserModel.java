@@ -7,10 +7,22 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name="USER_MODEL")
 @Getter
 @Setter
 public class UserModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer user_id;
+
+    private String username;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UserRole userRole;
 
     public UserModel() {}
     public UserModel(String username, String password) {
@@ -18,19 +30,9 @@ public class UserModel {
         this.password = password;
     }
 
-    @Id @GeneratedValue private Integer id;
-
-    @Column
-    private String username;
-
-    @Column
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private UserRole userRole;
-
-    @Transient
-    private String passwordConfirm;
-
+    public UserModel(String username, String password, UserRole userRole) {
+        this.username = username;
+        this.password = password;
+        this.userRole = userRole;
+    }
 }

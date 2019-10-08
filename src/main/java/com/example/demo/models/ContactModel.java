@@ -18,12 +18,22 @@ public class ContactModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contact_id;
 
-    @Column
+    @Column(nullable = false)
     private String contact_type;
-    @Column
+
+    @Column(nullable = false)
     private String contact_detail;
 
     @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    private int person_id;
+    private PersonModel person;
+
+    public ContactModel() {
+    }
+
+    public ContactModel(String contact_type, String contact_detail, PersonModel person) {
+        this.contact_type = contact_type;
+        this.contact_detail = contact_detail;
+        this.person = person;
+    }
 }
