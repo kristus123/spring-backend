@@ -1,0 +1,2 @@
+[![Build Status](https://travis-ci.com/kristus123/spring-backend.svg?branch=master)](https://travis-ci.com/kristus123/spring-backend)
+[![codecov](https://codecov.io/gh/kristus123/spring-backend/branch/haakon.add.jacoco/graph/badge.svg)](https://codecov.io/gh/kristus123/spring-backend)

@@ -3,8 +3,10 @@ package com.example.demo.models;
 import com.example.demo.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="USER_MODEL")
