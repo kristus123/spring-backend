@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -14,7 +16,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
 
 
@@ -33,6 +35,15 @@ public class UserService {
         System.out.println("AAAAAAAAAAAAAAAAAA");
 
         return dbUser;
+    }
+
+    public UserModel save(UserModel user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public Optional<UserModel> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public boolean login(String username, String password) {

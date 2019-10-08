@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name="USER_MODEL")
 @Getter
 @Setter
 public class UserModel {
-
+  
     public UserModel() {}
     public UserModel(String username, String password, UserRole... roles) {
         this.username = username;
@@ -35,8 +35,8 @@ public class UserModel {
 
 
     @Id @GeneratedValue private int id;
+ 
 
-    @Column
     private String username;
 
     @Column
@@ -47,5 +47,4 @@ public class UserModel {
     @Column(length = 80)
     @Size(min = 8 , max = 60)
     private String password;
-
 }
