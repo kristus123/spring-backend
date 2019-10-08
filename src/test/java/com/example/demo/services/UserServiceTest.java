@@ -55,7 +55,7 @@ class UserServiceTest {
 
         UserModel insertedUser = userService.signup(username, password);
 
-        assertTrue(username.equals(userService.findByUsername(username).getUsername()));
+        assertTrue(username.equals(userService.findByUsername(username).get().getUsername()));
     }
 
 

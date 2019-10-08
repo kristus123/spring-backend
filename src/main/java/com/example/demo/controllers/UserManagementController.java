@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/user/manage")
@@ -31,16 +32,16 @@ public class UserManagementController {
     @PostMapping("/updateInformation/{username}")
     public ResponseEntity<?> updateInfo(@PathVariable String username, @RequestBody UserModel updatedUser) throws URISyntaxException {
 
-        UserModel user = userService.findByUsername(username);
+        Optional<UserModel> user = userService.findByUsername(username);
         if (user == null)
             throw new UsernameNotFoundException(username);
 
-        user.setUsername(updatedUser.getUsername());
-        user.setPassword(updatedUser.getPassword());
+        user.get().setUsername(updatedUser.getUsername());
+        user.get().setPassword(updatedUser.getPassword());
 
-        userService.save(user);
+        userService.save(user.get());
 
-        Resource<UserModel> resource = assembler.toResource(user);
+        Resource<UserModel> resource = assembler.toResource(user.get());
 
         return ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))

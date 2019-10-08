@@ -26,12 +26,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserModel findByUsername(String username) {
+    public Optional<UserModel> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     public boolean login(String username, String password) {
-        final String PASSWORD_HASH = userRepository.findByUsername(username).getPassword();
+        final String PASSWORD_HASH = userRepository.findByUsername(username).get().getPassword();
 
         return passwordEncoder.matches(PASSWORD_HASH, password);
     }
