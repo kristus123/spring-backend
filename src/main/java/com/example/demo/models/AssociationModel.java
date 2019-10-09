@@ -15,11 +15,12 @@ import javax.validation.constraints.Size;
 public class AssociationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer association_id;
+    @Column(name = "association_id")
+    private Integer associationId;
 
     @Size(min = 4, max = 255, message = "Minimum Association name length: 4 characters")
     @Column(unique = true, nullable = false)
-    private String association_name;
+    private String name;
 
     @Size(min = 21, max = 255, message = "Minimum Association name length: 21 characters")
     @Column(unique = true, nullable = false)
@@ -30,13 +31,13 @@ public class AssociationModel {
 
     // TODO PANDA: for testing purposes
     public AssociationModel(Integer id, String name) {
-        this.association_id = id;
-        this.association_name = name;
+        this.associationId = id;
+        this.name = name;
         this.description = "very cool and very long description to fill up minimum requirement..";
     }
 
-    public AssociationModel(@Size(min = 4, max = 255, message = "Minimum Association name length: 4 characters") String association_name, @Size(min = 21, max = 255, message = "Minimum Association name length: 21 characters") String description) {
-        this.association_name = association_name;
+    public AssociationModel(@Size(min = 4, max = 255, message = "Minimum Association name length: 4 characters") String name, @Size(min = 21, max = 255, message = "Minimum Association name length: 21 characters") String description) {
+        this.name = name;
         this.description = description;
     }
 }

@@ -15,7 +15,7 @@ public class AssociationResourceAssembler implements ResourceAssembler<Associati
     @Override
     public Resource<AssociationModel> toResource(AssociationModel associationModel) {
         return new Resource<AssociationModel>(associationModel,
-                linkTo(methodOn(AssociationController.class).oneAssociation(associationModel.getAssociation_id())).withSelfRel(),
+                linkTo(methodOn(AssociationController.class).oneAssociation(associationModel.getAssociationId())).withSelfRel(),
                 linkTo(methodOn(AssociationController.class).allAssociations()).withRel("associations"));
     }
 }

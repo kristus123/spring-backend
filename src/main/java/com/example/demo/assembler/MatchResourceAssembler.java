@@ -14,7 +14,7 @@ public class MatchResourceAssembler implements ResourceAssembler<MatchModel, Res
     @Override
     public Resource<MatchModel> toResource(MatchModel matchModel) {
         return new Resource<>(matchModel,
-                linkTo(methodOn(MatchController.class).oneMatch(matchModel.getMatch_id())).withSelfRel(),
+                linkTo(methodOn(MatchController.class).oneMatch(matchModel.getMatchId())).withSelfRel(),
                 linkTo(methodOn(MatchController.class).allMatches()).withRel("matches"));
     }
 }

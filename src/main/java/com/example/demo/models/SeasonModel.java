@@ -14,13 +14,14 @@ public class SeasonModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer season_id;
+    @Column(name = "season_id")
+    private Integer seasonId;
 
     @Column(nullable = false)
-    private Date start_date;
+    private Date startDate;
 
     @Column(nullable = false)
-    private Date end_date;
+    private Date endDate;
 
     @Column(nullable = false)
     private String name;
@@ -31,9 +32,9 @@ public class SeasonModel {
     public SeasonModel() {
     }
 
-    public SeasonModel(Date start_date, Date end_date, String name, String description) {
-        this.start_date = start_date;
-        this.end_date = end_date;
+    public SeasonModel(Date startDate, Date endDate, String name, String description) {
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.name = name;
         this.description = description;
     }
