@@ -33,6 +33,12 @@ public class TeamModel {
     public TeamModel() {
     }
 
+    // TODO PANDA: for testing purposes
+    public TeamModel(Integer team_id, Integer association_id, String associationName) {
+        this.team_id = team_id;
+        this.association = new AssociationModel(association_id, associationName);
+    }
+
     public TeamModel(AssociationModel association, CoachModel coach, OwnerModel owner, LocationModel location) {
         this.association = association;
         this.coach = coach;
