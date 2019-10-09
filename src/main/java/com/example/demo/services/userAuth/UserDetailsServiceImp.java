@@ -49,6 +49,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
     private UserModel findUserbyUername(String username) {
         Optional<UserModel> user = userRepository.findByUsername(username);
 
+
         if (user.isPresent()) {
             return user.get();
         }

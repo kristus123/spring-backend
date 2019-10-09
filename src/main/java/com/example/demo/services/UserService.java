@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -21,20 +22,31 @@ public class UserService {
 
 
     public UserModel signup(String username, String password) {
+        Optional<UserModel> u = userRepository.findByUsername(username);
+        if (u.isPresent()) { //finn bedre løsning her
+            return u.get();
+        }
 
-        System.out.println(password);
         final String PASSWORD = passwordEncoder.encode(password);
-
         UserModel user = new UserModel(username, PASSWORD, UserRole.STANDARD);
-
         UserModel dbUser = userRepository.save(user);
-
-
-        System.out.println("AAAAAAAAAAAAAAAAAA");
         System.out.println(userRepository.findByUsername(username).get().getPassword());
-        System.out.println("AAAAAAAAAAAAAAAAAA");
-
         return dbUser;
+    }
+
+    public boolean elevateUserToAdmin(int id) {
+        Optional<UserModel> userModel = userRepository.findById(id);
+        if (userModel.isPresent()) {
+            userModel.get().changeRole(UserRole.ADMINISTRATOR);
+            System.out.println(userModel.get().getRoles()[0]);
+            userRepository.save(userModel.get());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean elevateUserToAdmin(UserModel user) {
+        return elevateUserToAdmin(user.getId());
     }
 
     public UserModel save(UserModel user) {
