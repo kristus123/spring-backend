@@ -16,7 +16,8 @@ import javax.validation.constraints.Size;
 public class OwnerModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer owner_id;
+    @Column(name = "owner_id")
+    private Integer ownerId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")

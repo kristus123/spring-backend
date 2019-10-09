@@ -13,7 +13,8 @@ import javax.persistence.*;
 public class GoalTypeModel {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer goal_type_id;
+    @Column(name = "goal_type_id")
+    private Integer goalTypeId;
 
     @Column(nullable = false)
     private String type;

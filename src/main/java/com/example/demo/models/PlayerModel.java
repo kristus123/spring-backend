@@ -1,10 +1,7 @@
 package com.example.demo.models;
 
-import com.example.demo.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -17,7 +14,8 @@ public class PlayerModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer player_id;
+  @Column(name = "player_id")
+  private Integer playerId;
 
   @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
   @Column(unique = true, nullable = false)
@@ -31,19 +29,19 @@ public class PlayerModel {
   @JoinColumn(name = "team_id", referencedColumnName = "team_id")
   private TeamModel team;
 
-  private String normal_position;
+  private String normalPosition;
 
-  private Integer player_number;
+  private Integer playerNumber;
 
 
   public PlayerModel() {
   }
 
-  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normal_position, Integer player_number) {
+  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normalPosition, Integer playerNumber) {
     this.playername = playername;
     this.person = person;
     this.team = team;
-    this.normal_position = normal_position;
-    this.player_number = player_number;
+    this.normalPosition = normalPosition;
+    this.playerNumber = playerNumber;
   }
 }
