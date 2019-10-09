@@ -12,7 +12,7 @@ public class PlayerExceptionHandler {
     @ResponseBody
     @ExceptionHandler(PlayerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String playerNotFoundHandler(PlayerNotFoundException ex) {
+    public String handleNotFound(PlayerNotFoundException ex) {
         return ex.getMessage();
     }
 }

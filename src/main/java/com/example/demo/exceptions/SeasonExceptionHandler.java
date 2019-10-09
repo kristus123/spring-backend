@@ -12,7 +12,7 @@ public class SeasonExceptionHandler {
     @ResponseBody
     @ExceptionHandler(SeasonNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String seasonNotFoundHandler(SeasonNotFoundException ex) {
+    public String handleNotFound(SeasonNotFoundException ex) {
         return ex.getMessage();
     }
 }

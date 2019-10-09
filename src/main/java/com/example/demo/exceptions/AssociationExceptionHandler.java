@@ -12,7 +12,7 @@ public class AssociationExceptionHandler {
     @ResponseBody
     @ExceptionHandler(AssociationNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String associationNotFoundHandler(AssociationNotFoundException ex) {
+    public String handleNotFound(AssociationNotFoundException ex) {
         return ex.getMessage();
     }
 }

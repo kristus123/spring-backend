@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.assembler.TeamResourceAssembler;
+import com.example.demo.exceptions.InvalidTeamRequestException;
 import com.example.demo.exceptions.TeamNotFoundException;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.models.TeamModel;
@@ -30,22 +31,23 @@ public class TeamController {
 
     @PostMapping("/admin/post/team")
     public Resource<TeamModel> newTeam(@RequestBody TeamModel teamModel) throws URISyntaxException {
-
         Resource<TeamModel> resource = teamResourceAssembler.toResource(teamService.save(teamModel));
         /*
         ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
                 .body(resource);
          */
-
         return resource;
     }
 
     @PutMapping("/admin/update/team/{id}")
     public Resource<TeamModel> updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
-        if (teamModel.getTeamId() != id || !teamService.findById(id).isPresent()) {
+        if (id != teamModel.getTeamId()) {
+            throw new InvalidTeamRequestException(id, teamModel.getTeamId());
+        }
+        if (!teamService.findById(id).isPresent()) {
             //ResponseEntity.badRequest().build();
-            return null;
+            throw new TeamNotFoundException(id);
         }
 
         //return ResponseEntity.ok(associationService.save(associationModel));
@@ -57,7 +59,7 @@ public class TeamController {
         Optional<TeamModel> team = teamService.findById(id);
         if (!team.isPresent()) {
             //ResponseEntity.badRequest().build();
-            return null;
+            throw new TeamNotFoundException(id);
         }
 
         teamService.deleteById(id);

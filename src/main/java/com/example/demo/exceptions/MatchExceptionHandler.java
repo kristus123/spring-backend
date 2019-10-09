@@ -12,7 +12,7 @@ public class MatchExceptionHandler {
     @ResponseBody
     @ExceptionHandler(MatchNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String matchNotFoundHandler(MatchNotFoundException ex) {
+    public String handleNotFound(MatchNotFoundException ex) {
         return ex.getMessage();
     }
 }

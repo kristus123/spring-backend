@@ -12,7 +12,15 @@ public class TeamExceptionHandler {
     @ResponseBody
     @ExceptionHandler(TeamNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String teamNotFoundHandler(TeamNotFoundException ex) {
+    public String handleNotFound(TeamNotFoundException ex) {
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ExceptionHandler(InvalidTeamRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleBadRequest(InvalidTeamRequestException ex) {
+        return ex.getMessage();
+    }
+
 }
