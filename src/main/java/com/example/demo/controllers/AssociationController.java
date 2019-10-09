@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class AssociationController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class AssociationController {
     private AssociationResourceAssembler associationResourceAssembler;
 
 
-    @PostMapping("/create/association")
+    @PostMapping("/admin/post/association")
     public Resource<AssociationModel> newAssociation(@RequestBody AssociationModel associationModel) throws URISyntaxException {
 
         Resource<AssociationModel> resource = associationResourceAssembler.toResource(associationService.save(associationModel));
@@ -42,7 +42,7 @@ public class AssociationController {
         return resource;
     }
 
-    @PutMapping("/update/association/{id}")
+    @PutMapping("/admin/update/association/{id}")
     public Resource<AssociationModel> updateAssociation(@PathVariable Integer id, @RequestBody AssociationModel associationModel) {
         if (!associationService.findById(id).isPresent()) {
             //ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class AssociationController {
         return associationResourceAssembler.toResource(associationService.save(associationModel));
     }
 
-    @DeleteMapping("/delete/association/{id}")
+    @DeleteMapping("/admin/delete/association/{id}")
     public Resource<AssociationModel> deleteAssociation(@PathVariable Integer id) {
         Optional<AssociationModel> association = associationService.findById(id);
         if (!association.isPresent()) {
@@ -68,7 +68,7 @@ public class AssociationController {
     }
 
 
-    @GetMapping("/browse/association/{id}")
+    @GetMapping("/user/get/association/{id}")
     public Resource<AssociationModel> oneAssociation(@PathVariable Integer id) {
 
         AssociationModel association = associationService.findById(id)
@@ -77,7 +77,7 @@ public class AssociationController {
         return associationResourceAssembler.toResource(association);
     }
 
-    @GetMapping("/browse/associations")
+    @GetMapping("/user/get/associations")
     public Resources<Resource<AssociationModel>> allAssociations() {
 
         List<Resource<AssociationModel>> associations = associationService.findAll()

@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.assembler.TeamResourceAssembler;
 import com.example.demo.exceptions.TeamNotFoundException;
+import com.example.demo.models.AssociationModel;
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class TeamController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class TeamController {
     @Autowired
     private TeamResourceAssembler teamResourceAssembler;
 
-    @PostMapping("/create/team")
+    @PostMapping("/admin/post/team")
     public Resource<TeamModel> newTeam(@RequestBody TeamModel teamModel) throws URISyntaxException {
 
         Resource<TeamModel> resource = teamResourceAssembler.toResource(teamService.save(teamModel));
@@ -39,7 +41,32 @@ public class TeamController {
         return resource;
     }
 
-    @GetMapping("/browse/team/{id}")
+    @PutMapping("/admin/update/team/{id}")
+    public Resource<TeamModel> updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
+        if (!teamService.findById(id).isPresent()) {
+            //ResponseEntity.badRequest().build();
+        }
+
+        // TODO PANDA: check IDs between the two instances??
+
+        //return ResponseEntity.ok(associationService.save(associationModel));
+        return teamResourceAssembler.toResource(teamService.save(teamModel));
+    }
+
+    @DeleteMapping("/admin/delete/team/{id}")
+    public Resource<TeamModel> deleteTeam(@PathVariable Integer id) {
+        Optional<TeamModel> association = teamService.findById(id);
+        if (!association.isPresent()) {
+            //ResponseEntity.badRequest().build();
+        }
+
+        teamService.deleteById(id);
+
+        //return ResponseEntity.ok().build();
+        return teamResourceAssembler.toResource(association.get());
+    }
+
+    @GetMapping("/user/get/team/{id}")
     public Resource<TeamModel> oneTeam(@PathVariable Integer id) {
 
         TeamModel team = teamService.findById(id)
@@ -48,7 +75,7 @@ public class TeamController {
         return teamResourceAssembler.toResource(team);
     }
 
-    @GetMapping("/browse/teams")
+    @GetMapping("/user/get/teams")
     public Resources<Resource<TeamModel>> allTeams() {
 
         List<Resource<TeamModel>> teams = teamService.findAll()

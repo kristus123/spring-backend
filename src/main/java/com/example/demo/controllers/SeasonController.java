@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class SeasonController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class SeasonController {
     @Autowired
     private SeasonResourceAssembler seasonResourceAssembler;
 
-    @PostMapping("/create/season")
+    @PostMapping("/admin/post/season")
     public Resource<SeasonModel> newSeason(@RequestBody SeasonModel seasonModel) throws URISyntaxException {
 
         Resource<SeasonModel> resource = seasonResourceAssembler.toResource(seasonService.save(seasonModel));
@@ -38,7 +38,7 @@ public class SeasonController {
         return resource;
     }
 
-    @GetMapping("/browse/season/{id}")
+    @GetMapping("/user/get/season/{id}")
     public Resource<SeasonModel> oneSeason(@PathVariable Integer id) {
 
         SeasonModel season = seasonService.findById(id)
@@ -47,7 +47,7 @@ public class SeasonController {
         return seasonResourceAssembler.toResource(season);
     }
 
-    @GetMapping("/browse/seasons")
+    @GetMapping("/user/get/seasons")
     public Resources<Resource<SeasonModel>> allSeasons() {
 
         List<Resource<SeasonModel>> seasons = seasonService.findAll()

@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.PlayerModel;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,16 @@ class PlayerControllerTest {
     @Test
     void onePlayer() {
 
-        /*
-        PlayerModel player = new PlayerModel();
+        PlayerModel player = new PlayerModel(1, "Ronaldo");
         Resource<PlayerModel> returned = playerController.onePlayer(player.getPlayer_id());
 
-         */
     }
 
     @Test
     void allPlayers() {
 
-        /*
         Resources<Resource<PlayerModel>> players = playerController.allPlayers();
 
-         */
 
 
     }

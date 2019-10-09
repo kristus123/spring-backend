@@ -6,8 +6,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TeamControllerTest {
 
+
     @Test
     void newTeam() {
+    }
+
+    @Test
+    void updateTeam() {
+    }
+
+    @Test
+    void deleteTeam() {
     }
 
     @Test

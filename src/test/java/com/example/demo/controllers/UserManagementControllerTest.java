@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.UserModel;
 import com.example.demo.services.UserService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ class UserManagementControllerTest {
 
     @Test
     void updateInfo() {
-        /*
+
         String username = "Panda";
         String updatedUsername = "Shifu";
         String password = "superhemmelig123";
@@ -49,8 +50,6 @@ class UserManagementControllerTest {
 
         assertEquals(user.getId(), updatedUser.getId());
         assertEquals(updatedUsername, updatedUser.getUsername());
-
-         */
 
     }
 }

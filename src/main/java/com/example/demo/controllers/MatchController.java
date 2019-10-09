@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class MatchController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class MatchController {
     @Autowired
     private MatchResourceAssembler matchResourceAssembler;
 
-    @PostMapping("/create/match")
+    @PostMapping("/admin/post/match")
     public Resource<MatchModel> newMatch(@RequestBody MatchModel matchModel) throws URISyntaxException {
 
         Resource<MatchModel> resource = matchResourceAssembler.toResource(matchService.save(matchModel));
@@ -38,7 +38,7 @@ public class MatchController {
         return resource;
     }
 
-    @GetMapping("/browse/match/{id}")
+    @GetMapping("/user/get/match/{id}")
     public Resource<MatchModel> oneMatch(@PathVariable Integer id) {
 
         MatchModel match = matchService.findById(id)
@@ -47,7 +47,7 @@ public class MatchController {
         return matchResourceAssembler.toResource(match);
     }
 
-    @GetMapping("/browse/matches")
+    @GetMapping("/user/get/matches")
     public Resources<Resource<MatchModel>> allMatches() {
 
         List<Resource<MatchModel>> matches = matchService.findAll()

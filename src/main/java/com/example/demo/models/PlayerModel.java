@@ -15,35 +15,41 @@ import javax.validation.constraints.Size;
 @Setter
 public class PlayerModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer player_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer player_id;
 
-  @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
-  @Column(unique = true, nullable = false)
-  private String playername;
+    @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
+    @Column(unique = true, nullable = false)
+    private String playername;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-  private PersonModel person;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    private PersonModel person;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "team_id", referencedColumnName = "team_id")
-  private TeamModel team;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+    private TeamModel team;
 
-  private String normal_position;
+    private String normal_position;
 
-  private Integer player_number;
+    private Integer player_number;
 
 
-  public PlayerModel() {
-  }
+    public PlayerModel() {
+    }
 
-  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normal_position, Integer player_number) {
-    this.playername = playername;
-    this.person = person;
-    this.team = team;
-    this.normal_position = normal_position;
-    this.player_number = player_number;
-  }
+    // TODO PANDA: for testing purposes
+    public PlayerModel(Integer id, String name) {
+        this.player_id = id;
+        this.playername = name;
+    }
+
+    public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normal_position, Integer player_number) {
+        this.playername = playername;
+        this.person = person;
+        this.team = team;
+        this.normal_position = normal_position;
+        this.player_number = player_number;
+    }
 }

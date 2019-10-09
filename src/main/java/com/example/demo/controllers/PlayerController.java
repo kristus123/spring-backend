@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class PlayerController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class PlayerController {
     private PlayerResourceAssembler playerResourceAssembler;
 
 
-    @PostMapping("/create/player")
+    @PostMapping("/admin/post/player")
     public Resource<PlayerModel> newPlayer(@RequestBody PlayerModel playerModel) throws URISyntaxException {
 
         Resource<PlayerModel> resource = playerResourceAssembler.toResource(playerService.save(playerModel));
@@ -41,7 +41,7 @@ public class PlayerController {
         return resource;
     }
 
-    @GetMapping("/browse/player/{id}")
+    @GetMapping("/user/get/player/{id}")
     public Resource<PlayerModel> onePlayer(@PathVariable Integer id) {
 
         PlayerModel player = playerService.findById(id)
@@ -50,7 +50,7 @@ public class PlayerController {
         return playerResourceAssembler.toResource(player);
     }
 
-    @GetMapping("/browse/players")
+    @GetMapping("/user/get/players")
     public Resources<Resource<PlayerModel>> allPlayers() {
 
         List<Resource<PlayerModel>> players = playerService.findAll()
