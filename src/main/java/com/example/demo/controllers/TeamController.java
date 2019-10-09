@@ -43,11 +43,10 @@ public class TeamController {
 
     @PutMapping("/admin/update/team/{id}")
     public Resource<TeamModel> updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
-        if (!teamService.findById(id).isPresent()) {
+        if (teamModel.getTeamId() != id || !teamService.findById(id).isPresent()) {
             //ResponseEntity.badRequest().build();
+            return null;
         }
-
-        // TODO PANDA: check IDs between the two instances??
 
         //return ResponseEntity.ok(associationService.save(associationModel));
         return teamResourceAssembler.toResource(teamService.save(teamModel));
@@ -55,15 +54,16 @@ public class TeamController {
 
     @DeleteMapping("/admin/delete/team/{id}")
     public Resource<TeamModel> deleteTeam(@PathVariable Integer id) {
-        Optional<TeamModel> association = teamService.findById(id);
-        if (!association.isPresent()) {
+        Optional<TeamModel> team = teamService.findById(id);
+        if (!team.isPresent()) {
             //ResponseEntity.badRequest().build();
+            return null;
         }
 
         teamService.deleteById(id);
 
         //return ResponseEntity.ok().build();
-        return teamResourceAssembler.toResource(association.get());
+        return teamResourceAssembler.toResource(team.get());
     }
 
     @GetMapping("/user/get/team/{id}")

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,6 +40,31 @@ public class PlayerController {
          */
 
         return resource;
+    }
+
+    @PutMapping("/admin/update/player/{id}")
+    public Resource<PlayerModel> updatePlayer(@PathVariable Integer id, @RequestBody PlayerModel playerModel) {
+        if (playerModel.getPlayerId() != id || !playerService.findById(id).isPresent()) {
+            //ResponseEntity.badRequest().build();
+            return null;
+        }
+
+        //return ResponseEntity.ok(associationService.save(associationModel));
+        return playerResourceAssembler.toResource(playerService.save(playerModel));
+    }
+
+    @DeleteMapping("/admin/delete/player/{id}")
+    public Resource<PlayerModel> deletePlayer(@PathVariable Integer id) {
+        Optional<PlayerModel> player = playerService.findById(id);
+        if (!player.isPresent()) {
+            //ResponseEntity.badRequest().build();
+            return null;
+        }
+
+        playerService.deleteById(id);
+
+        //return ResponseEntity.ok().build();
+        return playerResourceAssembler.toResource(player.get());
     }
 
     @GetMapping("/user/get/player/{id}")

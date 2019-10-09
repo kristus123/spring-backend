@@ -44,11 +44,10 @@ public class AssociationController {
 
     @PutMapping("/admin/update/association/{id}")
     public Resource<AssociationModel> updateAssociation(@PathVariable Integer id, @RequestBody AssociationModel associationModel) {
-        if (!associationService.findById(id).isPresent()) {
+        if (associationModel.getAssociationId() != id || !associationService.findById(id).isPresent()) {
             //ResponseEntity.badRequest().build();
+            return null;
         }
-
-        // TODO PANDA: check IDs between the two instances??
 
         //return ResponseEntity.ok(associationService.save(associationModel));
         return associationResourceAssembler.toResource(associationService.save(associationModel));
@@ -59,6 +58,7 @@ public class AssociationController {
         Optional<AssociationModel> association = associationService.findById(id);
         if (!association.isPresent()) {
             //ResponseEntity.badRequest().build();
+            return null;
         }
 
         associationService.deleteById(id);

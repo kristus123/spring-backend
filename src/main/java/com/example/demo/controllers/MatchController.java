@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +37,31 @@ public class MatchController {
          */
 
         return resource;
+    }
+
+    @PutMapping("/admin/update/match/{id}")
+    public Resource<MatchModel> updateMatch(@PathVariable Integer id, @RequestBody MatchModel matchModel) {
+        if (matchModel.getMatchId() != id || !matchService.findById(id).isPresent()) {
+            //ResponseEntity.badRequest().build();
+            return null;
+        }
+
+        //return ResponseEntity.ok(associationService.save(associationModel));
+        return matchResourceAssembler.toResource(matchService.save(matchModel));
+    }
+
+    @DeleteMapping("/admin/delete/match/{id}")
+    public Resource<MatchModel> deleteMatch(@PathVariable Integer id) {
+        Optional<MatchModel> match = matchService.findById(id);
+        if (!match.isPresent()) {
+            //ResponseEntity.badRequest().build();
+            return null;
+        }
+
+        matchService.deleteById(id);
+
+        //return ResponseEntity.ok().build();
+        return matchResourceAssembler.toResource(match.get());
     }
 
     @GetMapping("/user/get/match/{id}")
