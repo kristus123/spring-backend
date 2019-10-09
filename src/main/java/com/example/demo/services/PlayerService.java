@@ -22,7 +22,7 @@ public class PlayerService {
         playerRepository.delete(player);
     }
 
-    public Optional<PlayerModel> findById(Integer id) {
+    public Optional<PlayerModel> findById(int id) {
         return playerRepository.findById(id);
     }
 

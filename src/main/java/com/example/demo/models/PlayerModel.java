@@ -19,10 +19,6 @@ public class PlayerModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer player_id;
 
-  @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
-  @Column(unique = true, nullable = false)
-  private String playername;
-
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "person_id", referencedColumnName = "person_id")
   private PersonModel person;
@@ -39,8 +35,7 @@ public class PlayerModel {
   public PlayerModel() {
   }
 
-  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normal_position, Integer player_number) {
-    this.playername = playername;
+  public PlayerModel(PersonModel person, TeamModel team, String normal_position, Integer player_number) {
     this.person = person;
     this.team = team;
     this.normal_position = normal_position;
