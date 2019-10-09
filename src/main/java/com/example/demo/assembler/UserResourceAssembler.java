@@ -10,6 +10,6 @@ public class UserResourceAssembler implements ResourceAssembler<UserModel, Resou
 
     @Override
     public Resource<UserModel> toResource(UserModel userModel) {
-        return new Resource<>(userModel);
+        return new Resource<>(userModel); // TODO PANDA: add links later
     }
 }

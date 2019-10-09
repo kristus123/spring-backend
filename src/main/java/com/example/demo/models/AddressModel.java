@@ -31,6 +31,14 @@ public class AddressModel {
     private String country;
 
     public AddressModel() {}
+
+    public AddressModel(String address_line_1, int postal_code, String city, String country) {
+        this.address_line_1 = address_line_1;
+        this.postal_code = postal_code;
+        this.city = city;
+        this.country = country;
+    }
+
     public AddressModel(String address_line_1, String address_line_2, String address_line_3, int postal_code, String city, String country) {
         this.address_line_1 = address_line_1;
         this.address_line_2 = address_line_2;
