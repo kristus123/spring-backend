@@ -48,7 +48,6 @@ public class UserModel {
     }
 
 
-    @Transient
     @Column(length = 80)
     @Size(min = 8 , max = 60)
     private String password;

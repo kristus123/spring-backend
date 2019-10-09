@@ -64,7 +64,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
 
 
-        user.get().setPassword(passwordEncoder.encode("temp123"));
 
         if (user.isPresent()) {
             return user.get();

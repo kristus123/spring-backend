@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,10 +11,12 @@ import javax.persistence.*;
 @Table(name="LOCATION")
 @Getter
 @Setter
+@NoArgsConstructor
 public class LocationModel {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer location_id;
+    @Column(name = "location_id")
+    private int locationId;
 
     @OneToOne(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -24,8 +27,6 @@ public class LocationModel {
 
     private String description;
 
-    public LocationModel() {
-    }
 
     public LocationModel(AddressModel address, String name, String description) {
         this.address = address;

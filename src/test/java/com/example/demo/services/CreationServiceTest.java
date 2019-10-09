@@ -5,6 +5,7 @@ import com.example.demo.models.AddressModel;
 import com.example.demo.models.LocationModel;
 import com.example.demo.repositories.AddressRepository;
 import com.example.demo.repositories.LocationRepository;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,15 @@ class CreationServiceTest {
 
     @Autowired LocationRepository locationRepository;
 
+
     @Test
     void createAddressAndLocations() {
 
+        //
+        //      CLEAN OPP DISSE TESTENE
+        //
 
-        creationService.createAddress(new AddressModel(250, "bergen", "NORGE", "vestre Vardane 30"));
+        creationService.createAddress(new AddressModel("250", "bergen", "NORGE", "vestre Vardane 30"));
 
         assertTrue(addressRepository.findByAddresses("vestre Vardane 30").isPresent());
 
@@ -46,7 +51,7 @@ class CreationServiceTest {
         assertTrue(locationRepository.findByName("billy-town").isPresent());
 
 
-        LocationModel loc = creationService.createLocation(new LocationDTO(locationModel, addressModel).getLocationModel());
+        LocationModel loc = creationService.createLocation(new LocationDTO(locationModel, addressModel));
         assertTrue(loc.getAddress().getCountry().equals("NORGE"));
 
         List<LocationModel> models =  locationRepository.findAll();
@@ -58,6 +63,52 @@ class CreationServiceTest {
                 .collect(Collectors.toList())
                 .isEmpty()
         );
+
+    }
+
+
+    @Test
+    void testMappingLocationToAddress() {
+        AddressModel addressModel = new AddressModel("5305", "OSLO", "NOREG", "vestre vardane 30");
+        LocationModel locationModel = new LocationModel(addressModel, "brann stadium", "en brennende fin by");
+        creationService.createLocation(new LocationDTO(locationModel, addressModel));
+
+        Optional<LocationModel>  location = locationRepository.findByName("brann stadium");
+        assertTrue(location.isPresent());
+
+        assertTrue(location.get().getAddress().getCountry().equals("NOREG"));
+
+
+
+    }
+
+    @Test
+    void assignAddressToLocationTest() {
+        LocationModel locationModel = creationService.createLocation(
+                null,
+                "Bislett", "et fint sted hvor Kristian bor");
+
+        addressRepository.save(new AddressModel("5555", "Trondheim", "Norway"));
+
+        creationService.createAddress("5306", "Trondheim", "Norway", "Trondo 30");
+
+        Optional<AddressModel>  addressModel = addressRepository.findByAddresses("Trondo 30");
+        assertTrue(addressModel.isPresent());
+
+
+
+
+        locationModel = locationRepository.findByName("Bislett").get();
+        assertNull(locationModel.getAddress());
+
+        creationService.assignAddressToLocation(locationModel, addressModel.get().getAddressId());
+
+        locationModel = locationRepository.findByName("Bislett").get();
+
+        assertNotNull(locationModel.getAddress());
+
+        assertEquals(locationModel.getAddress().getCity(), "Trondheim");
+
 
     }
 

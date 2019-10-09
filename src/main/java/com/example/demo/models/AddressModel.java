@@ -11,13 +11,14 @@ import javax.persistence.*;
 @Setter
 public class AddressModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer address_id;
+    @Column(name = "address_id")
+    private int addressId;
 
     @Column(nullable = false)
     private String[] addresses;
 
     @Column(nullable = false)
-    private int postal_code;
+    private String postalCode;
 
     @Column(nullable = false)
     private String city;
@@ -26,9 +27,9 @@ public class AddressModel {
     private String country;
 
     public AddressModel() {}
-    public AddressModel(int postalCode, String city, String country, String... addresses) {
+    public AddressModel(String postalCode, String city, String country, String... addresses) {
         this.addresses = addresses;
-        this.postal_code = postal_code;
+        this.postalCode = postalCode;
         this.city = city;
         this.country = country;
     }
