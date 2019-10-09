@@ -38,14 +38,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         //Her er koden fra den guiedn som setter opp JPA-auth
-        http.authorizeRequests()
-                .and().csrf().disable()
+        http.authorizeRequests().and().cors().and().csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/api/public/**").permitAll()
                     .antMatchers("/v1/users/signup").permitAll()
                     .antMatchers("/api/authenticate").permitAll()
                     .antMatchers("/hello").permitAll()
+                    .antMatchers("/v1/private/admin").hasRole("ADMIN")
                     .anyRequest().authenticated()
+
                     .and().addFilter(new JwtAuthenticationFilter(authenticationManager()))
                     .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                     .sessionManagement()

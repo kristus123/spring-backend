@@ -43,7 +43,6 @@ public class UserModel {
     private String[] roles;
 
 
-    @Transient
     @Column(length = 80)
     @Size(min = 8 , max = 60)
     private String password;
