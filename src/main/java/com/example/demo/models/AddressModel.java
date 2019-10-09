@@ -27,6 +27,7 @@ public class AddressModel {
     private String country;
 
     public AddressModel() {}
+
     public AddressModel(String postalCode, String city, String country, String... addresses) {
         this.addresses = addresses;
         this.postalCode = postalCode;
