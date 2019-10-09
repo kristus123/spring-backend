@@ -28,4 +28,26 @@ public class AdministratorPlayerController {
         PlayerModel newPlayer = playerService.save(playerModel);
         return newPlayer;
     }
+
+    @PutMapping("/put/player/{playerId}")
+    public PlayerModel updatePlayer(@PathVariable int playerId, @RequestBody PlayerModel playerModel) {
+        Optional<PlayerModel> oldPlayer = playerService.findById(playerId);
+        if(oldPlayer.isPresent()) {
+            PlayerModel updatedPlayer = playerService.update(playerModel, oldPlayer.get());
+            return updatedPlayer;
+        }
+        return null;
+    }
+
+    @DeleteMapping("/delete/player/{playerId}")
+    public PlayerModel deletePlayer(@PathVariable int playerId) {
+        Optional<PlayerModel> player = playerService.findById(playerId);
+        if(player.isPresent()) {
+            PlayerModel tempPlayer = player.get();
+            playerService.delete(player.get());
+            return tempPlayer;
+        }
+
+        return null;
+    }
 }
