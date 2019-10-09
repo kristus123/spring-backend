@@ -4,11 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="PERSON")
@@ -17,16 +14,17 @@ import javax.validation.constraints.Size;
 public class PersonModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer person_id;
+    @Column(name = "person_id")
+    private Integer personId;
 
     @Column(nullable = false)
-    private String first_name;
+    private String firstName;
 
     @Column(nullable = false)
-    private String last_name;
+    private String lastName;
 
     @Column(nullable = false)
-    private Date date_of_birth;
+    private Date dateOfBirth;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -35,10 +33,10 @@ public class PersonModel {
     public PersonModel() {
     }
 
-    public PersonModel(String first_name, String last_name, Date date_of_birth, AddressModel address) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.date_of_birth = date_of_birth;
+    public PersonModel(String firstName, String lastName, Date dateOfBirth, AddressModel address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
     }
 }

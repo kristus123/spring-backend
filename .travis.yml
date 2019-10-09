@@ -13,9 +13,3 @@ jobs:
       name: "Unit Tests"
       script:  mvn jacoco:prepare-agent test jacoco:report
       after_success: codecov
-
-services:
-  - postgresql
-
-before_script:
-  - psql -c 'create database demo;' -U postgres

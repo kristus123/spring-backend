@@ -16,7 +16,8 @@ public class AdministratorModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer admin_id;
+    @Column(name = "admin_id")
+    private Integer adminId;
 
     @Size(min = 8, message = "Minimum password length: 8 characters")
     private String password;

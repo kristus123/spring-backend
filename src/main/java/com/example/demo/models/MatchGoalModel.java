@@ -13,7 +13,8 @@ import javax.persistence.*;
 public class MatchGoalModel {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer goal_id;
+    @Column(name = "goal_id")
+    private Integer goalId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "player_id", referencedColumnName = "player_id")

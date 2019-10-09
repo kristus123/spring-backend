@@ -12,7 +12,8 @@ import javax.persistence.*;
 public class TeamModel {
     @Id
     @GeneratedValue
-    private Integer team_id;
+    @Column(name = "team_id")
+    private Integer teamId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "association_id", referencedColumnName = "association_id")
@@ -34,8 +35,8 @@ public class TeamModel {
     }
 
     // TODO PANDA: for testing purposes
-    public TeamModel(Integer team_id, Integer association_id, String associationName) {
-        this.team_id = team_id;
+    public TeamModel(Integer teamId, Integer association_id, String associationName) {
+        this.teamId = teamId;
         this.association = new AssociationModel(association_id, associationName);
     }
 

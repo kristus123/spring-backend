@@ -43,7 +43,11 @@ public class UserModel {
     private String[] roles;
 
 
-    @Transient
+    public void changeRole(UserRole role) {
+        this.roles = new String[] {role.getRole()};
+    }
+
+
     @Column(length = 80)
     @Size(min = 8 , max = 60)
     private String password;

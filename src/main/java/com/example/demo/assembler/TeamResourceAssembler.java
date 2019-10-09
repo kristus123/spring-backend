@@ -15,7 +15,7 @@ public class TeamResourceAssembler implements ResourceAssembler<TeamModel, Resou
     @Override
     public Resource<TeamModel> toResource(TeamModel teamModel) {
         return new Resource<>(teamModel,
-                linkTo(methodOn(TeamController.class).oneTeam(teamModel.getTeam_id())).withSelfRel(),
+                linkTo(methodOn(TeamController.class).oneTeam(teamModel.getTeamId())).withSelfRel(),
                 linkTo(methodOn(TeamController.class).allTeams()).withRel("teams"));
     }
 }
