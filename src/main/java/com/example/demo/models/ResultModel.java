@@ -14,7 +14,8 @@ import java.io.Serializable;
 public class ResultModel implements Serializable {
 
     @Id
-    private Integer match_id;
+    @Column(name = "match_id")
+    private Integer matchId; // NB!! Should not be auto-generated! Foreign-key to MatchModel.matchId
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id", referencedColumnName = "match_id")

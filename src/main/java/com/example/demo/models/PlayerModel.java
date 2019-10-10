@@ -1,10 +1,7 @@
 package com.example.demo.models;
 
-import com.example.demo.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -17,7 +14,8 @@ public class PlayerModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer player_id;
+  @Column(name = "player_id")
+  private Integer playerId;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "person_id", referencedColumnName = "person_id")
@@ -27,9 +25,9 @@ public class PlayerModel {
   @JoinColumn(name = "team_id", referencedColumnName = "team_id")
   private TeamModel team;
 
-  private String normal_position;
+  private String normalPosition;
 
-  private Integer player_number;
+  private Integer playerNumber;
 
 
   public PlayerModel() {
@@ -38,7 +36,7 @@ public class PlayerModel {
   public PlayerModel(PersonModel person, TeamModel team, String normal_position, Integer player_number) {
     this.person = person;
     this.team = team;
-    this.normal_position = normal_position;
-    this.player_number = player_number;
+    this.normalPosition = normalPosition;
+    this.playerNumber = playerNumber;
   }
 }
