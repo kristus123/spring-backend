@@ -35,7 +35,7 @@ public class AdministratorAssociationControllerTest {
 
 
     void addAssociation() throws Exception {
-        String json = "{\"association_id\" : 1, \"association_name\" : \"This name\", \"description\" : \"This description\" }";
+        String json = "{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\" }";
         mockMvc.perform(post("/v1/admin/post/association")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -47,13 +47,13 @@ public class AdministratorAssociationControllerTest {
     void getAssociation() throws Exception {
         mockMvc.perform(get("/v1/admin/get/association/1"))
                 .andDo(print())
-                .andExpect(content().json("{\"association_id\" : 1, \"association_name\" : \"This name\", \"description\" : \"This description\"}"));
-                //.andExpect(status().isOk());
+                .andExpect(content().json("{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\"}"))
+                .andExpect(status().isOk());
     }
 
 
     void updateAssociation() throws Exception {
-        String json = "{\"association_id\" : 1, \"association_name\" : \"Updated name\", \"description\" : \"Updated description\"}";
+        String json = "{\"associationId\" : 1, \"name\" : \"Updated name\", \"description\" : \"Updated description\"}";
         mockMvc.perform(put("/v1/admin/update/association/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))

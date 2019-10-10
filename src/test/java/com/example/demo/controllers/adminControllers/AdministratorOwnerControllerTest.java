@@ -37,7 +37,7 @@ public class AdministratorOwnerControllerTest {
     void getOwner() throws Exception {
         mockMvc.perform(get("/v1/admin/get/owner/1"))
                 .andDo(print())
-                .andExpect(content().json("{\"owner_id\" : 1, \"person\" : null}"))
+                .andExpect(content().json("{\"ownerId\" : 1, \"person\" : null}"))
                 .andExpect(status().isOk());
     }
 
@@ -52,7 +52,7 @@ public class AdministratorOwnerControllerTest {
 
     //This endpoint is difficult to test because of the table structure.
     void updateOwner() throws Exception {
-        String json = "{\"owner_id\" : 1, \"person\" : null}";
+        String json = "{\"ownerId\" : 1, \"person\" : null}";
         mockMvc.perform(put("/v1/admin/update/owner/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))

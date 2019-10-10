@@ -27,7 +27,7 @@ public class AdministratorPlayerControllerTest {
 
     @Before
     void addDummyData() throws Exception {
-        String json = "{\"person_id\" : 2, \"team_id\" : 3, \"normal_position\" : \"Attacker\", \"player_number\" : 7 }";
+        String json = "{\"personId\" : 2, \"teamId\" : 3, \"normalPosition\" : \"Attacker\", \"playerNumber\" : 7 }";
         mockMvc.perform(post("/v1/admin/post/player")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -37,7 +37,7 @@ public class AdministratorPlayerControllerTest {
 
     @Test
     void addPlayer() throws Exception {
-        String json = "{\"person_id\" : 3, \"team_id\" : 3, \"normal_position\" : \"Shooter\", \"player_number\" : 11 }";
+        String json = "{\"personId\" : 3, \"teamId\" : 3, \"normalPosition\" : \"Shooter\", \"playerNumber\" : 11 }";
         mockMvc.perform(post("/v1/admin/post/player")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -49,12 +49,12 @@ public class AdministratorPlayerControllerTest {
     void getPlayer() throws Exception {
         mockMvc.perform(get("/v1/admin/get/player/1"))
                 .andDo(print())
-                .andExpect(content().json("{\"player_id\" : 1, \"person\" : null, \"team\" : null, \"normal_position\" : \"Shooter\", \"player_number\" : 11}"));
+                .andExpect(content().json("{\"playerId\" : 1, \"person\" : null, \"team\" : null, \"normalPosition\" : \"Shooter\", \"playerNumber\" : 11}"));
     }
 
     @Test
     void updatePlayer() throws Exception {
-        String json = "{\"player_id\" : 1, \"person\" : null, \"team\" : null, \"normal_position\" : \"Defender\", \"player_number\" : 21 }";
+        String json = "{\"playerId\" : 1, \"person\" : null, \"team\" : null, \"normalPosition\" : \"Defender\", \"playerNumber\" : 21 }";
         mockMvc.perform(put("/v1/admin/update/player/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
