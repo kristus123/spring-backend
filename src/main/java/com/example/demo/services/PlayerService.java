@@ -18,11 +18,21 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    public PlayerModel update(PlayerModel player, PlayerModel oldPlayer) {
+
+        PlayerModel updatedPlayer = null;
+        if(oldPlayer.getPlayerId() == player.getPlayerId()){
+            updatedPlayer = save(player);
+        }
+
+        return updatedPlayer;
+    }
+
     public void delete(PlayerModel player) {
         playerRepository.delete(player);
     }
 
-    public Optional<PlayerModel> findById(Integer id) {
+    public Optional<PlayerModel> findById(int id) {
         return playerRepository.findById(id);
     }
 

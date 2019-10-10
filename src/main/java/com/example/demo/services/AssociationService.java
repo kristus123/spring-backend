@@ -14,15 +14,28 @@ public class AssociationService {
     @Autowired
     private AssociationRepository associationRepository;
 
+    /** TODO PANDA: remove comment
+        calling save() on an object with predefined id will update the corresponding database record
+        rather than insert a new one, and also explains why save() is not called create()
+     */
     public AssociationModel save(AssociationModel association) {
         return associationRepository.save(association);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         associationRepository.deleteById(id);
     }
 
-    public Optional<AssociationModel> findById(Integer id) {
+    public AssociationModel update(AssociationModel associationModel, AssociationModel oldAssociationModel) {
+        AssociationModel updatedAssociation = null;
+        if(oldAssociationModel.getAssociationId() == associationModel.getAssociationId()) {
+            updatedAssociation = save(associationModel);
+        }
+
+        return updatedAssociation;
+    }
+
+    public Optional<AssociationModel> findById(int id) {
         return associationRepository.findById(id);
     }
 
