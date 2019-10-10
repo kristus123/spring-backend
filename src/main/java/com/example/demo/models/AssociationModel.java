@@ -24,7 +24,6 @@ public class AssociationModel {
     @Column(unique = true, nullable = false)
     private String name;
 
-
     @Size(min = 1, max = 255, message = "Minimum Association name length: 21 characters")
     @Column(unique = true, nullable = false)
     private String description;
