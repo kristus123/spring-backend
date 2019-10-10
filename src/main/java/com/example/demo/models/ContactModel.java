@@ -3,11 +3,7 @@ package com.example.demo.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="CONTACT")
@@ -16,13 +12,14 @@ import javax.validation.constraints.Size;
 public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer contact_id;
+    @Column(name = "contact_id")
+    private Integer contactId;
 
     @Column(nullable = false)
-    private String contact_type;
+    private String contactType;
 
     @Column(nullable = false)
-    private String contact_detail;
+    private String contactDetail;
 
     @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
@@ -31,9 +28,9 @@ public class ContactModel {
     public ContactModel() {
     }
 
-    public ContactModel(String contact_type, String contact_detail, PersonModel person) {
-        this.contact_type = contact_type;
-        this.contact_detail = contact_detail;
+    public ContactModel(String contactType, String contactDetail, PersonModel person) {
+        this.contactType = contactType;
+        this.contactDetail = contactDetail;
         this.person = person;
     }
 }

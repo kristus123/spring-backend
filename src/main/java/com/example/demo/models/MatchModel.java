@@ -14,9 +14,10 @@ import java.sql.Date;
 public class MatchModel {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer match_id;
+    @Column(name = "match_id")
+    private Integer matchId;
 
-    private Date match_date;
+    private Date matchDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "home_team_id", referencedColumnName = "team_id")
@@ -37,8 +38,8 @@ public class MatchModel {
     public MatchModel() {
     }
 
-    public MatchModel(Date match_date, TeamModel homeTeam, TeamModel awayTeam, SeasonModel season, LocationModel location) {
-        this.match_date = match_date;
+    public MatchModel(Date matchDate, TeamModel homeTeam, TeamModel awayTeam, SeasonModel season, LocationModel location) {
+        this.matchDate = matchDate;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.season = season;
