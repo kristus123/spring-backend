@@ -18,8 +18,8 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
-    public void delete(PlayerModel player) {
-        playerRepository.delete(player);
+    public void deleteById(Integer id) {
+        playerRepository.deleteById(id);
     }
 
     public Optional<PlayerModel> findById(Integer id) {
