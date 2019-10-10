@@ -67,7 +67,7 @@ class UserTeamControllerTest {
 
         when(teamServiceMock.findAll()).thenReturn(teams);
 
-        mockMvc.perform(get("/v1/user/get/teams"))
+        mockMvc.perform(get("/v1/user/get/team"))
                 .andExpect(status().isOk())
                 //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$._embedded.teamModelList[0].teamId", is(1)))
