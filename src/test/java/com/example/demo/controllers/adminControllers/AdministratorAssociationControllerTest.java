@@ -1,7 +1,8 @@
 package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.repositories.PlayerRepository;
+import com.example.demo.repositories.AssociationRepository;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,53 +19,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class AdministratorPlayerControllerTest {
+public class AdministratorAssociationControllerTest {
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    PlayerRepository playerRepository;
+    AssociationRepository associationRepository;
 
-    @Before
-    void addDummyData() throws Exception {
-        String json = "{\"person_id\" : 2, \"team_id\" : 3, \"normal_position\" : \"Attacker\", \"player_number\" : 7 }";
-        mockMvc.perform(post("/v1/admin/post/player")
+    @Test
+    void runTests() throws Exception {
+        addAssociation();
+        getAssociation();
+        updateAssociation();
+        deleteAssociation();
+    }
+
+
+    void addAssociation() throws Exception {
+        String json = "{\"association_id\" : 1, \"association_name\" : \"This name\", \"description\" : \"This description\" }";
+        mockMvc.perform(post("/v1/admin/post/association")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void addPlayer() throws Exception {
-        String json = "{\"person_id\" : 3, \"team_id\" : 3, \"normal_position\" : \"Shooter\", \"player_number\" : 11 }";
-        mockMvc.perform(post("/v1/admin/post/player")
+
+    void getAssociation() throws Exception {
+        mockMvc.perform(get("/v1/admin/get/association/1"))
+                .andDo(print())
+                .andExpect(content().json("{\"association_id\" : 1, \"association_name\" : \"This name\", \"description\" : \"This description\"}"));
+                //.andExpect(status().isOk());
+    }
+
+
+    void updateAssociation() throws Exception {
+        String json = "{\"association_id\" : 1, \"association_name\" : \"Updated name\", \"description\" : \"Updated description\"}";
+        mockMvc.perform(put("/v1/admin/update/association/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void getPlayer() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/player/1"))
-                .andDo(print())
-                .andExpect(content().json("{\"player_id\" : 1, \"person\" : null, \"team\" : null, \"normal_position\" : \"Shooter\", \"player_number\" : 11}"));
-    }
-
-    @Test
-    void updatePlayer() throws Exception {
-        String json = "{\"player_id\" : 1, \"person\" : null, \"team\" : null, \"normal_position\" : \"Defender\", \"player_number\" : 21 }";
-        mockMvc.perform(put("/v1/admin/update/player/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void deletePlayer() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/player/1"))
+    void deleteAssociation() throws Exception {
+        mockMvc.perform(delete("/v1/admin/delete/association/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

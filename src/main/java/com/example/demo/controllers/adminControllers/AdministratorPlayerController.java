@@ -29,7 +29,7 @@ public class AdministratorPlayerController {
         return newPlayer;
     }
 
-    @PutMapping("/put/player/{playerId}")
+    @PutMapping("/update/player/{playerId}")
     public PlayerModel updatePlayer(@PathVariable int playerId, @RequestBody PlayerModel playerModel) {
         Optional<PlayerModel> oldPlayer = playerService.findById(playerId);
         if(oldPlayer.isPresent()) {

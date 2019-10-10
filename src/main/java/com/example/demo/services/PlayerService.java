@@ -19,12 +19,13 @@ public class PlayerService {
     }
 
     public PlayerModel update(PlayerModel player, PlayerModel oldPlayer) {
-        oldPlayer.setPlayer_id(player.getPlayer_id());
-        oldPlayer.setPerson(player.getPerson());
-        oldPlayer.setNormal_position(player.getNormal_position());
-        oldPlayer.setPlayer_number(player.getPlayer_number());
 
-        return oldPlayer;
+        PlayerModel updatedPlayer = null;
+        if(oldPlayer.getPlayer_id() == player.getPlayer_id()){
+            updatedPlayer = save(player);
+        }
+
+        return updatedPlayer;
     }
 
     public void delete(PlayerModel player) {
