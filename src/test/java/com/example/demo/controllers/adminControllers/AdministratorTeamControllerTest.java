@@ -1,10 +1,8 @@
-package com.example.demo.controllers;
+package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.exceptions.TeamNotFoundException;
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -18,22 +16,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class TeamControllerTest {
+class AdministratorTeamControllerTest {
 
     private MockMvc mockMvc;
 
@@ -136,36 +133,6 @@ class TeamControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void oneTeam() throws Exception {
-        Integer id = 1;
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
-        when(teamServiceMock.findById(id)).thenReturn(team);
-
-        mockMvc.perform(get("/v1/user/get/team/{id}", id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.teamId").value(id));
-    }
-
-    @Test
-    void allTeams() throws Exception {
-        Integer id = 1, id2 = 2;
-        TeamModel team1 = new TeamModel(id, id, "ManU");
-        TeamModel team2 = new TeamModel(id2, id2, "Chelsea");
-        List<TeamModel> teams = Arrays.asList(team1, team2);
-
-        when(teamServiceMock.findAll()).thenReturn(teams);
-
-        mockMvc.perform(get("/v1/user/get/teams"))
-                .andExpect(status().isOk())
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$._embedded.teamModelList[0].teamId", is(1)))
-                .andExpect(jsonPath("$._embedded.teamModelList[0].association.name", is("ManU")))
-                .andExpect(jsonPath("$._embedded.teamModelList[1].teamId", is(2)))
-                .andExpect(jsonPath("$._embedded.teamModelList[1].association.name", is("Chelsea")));
-    }
 
     public static String asJsonString(final Object obj) {
         try {
