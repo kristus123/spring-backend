@@ -21,7 +21,7 @@ public class PlayerService {
     public PlayerModel update(PlayerModel player, PlayerModel oldPlayer) {
 
         PlayerModel updatedPlayer = null;
-        if(oldPlayer.getPlayer_id() == player.getPlayer_id()){
+        if(oldPlayer.getPlayerId() == player.getPlayerId()){
             updatedPlayer = save(player);
         }
 

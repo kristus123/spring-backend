@@ -45,7 +45,7 @@ public class AdministratorAssociationController {
         Optional<AssociationModel> associationModel = associationService.findById(associationId);
         if(associationModel.isPresent()) {
             AssociationModel tempAssociation = associationModel.get();
-            associationService.deleteById(associationModel.get().getAssociation_id());
+            associationService.deleteById(associationModel.get().getAssociationId());
             return tempAssociation;
         }
 

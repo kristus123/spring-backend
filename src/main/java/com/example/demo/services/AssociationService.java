@@ -24,7 +24,7 @@ public class AssociationService {
 
     public AssociationModel update(AssociationModel associationModel, AssociationModel oldAssociationModel) {
         AssociationModel updatedAssociation = null;
-        if(oldAssociationModel.getAssociation_id() == associationModel.getAssociation_id()) {
+        if(oldAssociationModel.getAssociationId() == associationModel.getAssociationId()) {
             updatedAssociation = save(associationModel);
         }
 

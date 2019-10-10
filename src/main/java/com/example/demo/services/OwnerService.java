@@ -19,7 +19,7 @@ public class OwnerService {
 
     public OwnerModel update(OwnerModel owner, OwnerModel oldOwner) {
         OwnerModel updatedOwner = null;
-        if(oldOwner.getOwner_id() == owner.getOwner_id()) {
+        if(oldOwner.getOwnerId() == owner.getOwnerId()) {
             updatedOwner = save(owner);
         }
         return updatedOwner;

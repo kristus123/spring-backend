@@ -26,8 +26,6 @@ public class AdministratorMatchPositionController {
 
     @PostMapping("post/matchPosition")
     public MatchPositionModel addMatchPosition(@RequestBody MatchPositionModel matchPositionModel) {
-        System.out.println(matchPositionModel.getMatch());
-        System.out.println(matchPositionModel.getPlayer());
         MatchPositionModel newMatchPosition = matchPositionService.save(matchPositionModel);
         return newMatchPosition;
     }
