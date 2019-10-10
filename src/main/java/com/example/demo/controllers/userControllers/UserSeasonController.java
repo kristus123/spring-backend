@@ -19,11 +19,7 @@ public class UserSeasonController {
 
     @GetMapping("/get/season/{id}")
     public SeasonModel oneSeason(@PathVariable Integer id) {
-
-        SeasonModel season = seasonService.findById(id)
-                .orElseThrow(() -> new SeasonNotFoundException(id));
-
-        return season;
+        return seasonService.findById(id).get();
     }
 
     @GetMapping("/get/season")

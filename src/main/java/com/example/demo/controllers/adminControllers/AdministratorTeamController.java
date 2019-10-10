@@ -26,10 +26,10 @@ public class AdministratorTeamController {
     @PutMapping("/update/team/{id}")
     public TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
         if (id != teamModel.getTeamId()) {
-            throw new InvalidTeamRequestException(id, teamModel.getTeamId());
+            return null;
         }
         if (!teamService.findById(id).isPresent()) {
-            throw new TeamNotFoundException(id);
+            return null;
         }
 
         return teamService.save(teamModel);
@@ -39,7 +39,7 @@ public class AdministratorTeamController {
     public TeamModel deleteTeam(@PathVariable Integer id) {
         Optional<TeamModel> team = teamService.findById(id);
         if (!team.isPresent()) {
-            throw new TeamNotFoundException(id);
+            return null;
         }
 
         teamService.deleteById(id);

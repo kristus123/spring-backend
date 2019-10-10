@@ -19,11 +19,7 @@ public class UserPlayerController {
 
     @GetMapping("/get/player/{id}")
     public PlayerModel onePlayer(@PathVariable Integer id) {
-
-        PlayerModel player = playerService.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(id));
-
-        return player;
+        return playerService.findById(id).get();
     }
 
     @GetMapping("/get/player")

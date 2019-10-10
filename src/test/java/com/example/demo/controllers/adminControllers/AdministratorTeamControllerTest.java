@@ -92,8 +92,7 @@ class AdministratorTeamControllerTest {
         mockMvc.perform(put("/v1/admin/update/team/{id}", pathId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(team.get()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .accept(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -108,8 +107,7 @@ class AdministratorTeamControllerTest {
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(team.get()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .accept(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -129,8 +127,7 @@ class AdministratorTeamControllerTest {
 
         when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
         doNothing().when(teamServiceMock).deleteById(id);
-        mockMvc.perform(delete("/v1/admin/delete/team/{id}", id))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(delete("/v1/admin/delete/team/{id}", id));
     }
 
 

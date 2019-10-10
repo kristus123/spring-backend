@@ -19,11 +19,7 @@ public class UserTeamController {
 
     @GetMapping("/get/team/{id}")
     public TeamModel oneTeam(@PathVariable Integer id) {
-
-        TeamModel team = teamService.findById(id)
-                .orElseThrow(() -> new TeamNotFoundException(id));
-
-        return team;
+        return teamService.findById(id).get();
     }
 
     @GetMapping("/get/team")

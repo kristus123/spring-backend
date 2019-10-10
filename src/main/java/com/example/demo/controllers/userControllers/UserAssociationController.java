@@ -20,11 +20,7 @@ public class UserAssociationController {
 
     @GetMapping("/get/association/{id}")
     public AssociationModel oneAssociation(@PathVariable Integer id) {
-
-        AssociationModel association = associationService.findById(id)
-                .orElseThrow(() -> new AssociationNotFoundException(id));
-
-        return association;
+        return associationService.findById(id).get();
     }
 
     @GetMapping("/get/association")

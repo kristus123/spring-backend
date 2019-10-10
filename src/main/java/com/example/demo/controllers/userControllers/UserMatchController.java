@@ -19,11 +19,7 @@ public class UserMatchController {
 
     @GetMapping("/get/match/{id}")
     public MatchModel oneMatch(@PathVariable Integer id) {
-
-        MatchModel match = matchService.findById(id)
-                .orElseThrow(() -> new MatchNotFoundException(id));
-
-        return match;
+        return matchService.findById(id).get();
     }
 
     @GetMapping("/get/match")
