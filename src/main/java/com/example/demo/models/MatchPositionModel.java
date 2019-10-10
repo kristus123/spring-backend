@@ -25,6 +25,7 @@ public class MatchPositionModel {
     private String position; // TODO PANDA: Integer? String?
 
     public MatchPositionModel() {
+
     }
 
     public MatchPositionModel(PlayerModel player, MatchModel match, String position) {

@@ -1,7 +1,6 @@
 package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.repositories.AssociationRepository;
-
+import com.example.demo.repositories.OwnerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,56 +12,56 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class AdministratorAssociationControllerTest {
+public class AdministratorOwnerControllerTest {
+
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    AssociationRepository associationRepository;
+    OwnerRepository ownerRepository;
 
     @Test
     void runTests() throws Exception {
-        addAssociation();
-        getAssociation();
-        updateAssociation();
-        deleteAssociation();
+        addOwner();
+        getOwner();
+        updateOwner();
+        deleteOwner();
     }
 
+    void getOwner() throws Exception {
+        mockMvc.perform(get("/v1/admin/get/owner/1"))
+                .andDo(print())
+                .andExpect(content().json("{\"ownerId\" : 1, \"person\" : null}"))
+                .andExpect(status().isOk());
+    }
 
-    void addAssociation() throws Exception {
-        String json = "{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\" }";
-        mockMvc.perform(post("/v1/admin/post/association")
+    void addOwner() throws Exception {
+        String json = "{\"person_id\" : 2}";
+        mockMvc.perform(post("/v1/admin/post/owner")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-
-    void getAssociation() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/association/1"))
-                .andDo(print())
-                .andExpect(content().json("{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\"}"))
-                .andExpect(status().isOk());
-    }
-
-
-    void updateAssociation() throws Exception {
-        String json = "{\"associationId\" : 1, \"name\" : \"Updated name\", \"description\" : \"Updated description\"}";
-        mockMvc.perform(put("/v1/admin/update/association/1")
+    //This endpoint is difficult to test because of the table structure.
+    void updateOwner() throws Exception {
+        String json = "{\"ownerId\" : 1, \"person\" : null}";
+        mockMvc.perform(put("/v1/admin/update/owner/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    void deleteAssociation() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/association/1"))
+    void deleteOwner() throws Exception {
+        mockMvc.perform(delete("/v1/admin/delete/owner/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
