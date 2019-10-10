@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -70,9 +71,9 @@ class UserTeamControllerTest {
         mockMvc.perform(get("/v1/user/get/team"))
                 .andExpect(status().isOk())
                 //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$._embedded.teamModelList[0].teamId", is(1)))
-                .andExpect(jsonPath("$._embedded.teamModelList[0].association.name", is("ManU")))
-                .andExpect(jsonPath("$._embedded.teamModelList[1].teamId", is(2)))
-                .andExpect(jsonPath("$._embedded.teamModelList[1].association.name", is("Chelsea")));
+                .andExpect(jsonPath("$[0].teamId", is(1)))
+                .andExpect(jsonPath("$[0].association.name", is("ManU")))
+                .andExpect(jsonPath("$[1].teamId", is(2)))
+                .andExpect(jsonPath("$[1].association.name", is("Chelsea")));
     }
 }
