@@ -18,8 +18,8 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
-    public void delete(MatchModel match) {
-        matchRepository.delete(match);
+    public void deleteById(Integer id) {
+        matchRepository.deleteById(id);
     }
 
     public Optional<MatchModel> findById(Integer id) {
