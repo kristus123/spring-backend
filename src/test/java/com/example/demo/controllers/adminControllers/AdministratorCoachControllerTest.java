@@ -39,8 +39,6 @@ class AdministratorCoachControllerTest {
 
     @Test
     public void testThatCanGetCoachAfterPost() throws Exception {
-
-        System.out.println("Here is the ID: " + ID);
         mockMvc.perform(get("/v1/admin/get/coach/" + ID)).andExpect(content().json("{\"coachId\": " + ID + "}"));
     }
 
