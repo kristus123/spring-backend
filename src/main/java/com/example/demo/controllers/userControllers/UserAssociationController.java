@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -20,7 +21,12 @@ public class UserAssociationController {
 
     @GetMapping("/get/association/{id}")
     public AssociationModel oneAssociation(@PathVariable Integer id) {
-        return associationService.findById(id).get();
+
+        Optional<AssociationModel> association = associationService.findById(id);
+        if (!association.isPresent())
+            return null;
+
+        return association.get();
     }
 
     @GetMapping("/get/association")

@@ -60,6 +60,14 @@ class UserTeamControllerTest {
     }
 
     @Test
+    void oneNonExistingTeam() throws Exception {
+        Integer id = 1;
+        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/v1/user/get/team/{id}", id));
+    }
+
+    @Test
     void allTeams() throws Exception {
         Integer id = 1, id2 = 2;
         TeamModel team1 = new TeamModel(id, id, "ManU");

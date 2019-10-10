@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -19,7 +20,12 @@ public class UserSeasonController {
 
     @GetMapping("/get/season/{id}")
     public SeasonModel oneSeason(@PathVariable Integer id) {
-        return seasonService.findById(id).get();
+
+        Optional<SeasonModel> season = seasonService.findById(id);
+        if(!season.isPresent())
+            return null;
+
+        return season.get();
     }
 
     @GetMapping("/get/season")

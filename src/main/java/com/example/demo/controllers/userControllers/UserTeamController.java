@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -19,7 +20,12 @@ public class UserTeamController {
 
     @GetMapping("/get/team/{id}")
     public TeamModel oneTeam(@PathVariable Integer id) {
-        return teamService.findById(id).get();
+
+        Optional<TeamModel> team = teamService.findById(id);
+        if(!team.isPresent())
+            return null;
+
+        return team.get();
     }
 
     @GetMapping("/get/team")

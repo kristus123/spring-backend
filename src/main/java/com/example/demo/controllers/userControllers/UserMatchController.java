@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -19,7 +20,12 @@ public class UserMatchController {
 
     @GetMapping("/get/match/{id}")
     public MatchModel oneMatch(@PathVariable Integer id) {
-        return matchService.findById(id).get();
+
+        Optional<MatchModel> match = matchService.findById(id);
+        if (!match.isPresent())
+            return null;
+
+        return match.get();
     }
 
     @GetMapping("/get/match")
