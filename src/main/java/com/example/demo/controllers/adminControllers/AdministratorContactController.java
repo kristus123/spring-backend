@@ -5,6 +5,8 @@ import com.example.demo.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/admin")
 public class AdministratorContactController {
@@ -16,6 +18,11 @@ public class AdministratorContactController {
     public ContactModel getContact(@PathVariable Integer id) {
         ContactModel contactModel = contactService.findById(id).orElseGet(null);
         return contactModel;
+    }
+
+    @GetMapping("/get/contact")
+    public List<ContactModel> getAllContact() {
+        return contactService.findAll();
     }
 
     @PostMapping("/post/contact")

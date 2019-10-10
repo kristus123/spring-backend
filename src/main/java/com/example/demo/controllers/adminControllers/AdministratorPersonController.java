@@ -7,6 +7,7 @@ import com.example.demo.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,6 +21,11 @@ public class AdministratorPersonController {
     public PersonModel getPlayer(@PathVariable Integer id) {
         PersonModel personModel = personService.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
         return personModel;
+    }
+
+    @GetMapping("/get/person")
+    public List<PersonModel> getAllPlayers() {
+        return personService.findAll();
     }
 
     @PostMapping("/post/person")

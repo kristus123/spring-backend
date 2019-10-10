@@ -14,13 +14,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.assertj.core.api.Assertions.*;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -83,17 +83,27 @@ class AdministratorPersonControllerTest {
     }
 
     @Test
+    void testThatCanGetAllPersons() throws Exception {
+        String json = "{\"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
+                content(json)).
+                andExpect(status().isOk());
+        ID++;
+        mockMvc.perform(get("/v1/admin/get/person/")).andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
     void testThatPersonIsUpdated() throws Exception {
         String json = "{\"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
-        String json_update = "{\"person_id\":" + ID + ", \"first_name\":\"OLA\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        String jsonUpdated = "{\"person_id\":" + ID + ", \"first_name\":\"OLA\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
 
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
                 content(json)).
                 andExpect(status().isOk());
 
         mockMvc.perform(put("/v1/admin/update/person/" + ID).contentType(MediaType.APPLICATION_JSON).
-                content(json_update));
+                content(jsonUpdated));
 
-        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(json_update));
+        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(jsonUpdated));
     }
 }

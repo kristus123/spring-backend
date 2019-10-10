@@ -1,6 +1,5 @@
 package com.example.demo.controllers.adminControllers;
 
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class AdministratorContactControllerTest {
+class AdministratorMatchGoalControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -30,46 +29,41 @@ class AdministratorContactControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
+        jsonBody = "{\"player_id\": 1,\"goal_type_id\": 1, \"match_id\": 1, \"description\": \"Incredible goal!\" }";
 
-        jsonBody = "{\"person_id\":" + ID + ", \"contact_type\":\"phone\", \"contact_detail\":\"41003239\"}";
-
-        mockMvc.perform(post("/v1/admin/post/contact").contentType(MediaType.APPLICATION_JSON).
+        mockMvc.perform(post("/v1/admin/post/matchgoal").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
                 andExpect(status().isOk());
         ID++;
     }
 
     @Test
-    public void testThatCanGetContactAfterPost() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/contact/" + ID)).andExpect(content().json("{\"contact_type\":\"phone\", \"contact_detail\":\"41003239\"}"));
+    void testThatCanGetMatchGoalAfterPost() throws Exception {
+        mockMvc.perform(get("/v1/admin/get/matchgoal/" + ID)).andExpect(content().json("{\"description\": \"Incredible goal!\" }"));
     }
 
     @Test
-    public void testThatCanGetAllContacts() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/contact/")).andExpect(jsonPath("$", hasSize(1)));
+    void testThatCanGetAllMatchGoals() throws Exception {
+        mockMvc.perform(get("/v1/admin/get/matchgoal/")).andExpect(jsonPath("$").isNotEmpty());
     }
 
     @Test
-    public void testThatContactIsDeleted() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/contact/" + ID));
+    void testThatMatchGoalIsDeleted() throws Exception {
+        mockMvc.perform(delete("/v1/admin/delete/matchgoal/" + ID));
         // This is not a good testing method
         // Should be checked by http status set by a custom exception
         // We are actually expecting a nullPointerException, but it is wrapped inside a Spring exception
         assertThrows(NestedServletException.class, () ->
-                mockMvc.perform(get("/v1/admin/get/contact/" + ID)));
-
+                mockMvc.perform(get("/v1/admin/get/matchgoal/" + ID)));
     }
 
     @Test
-    public void testThatContactIsUpdated() throws Exception {
+    void testThatMatchGoalIsUpdated() throws Exception {
+        String jsonBodyUpdated = "{\"goal_id\": " + ID + ",\"player_id\": 1,\"goal_type_id\": 1, \"match_id\": 1, \"description\": \"Not so Incredible goal!\" }";
 
-        String jsonBodyUpdated = "{\"contact_id\":" + ID + ",  \"person_id\":" + ID + ", \"contact_type\":\"phone\", \"contact_detail\":\"1111111\"}";
+        mockMvc.perform(put("/v1/admin/update/matchgoal/" + ID).contentType(MediaType.APPLICATION_JSON).
+                content(jsonBodyUpdated));
 
-        mockMvc.perform(put("/v1/admin/update/contact/"+ID).contentType(MediaType.APPLICATION_JSON).
-                content(jsonBodyUpdated)).
-                andExpect(status().isOk());
-
-        mockMvc.perform(get("/v1/admin/get/contact/" + ID)).
-                andExpect(content().json("{\"contact_detail\":\"1111111\"}"));
+        mockMvc.perform(get("/v1/admin/get/matchgoal/" + ID)).andExpect(content().json("{\"description\": \"Not so Incredible goal!\" }"));
     }
 }

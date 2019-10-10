@@ -5,6 +5,8 @@ import com.example.demo.services.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/admin/")
 public class AdministratorCoachController {
@@ -16,6 +18,9 @@ public class AdministratorCoachController {
     public CoachModel getCoach(@PathVariable Integer id) {
         return coachService.findById(id).orElseGet(null);
     }
+
+    @GetMapping("/get/coach")
+    public List<CoachModel> getAllCoaches() {return coachService.findAll();}
 
     @PostMapping("/post/coach")
     public CoachModel createCoach(@RequestBody CoachModel coach) {
