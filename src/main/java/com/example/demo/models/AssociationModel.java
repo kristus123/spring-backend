@@ -20,7 +20,7 @@ public class AssociationModel {
     @Column(name = "association_id")
     private int associationId;
 
-    @Size(min = 4, max = 255, message = "Minimum Association name length: 4 characters")
+    //@Size(min = 4, max = 255, message = "Minimum Association name length: 4 characters")
     @Column(unique = true, nullable = false)
     private String name;
 

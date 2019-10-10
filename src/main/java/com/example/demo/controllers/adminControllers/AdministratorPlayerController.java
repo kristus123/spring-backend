@@ -7,38 +7,46 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/v1/admin")
+@RestController @RequestMapping("/v1/admin")
 public class AdministratorPlayerController {
-
     @Autowired
-    private PlayerService playerService;
+    PlayerService playerService;
 
+    @GetMapping("/get/player/{playerId}")
+    public PlayerModel getPlayer(@PathVariable int playerId) {
 
+        Optional<PlayerModel> playerModel = playerService.findById(playerId);
+        if (playerModel.isPresent()) {
+            return playerModel.get();
+        }
+        return null;
+    }
 
     @PostMapping("/post/player")
-    public PlayerModel newPlayer(@RequestBody PlayerModel playerModel) {
-        return playerService.save(playerModel);
+    public PlayerModel addPlayer(@RequestBody PlayerModel playerModel) {
+        PlayerModel newPlayer = playerService.save(playerModel);
+        return newPlayer;
     }
 
-    @PutMapping("/update/player/{id}")
-    public PlayerModel updatePlayer(@PathVariable Integer id, @RequestBody PlayerModel playerModel) {
-        if (playerModel.getPlayerId() != id || !playerService.findById(id).isPresent()) {
-            return null;
+    @PutMapping("/update/player/{playerId}")
+    public PlayerModel updatePlayer(@PathVariable int playerId, @RequestBody PlayerModel playerModel) {
+        Optional<PlayerModel> oldPlayer = playerService.findById(playerId);
+        if(oldPlayer.isPresent()) {
+            PlayerModel updatedPlayer = playerService.update(playerModel, oldPlayer.get());
+            return updatedPlayer;
         }
-
-        return playerService.save(playerModel);
+        return null;
     }
 
-    @DeleteMapping("/delete/player/{id}")
-    public PlayerModel deletePlayer(@PathVariable Integer id) {
-        Optional<PlayerModel> player = playerService.findById(id);
-        if (!player.isPresent()) {
-            return null;
+    @DeleteMapping("/delete/player/{playerId}")
+    public PlayerModel deletePlayer(@PathVariable int playerId) {
+        Optional<PlayerModel> player = playerService.findById(playerId);
+        if(player.isPresent()) {
+            PlayerModel tempPlayer = player.get();
+            playerService.delete(player.get());
+            return tempPlayer;
         }
 
-        playerService.deleteById(id);
-
-        return player.get();
+        return null;
     }
 }

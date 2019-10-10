@@ -1,6 +1,5 @@
 package com.example.demo.controllers.adminControllers;
 
-
 import com.example.demo.models.MatchModel;
 import com.example.demo.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +40,14 @@ public class AdministratorMatchController {
         matchService.deleteById(id);
 
         return match.get();
+    }
+
+    @GetMapping("/get/match/{matchId}")
+    public MatchModel getMatch(@PathVariable int matchId) {
+        Optional<MatchModel> match = matchService.findById(matchId);
+        if(match.isPresent()) {
+            return  match.get();
+        }
+        return null;
     }
 }
