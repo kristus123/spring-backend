@@ -1,8 +1,7 @@
 package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.repositories.AssociationRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

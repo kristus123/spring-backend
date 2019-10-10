@@ -18,8 +18,8 @@ public class SeasonService {
         return seasonRepository.save(season);
     }
 
-    public void delete(SeasonModel season) {
-        seasonRepository.delete(season);
+    public void deleteById(Integer id) {
+        seasonRepository.deleteById(id);
     }
 
     public Optional<SeasonModel> findById(Integer id) {

@@ -16,10 +16,8 @@ public class AdministratorAssociationController {
     public AssociationModel getAssociation(@PathVariable int associationId) {
         Optional<AssociationModel> associationModel = associationService.findById(associationId);
         if(associationModel.isPresent()) {
-            System.out.println("hei på deg!");
             return associationModel.get();
         }
-        System.out.println("null wtf?!");
         return null;
     }
 

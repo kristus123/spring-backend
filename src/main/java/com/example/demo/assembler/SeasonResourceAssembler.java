@@ -1,6 +1,6 @@
 package com.example.demo.assembler;
 
-import com.example.demo.controllers.SeasonController;
+import com.example.demo.controllers.userControllers.UserSeasonController;
 import com.example.demo.models.SeasonModel;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -15,7 +15,7 @@ public class SeasonResourceAssembler implements ResourceAssembler<SeasonModel, R
     @Override
     public Resource<SeasonModel> toResource(SeasonModel seasonModel) {
         return new Resource<>(seasonModel,
-                linkTo(methodOn(SeasonController.class).oneSeason(seasonModel.getSeasonId())).withSelfRel(),
-                linkTo(methodOn(SeasonController.class).allSeasons()).withRel("seasons"));
+                linkTo(methodOn(UserSeasonController.class).oneSeason(seasonModel.getSeasonId())).withSelfRel(),
+                linkTo(methodOn(UserSeasonController.class).allSeasons()).withRel("seasons"));
     }
 }

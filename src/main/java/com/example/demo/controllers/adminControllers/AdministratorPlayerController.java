@@ -1,7 +1,6 @@
 package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.models.PlayerModel;
-import com.example.demo.repositories.PlayerRepository;
 import com.example.demo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
