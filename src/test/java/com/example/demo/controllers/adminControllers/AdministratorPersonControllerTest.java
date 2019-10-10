@@ -41,7 +41,7 @@ class AdministratorPersonControllerTest {
 
     @Test
     void testThatCanGetPersonAfterPost() throws Exception {
-        String json = "{\"first_name\":\"haadasdaskon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        String json = "{\"firstName\":\"haadasdaskon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
                 content(json)).
@@ -55,16 +55,16 @@ class AdministratorPersonControllerTest {
     */
     @Test
     void testThatExceptionIsThrownIfPersonDoesNotExist() throws PersonNotFoundException  {
-        String person_id = "10";
-        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + person_id)));
+        String personId = "10";
+        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + personId)));
         org.junit.jupiter.api.Assertions.assertEquals(
-                "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + person_id,
+                "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
     }
 
     @Test
     void testThatPersonIsDeleted() throws Exception {
-        String json = "{\"first_name\":\"haakdsadason\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        String json = "{\"firstName\":\"haakdsadason\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
         // Create person and check that it was an success
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
@@ -75,16 +75,16 @@ class AdministratorPersonControllerTest {
         mockMvc.perform(delete("/v1/admin/delete/person/" + ID));
 
         // Check that person is not present
-        String person_id = "1";
+        String personId = "1";
         Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + ID++)));
         org.junit.jupiter.api.Assertions.assertEquals(
-                "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + person_id,
+                "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
     }
 
     @Test
     void testThatCanGetAllPersons() throws Exception {
-        String json = "{\"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
                 content(json)).
                 andExpect(status().isOk());
@@ -94,8 +94,8 @@ class AdministratorPersonControllerTest {
 
     @Test
     void testThatPersonIsUpdated() throws Exception {
-        String json = "{\"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
-        String jsonUpdated = "{\"person_id\":" + ID + ", \"first_name\":\"OLA\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+        String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
+        String jsonUpdated = "{\"personId\":" + ID + ", \"firstName\":\"OLA\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
                 content(json)).

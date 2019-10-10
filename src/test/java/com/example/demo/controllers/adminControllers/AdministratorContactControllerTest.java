@@ -31,7 +31,7 @@ class AdministratorContactControllerTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        jsonBody = "{\"person_id\":" + ID + ", \"contact_type\":\"phone\", \"contact_detail\":\"41003239\"}";
+        jsonBody = "{\"personId\":" + ID + ", \"contactType\":\"phone\", \"contactDetail\":\"41003239\"}";
 
         mockMvc.perform(post("/v1/admin/post/contact").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
@@ -41,7 +41,7 @@ class AdministratorContactControllerTest {
 
     @Test
     public void testThatCanGetContactAfterPost() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/contact/" + ID)).andExpect(content().json("{\"contact_type\":\"phone\", \"contact_detail\":\"41003239\"}"));
+        mockMvc.perform(get("/v1/admin/get/contact/" + ID)).andExpect(content().json("{\"contactType\":\"phone\", \"contactDetail\":\"41003239\"}"));
     }
 
     @Test
@@ -63,13 +63,13 @@ class AdministratorContactControllerTest {
     @Test
     public void testThatContactIsUpdated() throws Exception {
 
-        String jsonBodyUpdated = "{\"contact_id\":" + ID + ",  \"person_id\":" + ID + ", \"contact_type\":\"phone\", \"contact_detail\":\"1111111\"}";
+        String jsonBodyUpdated = "{\"contactId\":" + ID + ",  \"personId\":" + ID + ", \"contactType\":\"phone\", \"contactDetail\":\"1111111\"}";
 
         mockMvc.perform(put("/v1/admin/update/contact/"+ID).contentType(MediaType.APPLICATION_JSON).
                 content(jsonBodyUpdated)).
                 andExpect(status().isOk());
 
         mockMvc.perform(get("/v1/admin/get/contact/" + ID)).
-                andExpect(content().json("{\"contact_detail\":\"1111111\"}"));
+                andExpect(content().json("{\"contactDetail\":\"1111111\"}"));
     }
 }

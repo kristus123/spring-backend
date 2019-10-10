@@ -29,7 +29,7 @@ class AdministratorMatchGoalControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonBody = "{\"player_id\": 1,\"goal_type_id\": 1, \"match_id\": 1, \"description\": \"Incredible goal!\" }";
+        jsonBody = "{\"playerId\": 1,\"goalTypeId\": 1, \"matchId\": 1, \"description\": \"Incredible goal!\" }";
 
         mockMvc.perform(post("/v1/admin/post/matchgoal").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
@@ -59,7 +59,7 @@ class AdministratorMatchGoalControllerTest {
 
     @Test
     void testThatMatchGoalIsUpdated() throws Exception {
-        String jsonBodyUpdated = "{\"goal_id\": " + ID + ",\"player_id\": 1,\"goal_type_id\": 1, \"match_id\": 1, \"description\": \"Not so Incredible goal!\" }";
+        String jsonBodyUpdated = "{\"goalId\": " + ID + ",\"playerId\": 1,\"goalTypeId\": 1, \"matchId\": 1, \"description\": \"Not so Incredible goal!\" }";
 
         mockMvc.perform(put("/v1/admin/update/matchgoal/" + ID).contentType(MediaType.APPLICATION_JSON).
                 content(jsonBodyUpdated));

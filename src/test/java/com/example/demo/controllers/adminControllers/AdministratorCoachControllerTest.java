@@ -29,7 +29,7 @@ class AdministratorCoachControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonBody = "{\"person_id\": 1 }";
+        jsonBody = "{\"personId\": 1 }";
 
         mockMvc.perform(post("/v1/admin/post/coach").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
@@ -41,7 +41,7 @@ class AdministratorCoachControllerTest {
     public void testThatCanGetCoachAfterPost() throws Exception {
 
         System.out.println("Here is the ID: " + ID);
-        mockMvc.perform(get("/v1/admin/get/coach/" + ID)).andExpect(content().json("{\"coach_id\": " + ID + "}"));
+        mockMvc.perform(get("/v1/admin/get/coach/" + ID)).andExpect(content().json("{\"coachId\": " + ID + "}"));
     }
 
     @Test
@@ -62,14 +62,14 @@ class AdministratorCoachControllerTest {
     @Test
     public void testThatCoachIsUpdated() throws Exception {
         // TODO: Add person object to coach
-//        String person_json = "{\"person_id\":\"2\", \"address_id\":\"1\", \"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
-//        String jsonBodyUpdated = "{\"coach_id\":" + 2 + ",  \"person_id\": 1 }";
+//        String person_json = "{\"personId\":\"2\", \"addressId\":\"1\", \"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
+//        String jsonBodyUpdated = "{\"coachId\":" + 2 + ",  \"personId\": 1 }";
 //
 //        mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
 //                content(person_json)).
 //                andExpect(status().isOk());
 //
-//        jsonBody = "{\"person_id\": 2 }";
+//        jsonBody = "{\"personId\": 2 }";
 //
 //        mockMvc.perform(post("/v1/admin/post/coach").contentType(MediaType.APPLICATION_JSON).
 //                content(jsonBody)).
@@ -80,7 +80,7 @@ class AdministratorCoachControllerTest {
 //                andExpect(status().isOk());
 //
 //        mockMvc.perform(get("/v1/admin/get/coach/" + ID)).
-//                andExpect(content().json("{\"person_id\":" + person_json + "}"));
+//                andExpect(content().json("{\"personId\":" + person_json + "}"));
     }
 
 }
