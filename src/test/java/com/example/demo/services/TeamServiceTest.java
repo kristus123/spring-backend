@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -9,11 +10,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 class TeamServiceTest {
 
+    @Autowired
+    TeamService teamService;
+
     /**
      * https://stackoverflow.com/questions/34793104/what-is-the-best-way-to-test-controllers-and-services-with-junit
      */
     @Test
     void save() {
+
+
     }
 
     @Test
