@@ -27,12 +27,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-
-
-
-    /*Here we are using dummy data, you need to load user data from
-     database or other third party application*/
+        
         UserModel user = findUserbyUername(username);
 
         UserBuilder builder = null;
@@ -40,9 +35,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
             builder = org.springframework.security.core.userdetails.User.withUsername(username);
             builder.password(user.getPassword());
-            System.out.println("______________XXXXXXXXXXXX");
-            System.out.println(user.getPassword());
-            System.out.println("______________XXXXXXXXXXXX");
+
             builder.roles(user.getRoles());
             System.out.println(builder);
 
@@ -55,14 +48,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     private UserModel findUserbyUername(String username) {
         Optional<UserModel> user = userRepository.findByUsername(username);
-
-        System.out.println("________________");
-        System.out.println(user.get().getUsername());
-        System.out.println(user.get().getPassword());
-        System.out.println("________________");
-
-
-
 
 
         if (user.isPresent()) {
