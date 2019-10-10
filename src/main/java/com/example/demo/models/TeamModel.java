@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name="TEAM")
 @Getter
 @Setter
+@NoArgsConstructor
 public class TeamModel {
     @Id
     @GeneratedValue
@@ -31,8 +33,6 @@ public class TeamModel {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 
-    public TeamModel() {
-    }
 
     // TODO PANDA: for testing purposes
     public TeamModel(Integer teamId, Integer association_id, String associationName) {
@@ -45,5 +45,10 @@ public class TeamModel {
         this.coach = coach;
         this.owner = owner;
         this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "TEAMMODEL : Association : " + association.getName() + " Coach : " + coach.getPerson().getFirstName() + " owner : " + owner.getPerson().getFirstName() + " addresse :" +location.getAddress().getAddresses()[0] ;
     }
 }

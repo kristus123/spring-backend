@@ -1,9 +1,11 @@
 package com.example.demo.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @Table(name="PERSON")
 @Getter
 @Setter
+@NoArgsConstructor
 public class PersonModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,19 +27,22 @@ public class PersonModel {
     private String lastName;
 
     @Column(nullable = false)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 
-    public PersonModel() {
-    }
 
-    public PersonModel(String firstName, String lastName, Date dateOfBirth, AddressModel address) {
+    public PersonModel(String firstName, String lastName, LocalDate dateOfBirth, AddressModel address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "PERSONMODEL : " + firstName + " " + lastName;
     }
 }

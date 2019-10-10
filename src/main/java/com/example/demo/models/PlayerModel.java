@@ -17,9 +17,6 @@ public class PlayerModel {
   @Column(name = "player_id")
   private Integer playerId;
 
-  @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
-  @Column(unique = true, nullable = false)
-  private String playername;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "person_id", referencedColumnName = "person_id")
@@ -31,17 +28,21 @@ public class PlayerModel {
 
   private String normalPosition;
 
-  private Integer playerNumber;
+  private String playerNumber;
 
 
   public PlayerModel() {
   }
 
-  public PlayerModel(@Size(min = 4, max = 255, message = "Minimum player name length: 4 characters") String playername, PersonModel person, TeamModel team, String normalPosition, Integer playerNumber) {
-    this.playername = playername;
+  public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber) {
     this.person = person;
     this.team = team;
     this.normalPosition = normalPosition;
     this.playerNumber = playerNumber;
+  }
+
+  @Override
+  public String toString() {
+    return person.getFirstName() + " spiller for " + team.getAssociation().getName() + " : posisjonen hans er " + normalPosition + " og spillernummer er " + playerNumber;
   }
 }

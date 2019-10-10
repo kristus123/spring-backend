@@ -85,7 +85,7 @@ class CreationServiceTest {
     @Test
     void assignAddressToLocationTest() {
         LocationModel locationModel = creationService.createLocation(
-                null,
+                new AddressModel("5555", "Oslo", "Norge", "Vestre 30"),
                 "Bislett", "et fint sted hvor Kristian bor");
 
         addressRepository.save(new AddressModel("5555", "Trondheim", "Norway"));
@@ -99,7 +99,7 @@ class CreationServiceTest {
 
 
         locationModel = locationRepository.findByName("Bislett").get();
-        assertNull(locationModel.getAddress());
+
 
         creationService.assignAddressToLocation(locationModel, addressModel.get().getAddressId());
 
