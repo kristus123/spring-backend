@@ -18,6 +18,19 @@ public class SeasonService {
         return seasonRepository.save(season);
     }
 
+    public SeasonModel update(SeasonModel season, SeasonModel oldSeason) {
+         SeasonModel updatedSeason = null;
+         if (oldSeason.getSeasonId() == season.getSeasonId()) {
+             updatedSeason = save(season);
+         }
+
+         return updatedSeason;
+    }
+
+    public void delete(SeasonModel season) {
+        seasonRepository.delete(season);
+    }
+
     public void deleteById(Integer id) {
         seasonRepository.deleteById(id);
     }

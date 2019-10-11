@@ -20,7 +20,7 @@ public class UserAssociationController {
 
 
     @GetMapping("/get/association/{id}")
-    public AssociationModel oneAssociation(@PathVariable Integer id) {
+    public AssociationModel getAssociation(@PathVariable Integer id) {
 
         Optional<AssociationModel> association = associationService.findById(id);
         if (!association.isPresent())
@@ -30,7 +30,7 @@ public class UserAssociationController {
     }
 
     @GetMapping("/get/association")
-    public List<AssociationModel> allAssociations() {
+    public List<AssociationModel> getAssociations() {
 
         List<AssociationModel> associations = associationService.findAll();
 

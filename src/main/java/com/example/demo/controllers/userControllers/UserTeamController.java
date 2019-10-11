@@ -19,7 +19,7 @@ public class UserTeamController {
     private TeamService teamService;
 
     @GetMapping("/get/team/{id}")
-    public TeamModel oneTeam(@PathVariable Integer id) {
+    public TeamModel getTeam(@PathVariable Integer id) {
 
         Optional<TeamModel> team = teamService.findById(id);
         if(!team.isPresent())
@@ -29,7 +29,7 @@ public class UserTeamController {
     }
 
     @GetMapping("/get/team")
-    public List<TeamModel> allTeams() {
+    public List<TeamModel> getTeams() {
 
         List<TeamModel> teams = teamService.findAll();
 

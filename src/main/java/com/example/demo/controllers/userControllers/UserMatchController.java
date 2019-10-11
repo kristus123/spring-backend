@@ -19,7 +19,7 @@ public class UserMatchController {
 
 
     @GetMapping("/get/match/{id}")
-    public MatchModel oneMatch(@PathVariable Integer id) {
+    public MatchModel getMatch(@PathVariable Integer id) {
 
         Optional<MatchModel> match = matchService.findById(id);
         if (!match.isPresent())
@@ -29,7 +29,7 @@ public class UserMatchController {
     }
 
     @GetMapping("/get/match")
-    public List<MatchModel> allMatches() {
+    public List<MatchModel> getMatches() {
 
         List<MatchModel> matches = matchService.findAll();
 

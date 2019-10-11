@@ -15,7 +15,7 @@ public class PlayerResourceAssembler implements ResourceAssembler<PlayerModel, R
     @Override
     public Resource<PlayerModel> toResource(PlayerModel playerModel) {
         return new Resource<>(playerModel,
-                linkTo(methodOn(UserPlayerController.class).onePlayer(playerModel.getPlayerId())).withSelfRel(),
-                linkTo(methodOn(UserPlayerController.class).allPlayers()).withRel("players"));
+                linkTo(methodOn(UserPlayerController.class).getPlayer(playerModel.getPlayerId())).withSelfRel(),
+                linkTo(methodOn(UserPlayerController.class).getPlayers()).withRel("players"));
     }
 }

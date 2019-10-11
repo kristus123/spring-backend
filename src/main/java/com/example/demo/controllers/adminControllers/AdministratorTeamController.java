@@ -19,20 +19,22 @@ public class AdministratorTeamController {
 
 
     @PostMapping("/post/team")
-    public TeamModel newTeam(@RequestBody TeamModel teamModel) {
+    public TeamModel addTeam(@RequestBody TeamModel teamModel) {
         return teamService.save(teamModel);
     }
 
     @PutMapping("/update/team/{id}")
     public TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
-        if (id != teamModel.getTeamId()) {
-            return null;
-        }
-        if (!teamService.findById(id).isPresent()) {
+        if (teamModel == null || teamModel.getTeamId() != id) {
             return null;
         }
 
-        return teamService.save(teamModel);
+        Optional<TeamModel> oldTeam = teamService.findById(id);
+        if (!oldTeam.isPresent()) {
+            return null;
+        }
+
+        return teamService.update(teamModel, oldTeam.get());
     }
 
     @DeleteMapping("/delete/team/{id}")

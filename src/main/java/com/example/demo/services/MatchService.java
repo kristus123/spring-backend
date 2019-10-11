@@ -18,6 +18,20 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
+    public MatchModel update(MatchModel match, MatchModel oldMatch) {
+
+        MatchModel updatedMatch = null;
+        if (oldMatch.getMatchId() == match.getMatchId()) {
+            updatedMatch = save(match);
+        }
+
+        return updatedMatch;
+    }
+
+    public void delete(MatchModel match) {
+        matchRepository.delete(match);
+    }
+
     public void deleteById(Integer id) {
         matchRepository.deleteById(id);
     }

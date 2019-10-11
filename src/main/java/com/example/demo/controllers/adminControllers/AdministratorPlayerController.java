@@ -12,6 +12,7 @@ public class AdministratorPlayerController {
     @Autowired
     PlayerService playerService;
 
+    /* TODO PANDA: user operation moved to User controller
     @GetMapping("/get/player/{playerId}")
     public PlayerModel getPlayer(@PathVariable int playerId) {
 
@@ -21,6 +22,7 @@ public class AdministratorPlayerController {
         }
         return null;
     }
+     */
 
     @PostMapping("/post/player")
     public PlayerModel addPlayer(@RequestBody PlayerModel playerModel) {
@@ -30,6 +32,10 @@ public class AdministratorPlayerController {
 
     @PutMapping("/update/player/{playerId}")
     public PlayerModel updatePlayer(@PathVariable int playerId, @RequestBody PlayerModel playerModel) {
+        if (playerModel == null || playerModel.getPlayerId() != playerId) {
+            return null;
+        }
+
         Optional<PlayerModel> oldPlayer = playerService.findById(playerId);
         if(oldPlayer.isPresent()) {
             PlayerModel updatedPlayer = playerService.update(playerModel, oldPlayer.get());

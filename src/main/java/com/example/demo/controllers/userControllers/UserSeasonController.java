@@ -19,7 +19,7 @@ public class UserSeasonController {
 
 
     @GetMapping("/get/season/{id}")
-    public SeasonModel oneSeason(@PathVariable Integer id) {
+    public SeasonModel getSeason(@PathVariable Integer id) {
 
         Optional<SeasonModel> season = seasonService.findById(id);
         if(!season.isPresent())
@@ -29,7 +29,7 @@ public class UserSeasonController {
     }
 
     @GetMapping("/get/season")
-    public List<SeasonModel> allSeasons() {
+    public List<SeasonModel> getSeasons() {
 
         List<SeasonModel> seasons = seasonService.findAll();
 

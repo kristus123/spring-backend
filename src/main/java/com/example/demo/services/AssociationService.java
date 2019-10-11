@@ -22,10 +22,6 @@ public class AssociationService {
         return associationRepository.save(association);
     }
 
-    public void deleteById(int id) {
-        associationRepository.deleteById(id);
-    }
-
     public AssociationModel update(AssociationModel associationModel, AssociationModel oldAssociationModel) {
         AssociationModel updatedAssociation = null;
         if(oldAssociationModel.getAssociationId() == associationModel.getAssociationId()) {
@@ -33,6 +29,14 @@ public class AssociationService {
         }
 
         return updatedAssociation;
+    }
+
+    public void delete(AssociationModel association) {
+        associationRepository.delete(association);
+    }
+
+    public void deleteById(int id) {
+        associationRepository.deleteById(id);
     }
 
     public Optional<AssociationModel> findById(int id) {

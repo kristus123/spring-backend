@@ -18,6 +18,20 @@ public class TeamService {
         return teamRepository.save(team);
     }
 
+    public TeamModel update(TeamModel team, TeamModel oldTeam) {
+
+        TeamModel updatedTeam = null;
+        if (oldTeam.getTeamId() == team.getTeamId()) {
+            updatedTeam = save(team);
+        }
+
+        return updatedTeam;
+    }
+
+    public void delete(TeamModel team) {
+        teamRepository.delete(team);
+    }
+
     public void deleteById(Integer id) {
         teamRepository.deleteById(id);
     }

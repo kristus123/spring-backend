@@ -15,7 +15,7 @@ public class SeasonResourceAssembler implements ResourceAssembler<SeasonModel, R
     @Override
     public Resource<SeasonModel> toResource(SeasonModel seasonModel) {
         return new Resource<>(seasonModel,
-                linkTo(methodOn(UserSeasonController.class).oneSeason(seasonModel.getSeasonId())).withSelfRel(),
-                linkTo(methodOn(UserSeasonController.class).allSeasons()).withRel("seasons"));
+                linkTo(methodOn(UserSeasonController.class).getSeason(seasonModel.getSeasonId())).withSelfRel(),
+                linkTo(methodOn(UserSeasonController.class).getSeasons()).withRel("seasons"));
     }
 }

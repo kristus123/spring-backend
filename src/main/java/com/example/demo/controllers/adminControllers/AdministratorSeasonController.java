@@ -17,17 +17,22 @@ public class AdministratorSeasonController {
 
 
     @PostMapping("/post/season")
-    public SeasonModel newSeason(@RequestBody SeasonModel seasonModel) {
+    public SeasonModel addSeason(@RequestBody SeasonModel seasonModel) {
         return seasonService.save(seasonModel);
     }
 
     @PutMapping("/update/season/{id}")
     public SeasonModel updateMatch(@PathVariable Integer id, @RequestBody SeasonModel seasonModel) {
-        if (seasonModel.getSeasonId() != id || !seasonService.findById(id).isPresent()) {
+        if (seasonModel == null || seasonModel.getSeasonId() != id) {
             return null;
         }
 
-        return seasonService.save(seasonModel);
+        Optional<SeasonModel> oldSeason = seasonService.findById(id);
+        if (!oldSeason.isPresent()) {
+            return null;
+        }
+
+        return seasonService.update(seasonModel, oldSeason.get());
     }
 
     @DeleteMapping("/delete/season/{id}")

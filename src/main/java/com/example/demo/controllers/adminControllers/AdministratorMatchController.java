@@ -17,17 +17,22 @@ public class AdministratorMatchController {
 
 
     @PostMapping("/post/match")
-    public MatchModel newMatch(@RequestBody MatchModel matchModel) {
+    public MatchModel addMatch(@RequestBody MatchModel matchModel) {
         return matchService.save(matchModel);
     }
 
     @PutMapping("/update/match/{id}")
     public MatchModel updateMatch(@PathVariable Integer id, @RequestBody MatchModel matchModel) {
-        if (matchModel.getMatchId() != id || !matchService.findById(id).isPresent()) {
+        if (matchModel == null || matchModel.getMatchId() != id) {
             return null;
         }
 
-        return matchService.save(matchModel);
+        Optional<MatchModel> oldMatch = matchService.findById(id);
+        if (!oldMatch.isPresent()) {
+            return null;
+        }
+
+        return matchService.update(matchModel, oldMatch.get());
     }
 
     @DeleteMapping("/delete/match/{id}")
@@ -42,6 +47,7 @@ public class AdministratorMatchController {
         return match.get();
     }
 
+    /* TODO PANDA: moved to user controller
     @GetMapping("/get/match/{matchId}")
     public MatchModel getMatch(@PathVariable int matchId) {
         Optional<MatchModel> match = matchService.findById(matchId);
@@ -50,4 +56,6 @@ public class AdministratorMatchController {
         }
         return null;
     }
+
+     */
 }

@@ -19,7 +19,7 @@ public class UserPlayerController {
 
 
     @GetMapping("/get/player/{id}")
-    public PlayerModel onePlayer(@PathVariable Integer id) {
+    public PlayerModel getPlayer(@PathVariable Integer id) {
 
         Optional<PlayerModel> player = playerService.findById(id);
         if (!player.isPresent())
@@ -29,7 +29,7 @@ public class UserPlayerController {
     }
 
     @GetMapping("/get/player")
-    public List<PlayerModel> allPlayers() {
+    public List<PlayerModel> getPlayers() {
 
         List<PlayerModel> players = playerService.findAll();
 

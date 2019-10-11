@@ -32,6 +32,10 @@ public class PlayerService {
         playerRepository.delete(player);
     }
 
+    public void deleteById(Integer id) {
+        playerRepository.deleteById(id);
+    }
+
     public Optional<PlayerModel> findById(int id) {
         return playerRepository.findById(id);
     }

@@ -12,6 +12,7 @@ public class AdministratorAssociationController {
     @Autowired
     AssociationService associationService;
 
+    /* TODO PANDA: moved to user controller
     @GetMapping("/get/association/{associationId}")
     public AssociationModel getAssociation(@PathVariable int associationId) {
         Optional<AssociationModel> associationModel = associationService.findById(associationId);
@@ -21,6 +22,8 @@ public class AdministratorAssociationController {
         return null;
     }
 
+     */
+
     @PostMapping("/post/association")
     public AssociationModel addAssociation(@RequestBody AssociationModel associationModel) {
         AssociationModel newAssociation = associationService.save(associationModel);
@@ -29,6 +32,10 @@ public class AdministratorAssociationController {
 
     @PutMapping("/update/association/{associationId}")
     public AssociationModel updateAssociation(@PathVariable int associationId, @RequestBody AssociationModel associationModel) {
+        if (associationModel == null || associationId != associationModel.getAssociationId()) {
+            return null;
+        }
+
         Optional<AssociationModel> oldAssociation = associationService.findById(associationId);
         if(oldAssociation.isPresent()) {
             AssociationModel updatedAssociation = associationService.update(associationModel, oldAssociation.get());
