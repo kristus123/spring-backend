@@ -6,6 +6,7 @@ import com.example.demo.models.LocationModel;
 import com.example.demo.repositories.AddressRepository;
 import com.example.demo.repositories.LocationRepository;
 import org.junit.Before;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class CreationServiceTest {

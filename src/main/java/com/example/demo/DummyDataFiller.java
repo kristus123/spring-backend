@@ -23,20 +23,25 @@ public class DummyDataFiller implements CommandLineRunner {
 
     @Override
     public void run(String...args) throws Exception {
-        dummyDataService.createTeam();
-        dummyDataService.insertPlayerToTeam();
-        System.out.println(teamRepository.findAll().get(0));
-
-        TeamModel teamModel = teamRepository.findAll().get(0);
+        dummyDataService.TEST();
+        dummyDataService.createPlayer();
 
 
-        PlayerModel player = playerRepository.findAll().get(0);
 
-        System.out.println(player.getTeam().getAssociation().getName());
 
-        player.setTeam(teamModel);
+        //dummyDataService.insertPlayerToTeam();
+        //System.out.println(teamRepository.findAll().get(0));
 
-        System.out.println(player.getTeam().getAssociation().getName());
+        //TeamModel teamModel = teamRepository.findAll().get(0);
+
+
+        //PlayerModel player = playerRepository.findAll().get(0);
+
+        //System.out.println(player.getTeam().getAssociation().getName());
+
+        //player.setTeam(teamModel);
+
+        //System.out.println(player.getTeam().getAssociation().getName());
 
         //playerRepository.save(player);
 

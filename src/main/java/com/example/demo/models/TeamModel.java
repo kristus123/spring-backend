@@ -17,11 +17,11 @@ public class TeamModel {
     @Column(name = "team_id")
     private Integer teamId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "association_id", referencedColumnName = "association_id")
     private AssociationModel association;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "coach_id", referencedColumnName = "coach_id")
     private CoachModel coach;
 
@@ -29,7 +29,7 @@ public class TeamModel {
     @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
     private OwnerModel owner;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 

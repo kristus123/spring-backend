@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.interfaces.LivingHuman;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PersonModel {
+public class PersonModel implements LivingHuman {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id")
@@ -30,7 +31,7 @@ public class PersonModel {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 
@@ -45,5 +46,10 @@ public class PersonModel {
     @Override
     public String toString() {
         return "PERSONMODEL : " + firstName + " " + lastName;
+    }
+
+    @Override
+    public PersonModel getPerson() {
+        return this;
     }
 }

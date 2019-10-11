@@ -1,6 +1,7 @@
 package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.repositories.PlayerRepository;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,27 +38,50 @@ public class AdministratorPlayerControllerTest {
 
     @Test
     void addPlayer() throws Exception {
-        String json = "{\"personId\" : 3, \"teamId\" : 3, \"normalPosition\" : \"Shooter\", \"playerNumber\" : 11 }";
+        JSONObject json = new JSONObject()
+                .put("personId", 3)
+                .put("teamId", 3)
+                .put("normalPosition", "Shooter")
+                .put("playerNumber", 11)
+                .put("playername", "Ramoirs");
+        //String json = "{\"personId\" : 3, \"teamId\" : 3, \"normalPosition\" : \"Shooter\", \"playerNumber\" : 11 }";
         mockMvc.perform(post("/v1/admin/post/player")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                .content(json.toString()))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void getPlayer() throws Exception {
+        JSONObject json = new JSONObject()
+                .put("personId", 3)
+                .put("teamId", 3)
+                .put("normalPosition", "Shooter")
+                .put("playerNumber", 11)
+                .put("playername", "Ramoirs");
+
+        System.out.println(json.toString());
+
         mockMvc.perform(get("/v1/admin/get/player/1"))
                 .andDo(print())
-                .andExpect(content().json("{\"playerId\" : 1, \"person\" : null, \"team\" : null, \"normalPosition\" : \"Shooter\", \"playerNumber\" : 11}"));
+                .andDo(p -> {
+                    System.out.println(content());
+                });
+                //.andExpect(content().json(json.toString()));
     }
 
     @Test
     void updatePlayer() throws Exception {
-        String json = "{\"playerId\" : 1, \"person\" : null, \"team\" : null, \"normalPosition\" : \"Defender\", \"playerNumber\" : 21 }";
+        JSONObject json = new JSONObject()
+                .put("playerId", 1)
+                .put("normalPosition", "Defender")
+                .put("playerNumber", 21)
+                .put("playername", "Ronaldo");
+
         mockMvc.perform(put("/v1/admin/update/player/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                .content(json.toString()))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

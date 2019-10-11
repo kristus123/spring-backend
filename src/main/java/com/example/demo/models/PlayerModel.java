@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.interfaces.LivingHuman;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,8 @@ import javax.validation.constraints.Size;
 @Table(name="PLAYER")
 @Getter
 @Setter
-public class PlayerModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PlayerModel implements LivingHuman {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "player_id")
     private Integer playerId;
 
@@ -25,12 +25,12 @@ public class PlayerModel {
     private String playername;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "team_id", referencedColumnName = "team_id")
     private TeamModel team;
 
@@ -51,6 +51,12 @@ public class PlayerModel {
     this.team = team;
     this.normalPosition = normalPosition;
     this.playerNumber = playerNumber;
+  }
+
+  public PlayerModel(PersonModel person) {
+        this.person = person;
+        this.playername = person.getFirstName() + " " + person.getLastName();
+
   }
 
   @Override
