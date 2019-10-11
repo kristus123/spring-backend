@@ -3,6 +3,7 @@ package com.example.demo.controllers.adminControllers;
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +50,7 @@ class AdministratorTeamControllerTest {
 
 
     @Test
-    void newTeam() throws Exception {
+    void addTeam() throws Exception {
         Integer id = 1;
         TeamModel team = new TeamModel(id, id, "ManU");
 
@@ -71,7 +72,7 @@ class AdministratorTeamControllerTest {
         when(teamServiceMock.findById(id)).thenReturn(team);
 
         Optional<TeamModel> updatedTeam = Optional.of(new TeamModel(id, id, "Chelsea"));
-        when(teamServiceMock.save(any(TeamModel.class))).thenReturn(updatedTeam.get());
+        when(teamServiceMock.update(any(TeamModel.class), any(TeamModel.class))).thenReturn(updatedTeam.get());
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +83,7 @@ class AdministratorTeamControllerTest {
     }
 
     @Test
-    void updateInvalidTeam() throws Exception {
+    void updateWrongTeam() throws Exception {
 
         Integer pathId = 1;
         Integer id = 2;
@@ -92,22 +93,36 @@ class AdministratorTeamControllerTest {
         mockMvc.perform(put("/v1/admin/update/team/{id}", pathId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(team.get()))
-                .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void updateEmptyTeam() throws Exception {
+
+        Integer id = 1;
+
+        mockMvc.perform(put("/v1/admin/update/team/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(Optional.empty()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").doesNotExist());
+
     }
 
     @Test
     void updateNonExistingTeam() throws Exception {
 
-        Integer pathId = 1;
-        Integer id = 2;
+        Integer id = 1;
         Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
 
-        when(teamServiceMock.findById(pathId)).thenReturn(Optional.empty());
+        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(team.get()))
-                .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test

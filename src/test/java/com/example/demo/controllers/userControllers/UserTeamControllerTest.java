@@ -47,7 +47,7 @@ class UserTeamControllerTest {
     }
 
     @Test
-    void oneTeam() throws Exception {
+    void getTeam() throws Exception {
         Integer id = 1;
         Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
         when(teamServiceMock.findById(id)).thenReturn(team);
@@ -60,15 +60,16 @@ class UserTeamControllerTest {
     }
 
     @Test
-    void oneNonExistingTeam() throws Exception {
+    void getNonExistingTeam() throws Exception {
         Integer id = 1;
         when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/v1/user/get/team/{id}", id));
+        mockMvc.perform(get("/v1/user/get/team/{id}", id))
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
-    void allTeams() throws Exception {
+    void getTeams() throws Exception {
         Integer id = 1, id2 = 2;
         TeamModel team1 = new TeamModel(id, id, "ManU");
         TeamModel team2 = new TeamModel(id2, id2, "Chelsea");
@@ -83,5 +84,16 @@ class UserTeamControllerTest {
                 .andExpect(jsonPath("$[0].association.name", is("ManU")))
                 .andExpect(jsonPath("$[1].teamId", is(2)))
                 .andExpect(jsonPath("$[1].association.name", is("Chelsea")));
+    }
+
+    @Test
+    void getEmptyTeams() throws Exception {
+
+        when(teamServiceMock.findAll()).thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/v1/user/get/team"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
     }
 }
