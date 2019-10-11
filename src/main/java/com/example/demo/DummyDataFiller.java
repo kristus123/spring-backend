@@ -38,7 +38,7 @@ public class DummyDataFiller implements CommandLineRunner {
 
         System.out.println(player.getTeam().getAssociation().getName());
 
-        playerRepository.save(player);
+        //playerRepository.save(player);
 
 
 
