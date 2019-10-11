@@ -30,7 +30,7 @@ public class AdministratorAssociationControllerTest {
         addAssociation();
         getAssociation();
         updateAssociation();
-        deleteAssociation();
+        //deleteAssociation();
     }
 
 

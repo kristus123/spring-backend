@@ -2,10 +2,12 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.models.CoachModel;
 import com.example.demo.services.CoachService;
+import com.example.demo.services.HumanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/admin/")
@@ -32,8 +34,15 @@ public class AdministratorCoachController {
         return coachService.update(id, coach);
     }
 
+    @Autowired
+    HumanService humanService;
+
     @DeleteMapping("/delete/coach/{id}")
     public void deleteCoach(@PathVariable Integer id) {
-        coachService.delete(id);
+        Optional<CoachModel> coach =  coachService.findById(id);
+        if (coach.isPresent()) {
+            humanService.delete(coach.get());
+        }
+
     }
 }
