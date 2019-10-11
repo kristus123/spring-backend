@@ -33,6 +33,9 @@ public class UserSeasonController {
 
         List<SeasonModel> seasons = seasonService.findAll();
 
+        if (seasons.isEmpty())
+            return null;
+
         return seasons;
     }
 

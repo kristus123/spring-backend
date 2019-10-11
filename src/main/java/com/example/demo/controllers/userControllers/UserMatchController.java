@@ -33,6 +33,9 @@ public class UserMatchController {
 
         List<MatchModel> matches = matchService.findAll();
 
+        if (matches.isEmpty())
+            return null;
+
         return matches;
     }
 

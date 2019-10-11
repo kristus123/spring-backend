@@ -34,6 +34,9 @@ public class UserAssociationController {
 
         List<AssociationModel> associations = associationService.findAll();
 
+        if (associations.isEmpty())
+            return null;
+
         return associations;
     }
 }

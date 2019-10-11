@@ -33,6 +33,9 @@ public class UserPlayerController {
 
         List<PlayerModel> players = playerService.findAll();
 
+        if (players.isEmpty())
+            return null;
+
         return players;
     }
 

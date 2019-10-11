@@ -33,6 +33,9 @@ public class UserTeamController {
 
         List<TeamModel> teams = teamService.findAll();
 
+        if (teams.isEmpty())
+            return null;
+
         return teams;
     }
 }
