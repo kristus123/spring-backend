@@ -16,9 +16,10 @@ public class ContactService {
 
     public ContactModel save(ContactModel contactModel) {return contactRepository.save(contactModel);}
     public ContactModel update(Integer id, ContactModel contactModel) {
-        if(!contactRepository.findById(id).isPresent())
+        if(!findById(id).isPresent())
             return null;
-        return contactRepository.save(contactModel);
+        contactModel.setContactId(id);
+        return save(contactModel);
     }
 
     public void delete(Integer id) {contactRepository.deleteById(id);}

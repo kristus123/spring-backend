@@ -16,9 +16,10 @@ public class CoachService {
 
     public CoachModel save(CoachModel coachModel) {return coachRepository.save(coachModel);}
     public CoachModel update(Integer id, CoachModel coachModel) {
-        if(!coachRepository.findById(id).isPresent())
+        if(!findById(id).isPresent())
             return null;
-        return coachRepository.save(coachModel);
+        coachModel.setCoachId(id);
+        return save(coachModel);
     }
     public void delete(Integer id) {coachRepository.deleteById(id);}
     public Optional<CoachModel> findById(Integer id) {return coachRepository.findById(id);}
