@@ -46,15 +46,34 @@ public class MatchService {
     public  void getMatchStats(MatchModel match) {
         //Get alle goals som er blitt scort
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
-
+        long home = 0;
+        long away = 0;
         System.out.println("___");
+
+        home = goals.stream()
+                .filter(g -> match.getHomeTeam()
+                                .getAssociation()
+                                .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
+
+        away = goals.size() - home;
+
+
+
         goals.forEach(g -> {
-            System.out.println(g.getPlayer().getPerson().getFirstName() + " scorte en " + g.getGoalType() + " og han spiller for ");
-            System.out.println(g.getPlayer().getTeam());
+
+
+            System.out.println(g.getPlayer().getPerson().getFirstName() + " scorte en " + g.getGoalType() + " og han spiller for " + g.getPlayer().getTeam());
         });
         System.out.println("___");
 
-        System.out.println(goals.get(0).getPlayer().getTeam());
+        System.out.println("home : " + home + " ( home er " + match.getHomeTeam() + " )");
+        System.out.println("away : " + away + " ( home er " + match.getAwayTeam() + " )");
+
+        if (home > away) {
+            System.out.println(match.getHomeTeam().getAssociation().getName() + " er vinneren");
+        } else if (home == away) System.out.println("det ble uavgjort");
+        else System.out.println(match.getAwayTeam().getAssociation().getName() + " vant");
+
 
     }
 
