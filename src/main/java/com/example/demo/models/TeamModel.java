@@ -40,6 +40,10 @@ public class TeamModel {
         this.association = new AssociationModel(association_id, associationName);
     }
 
+    public TeamModel(AssociationModel association) {
+        this.association = association;
+    }
+
     public TeamModel(AssociationModel association, CoachModel coach, OwnerModel owner, LocationModel location) {
         this.association = association;
         this.coach = coach;
@@ -49,6 +53,7 @@ public class TeamModel {
 
     @Override
     public String toString() {
-        return "TEAMMODEL : Association : " + association.getName() + " Coach : " + coach.getPerson().getFirstName() + " owner : " + owner.getPerson().getFirstName() + " addresse :" +location.getAddress().getAddresses()[0] ;
+        return association.getName();
+        //return "TEAMMODEL : Association : " + association.getName() + " Coach : " + coach.getPerson().getFirstName() + " owner : " + owner.getPerson().getFirstName() + " addresse :" +location.getAddress().getAddresses()[0] ;
     }
 }

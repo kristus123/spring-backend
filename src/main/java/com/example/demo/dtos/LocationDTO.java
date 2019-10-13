@@ -23,12 +23,14 @@ public class LocationDTO {
     private LocationModel locationModel;
 
     public LocationDTO(LocationModel locationModel, AddressModel addressModel) {
-        //locationService.save(locationModel);
-        //addressService.save(addressModel);
+        addressModel.getAddresses();
+        this.addressModel  = addressModel;
+        this.locationModel = locationModel;
+
+
 
         locationModel.setAddress(addressModel);
 
-        this.addressModel  = addressModel;
-        this.locationModel = locationModel;
+
     }
 }

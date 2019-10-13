@@ -2,15 +2,17 @@ package com.example.demo.controllers.userControllers;
 
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,30 +30,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Disabled
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.MOCK)
+@ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 class UserTeamControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private TeamService teamServiceMock;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @Mock
+    TeamService teamService;
 
 
-    @BeforeEach
-    public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     @Test
     void oneTeam() throws Exception {
         Integer id = 1;
         Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
-        when(teamServiceMock.findById(id)).thenReturn(team);
+        when(teamService.findById(id)).thenReturn(team);
+
+
 
         mockMvc.perform(get("/v1/user/get/team/{id}", id)
                 .accept(MediaType.APPLICATION_JSON))
@@ -63,7 +60,7 @@ class UserTeamControllerTest {
     @Test
     void oneNonExistingTeam() throws Exception {
         Integer id = 1;
-        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
+        when(teamService.findById(id)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/v1/user/get/team/{id}", id));
     }
@@ -75,7 +72,7 @@ class UserTeamControllerTest {
         TeamModel team2 = new TeamModel(id2, id2, "Chelsea");
         List<TeamModel> teams = Arrays.asList(team1, team2);
 
-        when(teamServiceMock.findAll()).thenReturn(teams);
+        when(teamService.findAll()).thenReturn(teams);
 
         mockMvc.perform(get("/v1/user/get/team"))
                 .andExpect(status().isOk())
