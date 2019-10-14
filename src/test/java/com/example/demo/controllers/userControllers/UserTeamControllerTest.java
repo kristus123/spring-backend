@@ -2,6 +2,7 @@ package com.example.demo.controllers.userControllers;
 
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -32,37 +33,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserTeamControllerTest {
 
-    private MockMvc mockMvc;
-
-    @MockBean
-    private TeamService teamServiceMock;
-
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    MockMvc mockMvc;
 
-
-    @BeforeEach
-    public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     @Test
     void getTeam() throws Exception {
         Integer id = 1;
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
-        when(teamServiceMock.findById(id)).thenReturn(team);
+        TeamModel team = new TeamModel(id, id, "ManU");
 
-        mockMvc.perform(get("/v1/user/get/team/{id}", id)
+        mockMvc.perform(post("/v1/admin/post/team")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.teamId").value(id));
+                //.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        mockMvc.perform(get("/v1/user/get/team/{id}", id))
+                //.accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+
+
     }
 
     @Test
     void getNonExistingTeam() throws Exception {
-        Integer id = 1;
-        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
+        Integer id = 10;
 
         mockMvc.perform(get("/v1/user/get/team/{id}", id))
                 .andExpect(jsonPath("$").doesNotExist());
@@ -70,30 +67,48 @@ class UserTeamControllerTest {
 
     @Test
     void getTeams() throws Exception {
-        Integer id = 1, id2 = 2;
-        TeamModel team1 = new TeamModel(id, id, "ManU");
-        TeamModel team2 = new TeamModel(id2, id2, "Chelsea");
-        List<TeamModel> teams = Arrays.asList(team1, team2);
+        Integer id = 1;
+        TeamModel team = new TeamModel(id, id, "ManU");
 
-        when(teamServiceMock.findAll()).thenReturn(teams);
+        mockMvc.perform(post("/v1/admin/post/team")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(team))
+                .accept(MediaType.APPLICATION_JSON))
+                //.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
         mockMvc.perform(get("/v1/user/get/team"))
-                .andExpect(status().isOk())
+                .andExpect(status().isOk());
                 //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$[0].teamId", is(1)))
-                .andExpect(jsonPath("$[0].association.name", is("ManU")))
-                .andExpect(jsonPath("$[1].teamId", is(2)))
-                .andExpect(jsonPath("$[1].association.name", is("Chelsea")));
+
     }
 
     @Test
-    void getEmptyTeams() throws Exception {
+    void getNonExistingTeams() throws Exception {
+        mockMvc.perform(get("/v1/user/get/team"))
+                .andExpect(status().isOk())
+                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$").doesNotExist());
+    }
 
-        when(teamServiceMock.findAll()).thenReturn(Arrays.asList());
+
+
+    @Test
+    void getEmptyTeams() throws Exception {
 
         mockMvc.perform(get("/v1/user/get/team"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
+    }
+
+
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

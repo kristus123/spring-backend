@@ -18,6 +18,7 @@ public class UserTeamController {
     @Autowired
     private TeamService teamService;
 
+
     @GetMapping("/get/team/{id}")
     public TeamModel getTeam(@PathVariable Integer id) {
 

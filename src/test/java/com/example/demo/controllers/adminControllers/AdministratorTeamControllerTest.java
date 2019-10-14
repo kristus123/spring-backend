@@ -33,20 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AdministratorTeamControllerTest {
 
-    private MockMvc mockMvc;
-
-    @MockBean
-    private TeamService teamServiceMock;
-
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-
-
-    @BeforeEach
-    public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+    MockMvc mockMvc;
 
 
     @Test
@@ -54,32 +42,33 @@ class AdministratorTeamControllerTest {
         Integer id = 1;
         TeamModel team = new TeamModel(id, id, "ManU");
 
-        when(teamServiceMock.save(any(TeamModel.class))).thenReturn(team);
         mockMvc.perform(post("/v1/admin/post/team")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
                 //.andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.teamId").value(id));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     void updateTeam() throws Exception {
 
         Integer id = 1;
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
-        when(teamServiceMock.findById(id)).thenReturn(team);
 
-        Optional<TeamModel> updatedTeam = Optional.of(new TeamModel(id, id, "Chelsea"));
-        when(teamServiceMock.update(any(TeamModel.class), any(TeamModel.class))).thenReturn(updatedTeam.get());
+        TeamModel team = new TeamModel(id, id, "ManU");
+        mockMvc.perform(post("/v1/admin/post/team")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(team))
+                .accept(MediaType.APPLICATION_JSON))
+                //.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
+        TeamModel updatedTeam = new TeamModel(id, id, "Chelsea");
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(updatedTeam.get()))
+                .content(asJsonString(updatedTeam))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.association.name").value("Chelsea"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
@@ -88,11 +77,11 @@ class AdministratorTeamControllerTest {
         Integer pathId = 1;
         Integer id = 2;
 
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
+        TeamModel team = new TeamModel(id, id, "ManU");
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", pathId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team.get()))
+                .content(asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").doesNotExist());
     }
@@ -107,20 +96,17 @@ class AdministratorTeamControllerTest {
                 .content(asJsonString(Optional.empty()))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").doesNotExist());
-
     }
 
     @Test
     void updateNonExistingTeam() throws Exception {
 
         Integer id = 1;
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
-
-        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
+        TeamModel team = new TeamModel(id, id, "ManU");
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team.get()))
+                .content(asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").doesNotExist());
     }
@@ -128,10 +114,15 @@ class AdministratorTeamControllerTest {
     @Test
     void deleteTeam() throws Exception {
         Integer id = 1;
-        Optional<TeamModel> team = Optional.of(new TeamModel(id, id, "ManU"));
+        TeamModel team = new TeamModel(id, id, "ManU");
 
-        when(teamServiceMock.findById(id)).thenReturn(team);
-        doNothing().when(teamServiceMock).deleteById(id);
+        mockMvc.perform(post("/v1/admin/post/team")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(team))
+                .accept(MediaType.APPLICATION_JSON))
+                //.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
         mockMvc.perform(delete("/v1/admin/delete/team/{id}", id))
                 .andExpect(status().isOk());
     }
@@ -140,8 +131,6 @@ class AdministratorTeamControllerTest {
     void deleteNonExistingTeam() throws Exception {
         Integer id = 1;
 
-        when(teamServiceMock.findById(id)).thenReturn(Optional.empty());
-        doNothing().when(teamServiceMock).deleteById(id);
         mockMvc.perform(delete("/v1/admin/delete/team/{id}", id));
     }
 
