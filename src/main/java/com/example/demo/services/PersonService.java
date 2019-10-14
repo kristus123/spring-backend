@@ -48,9 +48,11 @@ public class PersonService {
 
 
     public PersonModel update(Integer id, PersonModel personModel) {
-        if(!personRepository.findById(id).isPresent())
+        if(!findById(id).isPresent())
             return null;
-        return personRepository.save(personModel);
+        // This must be set if the id is not set in the json
+        personModel.setPersonId(id);
+        return save(personModel);
 
     }
     public void delete(Integer id) {
