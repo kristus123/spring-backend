@@ -43,8 +43,8 @@ public class MatchService {
     }
 
 
-    public  void getMatchStats(MatchModel match) {
-        //Get alle goals som er blitt scort
+    public void getMatchStats(MatchModel match) {
+        //Get alle goals som er blitt scoret
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
         long home = 0;
         long away = 0;
@@ -77,9 +77,25 @@ public class MatchService {
 
     }
 
+    public void getFilteredMatchStats(MatchModel match) {
+
+        List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
+        long home = 0;
+        long away = 0;
+        home =goals.stream()
+                .filter(g -> match.getHomeTeam()
+                        .getAssociation()
+                        .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
+
+        away = goals.size() - home;
+System.out.println("Resultatet i kampen "+match.getHomeTeam().getAssociation().getName() + "-" + match.getAwayTeam().getAssociation().getName() + " ble: ");
+        if (home > away) {
+            System.out.println(match.getHomeTeam().getAssociation().getName() + " vant");
+        } else if (home == away) System.out.println("det ble uavgjort");
+        else System.out.println(match.getAwayTeam().getAssociation().getName() + " vant");
 
 
-
+    }
 
 
 }
