@@ -8,6 +8,8 @@ import com.example.demo.services.DummyDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+/*
+
 
 @Component
 public class DummyDataFiller implements CommandLineRunner {
@@ -49,3 +51,4 @@ public class DummyDataFiller implements CommandLineRunner {
 
     }
 }
+ */
