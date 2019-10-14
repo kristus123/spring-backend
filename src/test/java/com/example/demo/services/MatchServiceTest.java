@@ -94,6 +94,13 @@ class MatchServiceTest {
 
         assertTrue(listOfTeams.size() >= 2);
 
+        System.out.println("_____");
+        AddressModel address = addressService.createAddress(new AddressModel("OSLO", "OSLO", "OSLO", "OSLO"));
+        locationService.save(new LocationModel(address, "OSLO", "OSLO"));
+
+        locationService.findAll().forEach(System.out::println);
+        System.out.println(locationService.findAll().size());
+        System.out.println("_____");
         assertTrue(locationService.findAll().size() >= 1);
 
         assertNotNull(locationService.findAll().get(0));
