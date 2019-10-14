@@ -46,4 +46,11 @@ public class AssociationService {
     public List<AssociationModel> findAll() {
         return associationRepository.findAll();
     }
+
+    public Optional<AssociationModel> findByName(String name) {return associationRepository.findByName(name);}
+
+
+    public AssociationModel create(AssociationModel associationModel) {
+        return associationRepository.save(associationModel);
+    }
 }

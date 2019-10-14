@@ -15,7 +15,29 @@ import java.util.List;
 @Getter
 @Setter
 public class UserModel {
-  
+
+    @Id
+    @GeneratedValue
+    private int id;
+
+    private String username;
+
+    @Column(length = 80)
+    @Size(min = 8 , max = 60)
+    private String password;
+
+    @Column
+    private String[] roles;
+
+    @OneToMany(cascade = CascadeType.MERGE,  orphanRemoval = true)
+    @JoinColumn(name = "id", referencedColumnName = "player_id")
+    private List<PlayerModel> favPlayers;
+
+    @OneToMany(cascade = CascadeType.MERGE,  orphanRemoval = true)
+    @JoinColumn(name = "id", referencedColumnName = "team_id")
+    private List<TeamModel> favTeams;
+
+
     public UserModel() {}
     public UserModel(String username, String password, UserRole... roles) {
         this.username = username;
@@ -32,23 +54,7 @@ public class UserModel {
         System.out.println(this.roles);
     }
 
-
-
-    @Id @GeneratedValue private int id;
- 
-
-    private String username;
-
-    @Column
-    private String[] roles;
-
-
     public void changeRole(UserRole role) {
         this.roles = new String[] {role.getRole()};
     }
-
-
-    @Column(length = 80)
-    @Size(min = 8 , max = 60)
-    private String password;
 }

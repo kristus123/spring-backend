@@ -1,6 +1,8 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Table(name="ADDRESS")
 @Getter
 @Setter
+@NoArgsConstructor
 public class AddressModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
@@ -26,7 +29,6 @@ public class AddressModel {
     @Column(nullable = false)
     private String country;
 
-    public AddressModel() {}
 
     public AddressModel(String postalCode, String city, String country, String... addresses) {
         this.addresses = addresses;

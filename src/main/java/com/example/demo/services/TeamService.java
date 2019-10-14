@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.models.TeamModel;
+import com.example.demo.models.*;
 import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +42,13 @@ public class TeamService {
 
     public List<TeamModel> findAll() {
         return teamRepository.findAll();
+    }
+
+    public TeamModel createTeam(AssociationModel associationModel, CoachModel coachModel, OwnerModel ownerModel, LocationModel locationModel) {
+        TeamModel teamModel = new TeamModel(
+            associationModel, coachModel, ownerModel, locationModel
+        );
+
+        return teamRepository.save(teamModel);
     }
 }

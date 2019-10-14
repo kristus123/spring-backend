@@ -21,7 +21,7 @@ public class AdministratorContactController {
     }
 
     @GetMapping("/get/contact")
-    public List<ContactModel> getAllContact() {
+    public List<ContactModel> getAllContacts() {
         return contactService.findAll();
     }
 

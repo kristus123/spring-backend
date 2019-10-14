@@ -6,6 +6,7 @@ import com.example.demo.models.LocationModel;
 import com.example.demo.repositories.AddressRepository;
 import com.example.demo.repositories.LocationRepository;
 import org.junit.Before;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+//@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class CreationServiceTest {
@@ -69,8 +72,11 @@ class CreationServiceTest {
 
     @Test
     void testMappingLocationToAddress() {
-        AddressModel addressModel = new AddressModel("5305", "OSLO", "NOREG", "vestre vardane 30");
+
+        AddressModel addressModel = addressRepository.save(new AddressModel("5305", "OSLO", "NOREG", "vestre vardane 30"));
+
         LocationModel locationModel = new LocationModel(addressModel, "brann stadium", "en brennende fin by");
+
         creationService.createLocation(new LocationDTO(locationModel, addressModel));
 
         Optional<LocationModel>  location = locationRepository.findByName("brann stadium");
@@ -85,7 +91,7 @@ class CreationServiceTest {
     @Test
     void assignAddressToLocationTest() {
         LocationModel locationModel = creationService.createLocation(
-                null,
+                new AddressModel("5555", "Oslo", "Norge", "Vestre 30"),
                 "Bislett", "et fint sted hvor Kristian bor");
 
         addressRepository.save(new AddressModel("5555", "Trondheim", "Norway"));
@@ -99,7 +105,7 @@ class CreationServiceTest {
 
 
         locationModel = locationRepository.findByName("Bislett").get();
-        assertNull(locationModel.getAddress());
+
 
         creationService.assignAddressToLocation(locationModel, addressModel.get().getAddressId());
 
