@@ -60,10 +60,9 @@ public class MatchService {
 
 
         goals.forEach(g -> {
-
-
             System.out.println(g.getPlayer().getPerson().getFirstName() + " scorte en " + g.getGoalType() + " og han spiller for " + g.getPlayer().getTeam());
         });
+
         System.out.println("___");
 
         System.out.println("home : " + home + " ( home er " + match.getHomeTeam() + " )");
