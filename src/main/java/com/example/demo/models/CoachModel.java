@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.example.demo.interfaces.LivingHuman;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,5 +37,12 @@ public class CoachModel implements LivingHuman {
     @Override
     public String toString() {
         return "coachname is " + person.getFirstName();
+    }
+
+
+    @Ignore
+    @Override
+    public PersonModel getPersonObject() {
+        return null;
     }
 }

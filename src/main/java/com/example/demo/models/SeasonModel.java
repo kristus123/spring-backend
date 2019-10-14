@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "SEASON")
@@ -18,10 +18,10 @@ public class SeasonModel {
     private Integer seasonId;
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private String name;
@@ -32,7 +32,7 @@ public class SeasonModel {
     public SeasonModel() {
     }
 
-    public SeasonModel(Date startDate, Date endDate, String name, String description) {
+    public SeasonModel(LocalDate startDate, LocalDate endDate, String name, String description) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.name = name;

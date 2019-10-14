@@ -1,9 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.models.AddressModel;
-import com.example.demo.models.AssociationModel;
-import com.example.demo.models.CoachModel;
-import com.example.demo.models.PersonModel;
+import com.example.demo.models.*;
 import com.example.demo.repositories.PersonRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +28,66 @@ class PersonServiceTest {
     @Autowired AddressService addressService;
 
     @Autowired AssociationService associationService;
+
+    @Autowired PlayerService playerService;
+
+
+    @Test
+    void testCreatePerson() {
+        PersonModel person = new PersonModel("kristian", "lavik", LocalDate.of(2015, 1, 2));
+        person.setAddress(new AddressModel("D", "C" ,"B" ,"A"));
+        personService.save(person);
+
+        int x = 5_______________________________________5;
+        System.out.println(x);
+
+        person = personRepository.findByFirstName("kristian").get();
+
+
+        assertTrue(person.getAddress().getCountry().equals("B"));
+    }
+
+
+    @Test
+    void makePersonPlayerOf() {
+        int teamId = teamService.findAll().get(0).getTeamId();
+
+        PlayerModel player =  personService.makePersonPlayerOf(teamId, 1);
+        System.out.println(player.getPlayerId());
+
+        TeamModel team = teamService.findById(teamId).get();
+
+        assertTrue(playerService.findById(player.getPlayerId()).get().getTeam().getTeamId() == team.getTeamId());
+
+    }
+
+
+
+
+    @Test
+    void makePersonOwnerOf(){
+        PersonModel person = personService.findAll().get(0);
+        TeamModel team = teamService.findAll().get(0);
+
+        team.setOwner(null);
+        teamService.save(team);
+        team = teamService.findById(team.getTeamId()).get();
+
+        team = personService.makePersonOwnerOf(person, team);
+
+        assertTrue(team.getOwner().getPerson().getFirstName().equals(person.getFirstName()));
+
+        team = teamService.findById(team.getTeamId()).get();
+
+        assertTrue(team.getOwner().getPerson().getFirstName().equals(person.getFirstName()));
+
+        //team = teamService.findAll().get(0);
+
+
+
+
+
+    }
 
     @Test
     void testDelete() {

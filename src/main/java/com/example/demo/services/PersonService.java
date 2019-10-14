@@ -1,13 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.exceptions.PersonNotFoundException;
-import com.example.demo.models.CoachModel;
-import com.example.demo.models.OwnerModel;
-import com.example.demo.models.PersonModel;
-import com.example.demo.models.TeamModel;
-import com.example.demo.repositories.CoachRepository;
-import com.example.demo.repositories.PersonRepository;
-import com.example.demo.repositories.TeamRepository;
+import com.example.demo.models.*;
+import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class PersonService {
+
+    @Autowired PersonService personService;
 
     @Autowired
     private PersonRepository personRepository;
@@ -29,9 +26,27 @@ public class PersonService {
     @Autowired CoachService coachService;
 
     @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
     CoachRepository coachRepository;
 
-    public PersonModel save(PersonModel personModel) { return personRepository.save(personModel);}
+    @Autowired
+    PlayerRepository playerRepository;
+
+    @Autowired PlayerService playerService;
+
+    public PersonModel save(PersonModel personModel) {
+
+        addressRepository.save(personModel.getAddress());
+        return personRepository.save(personModel);
+    }
+
+    public Optional<PersonModel> findByFirstName(String firstName) {
+        return personRepository.findByFirstName(firstName);
+    }
+
+
     public PersonModel update(Integer id, PersonModel personModel) {
         if(!personRepository.findById(id).isPresent())
             return null;
@@ -67,7 +82,11 @@ public class PersonService {
 
     public Optional<PersonModel> findById(Integer id) {return personRepository.findById(id);}
 
-    public List<PersonModel> findAll() {return personRepository.findAll();}
+    public List<PersonModel> findAll() {
+        List<PersonModel> liste = personRepository.findAll();
+        liste.forEach(System.out::println);
+        return liste;
+    }
 
     public PersonModel create(PersonModel personModel) {
         System.out.println("saving in database + " + personModel);
@@ -75,20 +94,65 @@ public class PersonService {
         return personModel;
     }
 
+    public TeamModel makePersonOwnerOf(int personId, int teamId) {
+        Optional<PersonModel> person = personRepository.findById(personId);
+        Optional<TeamModel> team = teamRepository.findById(teamId);
 
+        if (person.isPresent() && team.isPresent()) return makePersonOwnerOf(person.get(), team.get());
 
+        else return null;
+    }
 
-
-    public PersonModel makePersonOwnerOf(PersonModel person, TeamModel team) {
+    public TeamModel makePersonOwnerOf(PersonModel person, TeamModel team) {
         Optional<OwnerModel> owner = ownerService.findByPerson(person);
         if (owner.isPresent()) {
             team.setOwner(owner.get());
         } else {
+            System.out.println("not a coach from before, making him a coach now");
             team.setOwner(ownerService.create(person));
         }
-        teamRepository.save(team);
+        return teamRepository.save(team);
+    }
 
-        return person;
+
+    public CoachModel makePersonCoachOf(PersonModel person, TeamModel team) {
+        CoachModel coach = coachService.makePersonCoach(person);
+        team.setCoach(coach);
+        teamRepository.save(team);
+        return coach;
+    }
+
+    public CoachModel makePersonCoachOf(int personId, int teamId) {
+        Optional<PersonModel> person = findById(personId);
+        Optional<TeamModel>   team   = teamRepository.findById(teamId);
+
+        if (!person.isPresent() || !team.isPresent()) return null;
+
+        return makePersonCoachOf(person.get(), team.get());
+
+    }
+
+    public PlayerModel makePersonPlayerOf(PersonModel person, TeamModel team) {
+        return makePersonPlayerOf(person.getPersonId(), team.getTeamId());
+    }
+
+    public PlayerModel makePersonPlayerOf(int personId, int teamId) {
+        Optional<PersonModel> person = personRepository.findById(personId);
+        Optional<TeamModel> team = teamRepository.findById(teamId);
+
+        if (!person.isPresent() && !team.isPresent()) return null;
+        Optional<PlayerModel> player =  playerRepository.findByPerson(person.get());
+
+        if (player.isPresent()) {
+            player.get().setTeam(team.get());
+            return player.get();
+        } else {
+            return playerService.save(new PlayerModel(person.get(), team.get(), "N/A", "N/A", person.get().getFirstName()));
+        }
+
+
+
     }
 
 }
+

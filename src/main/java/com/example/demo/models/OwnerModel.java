@@ -35,4 +35,9 @@ public class OwnerModel implements LivingHuman {
     public OwnerModel(PersonModel person) {
         this.person = person;
     }
+
+    @Override
+    public PersonModel getPersonObject() {
+        return null;
+    }
 }

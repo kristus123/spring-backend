@@ -26,7 +26,7 @@ public class HumanService {
 
     public <T extends LivingHuman> void delete(T human) {
 
-        PersonModel person = human.getPerson();
+        PersonModel person = human.getPersonObject();
 
 
         Optional<CoachModel> possibleCoach = coachRepository.findByPerson(person);

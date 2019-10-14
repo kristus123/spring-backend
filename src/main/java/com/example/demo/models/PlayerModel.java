@@ -21,7 +21,7 @@ public class PlayerModel implements LivingHuman {
 
 
     @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String playername;
 
 
@@ -45,12 +45,13 @@ public class PlayerModel implements LivingHuman {
 
 
 
-  public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber) {
+  public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername) {
 
     this.person = person;
     this.team = team;
     this.normalPosition = normalPosition;
     this.playerNumber = playerNumber;
+    this.playername = playername;
   }
 
   public PlayerModel(PersonModel person) {
@@ -71,4 +72,8 @@ public class PlayerModel implements LivingHuman {
     }
 
 
+    @Override
+    public PersonModel getPersonObject() {
+        return null;
+    }
 }
