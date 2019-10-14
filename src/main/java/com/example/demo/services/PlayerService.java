@@ -51,5 +51,11 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    public void filteredPlayer(PlayerModel player) {
+System.out.println("The player : " + player.getPlayername() + " plays for " + player.getTeam().getAssociation().getName());
+
+
+    }
+
 
 }
