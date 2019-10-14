@@ -8,7 +8,9 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="USER_MODEL")
@@ -29,13 +31,25 @@ public class UserModel {
     @Column
     private String[] roles;
 
-    @OneToMany(cascade = CascadeType.MERGE,  orphanRemoval = true)
-    @JoinColumn(name = "id", referencedColumnName = "player_id")
-    private List<PlayerModel> favPlayers;
 
-    @OneToMany(cascade = CascadeType.MERGE,  orphanRemoval = true)
-    @JoinColumn(name = "id", referencedColumnName = "team_id")
-    private List<TeamModel> favTeams;
+    // Watchlist properties
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "USER_PLAYER",
+            joinColumns = { @JoinColumn(name = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "player_id") }
+    )
+    Set<PlayerModel> players = new HashSet<>();
+
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "USER_TEAM",
+            joinColumns = { @JoinColumn(name = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_id") }
+    )
+    Set<TeamModel> teams = new HashSet<>();
 
 
     public UserModel() {}

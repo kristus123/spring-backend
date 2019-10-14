@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,8 @@ public class UserService {
     private UserRepository userRepository;
 
 
+    @Autowired
+    Principal principal;
 
     public UserModel signup(String username, String password) {
         Optional<UserModel> u = userRepository.findByUsername(username);
@@ -63,4 +66,9 @@ public class UserService {
 
         return passwordEncoder.matches(PASSWORD_HASH, password);
     }
+
+    public UserModel getUser() {
+        return userRepository.findByUsername(principal.getName()).get();
+    }
+
 }

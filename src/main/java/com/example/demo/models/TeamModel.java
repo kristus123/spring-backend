@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="TEAM")
@@ -32,6 +34,11 @@ public class TeamModel {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
+
+    // Watchlist properties
+
+    @ManyToMany(mappedBy = "teams")
+    private Set<UserModel> users = new HashSet<>();
 
 
     // TODO PANDA: for testing purposes

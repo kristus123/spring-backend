@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="PLAYER")
@@ -37,6 +39,12 @@ public class PlayerModel implements LivingHuman {
     private String normalPosition;
 
     private String playerNumber;
+
+
+    // Watchlist properties
+
+    @ManyToMany(mappedBy = "players")
+    private Set<UserModel> users = new HashSet<>();
 
 
     public PlayerModel() {
