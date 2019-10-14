@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 
+import com.example.demo.enums.GoalType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +17,15 @@ public class MatchGoalModel {
     @Column(name = "goal_id")
     private Integer goalId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "player_id", referencedColumnName = "player_id")
     private PlayerModel player;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "goal_type_id", referencedColumnName = "goal_type_id")
-    private GoalTypeModel goalType;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private GoalType goalType;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "match_id", referencedColumnName = "match_id")
     private MatchModel match;
 
@@ -33,7 +34,7 @@ public class MatchGoalModel {
     public MatchGoalModel() {
     }
 
-    public MatchGoalModel(PlayerModel player, GoalTypeModel goalType, MatchModel match, String description) {
+    public MatchGoalModel(PlayerModel player, GoalType goalType, MatchModel match, String description) {
         this.player = player;
         this.goalType = goalType;
         this.match = match;

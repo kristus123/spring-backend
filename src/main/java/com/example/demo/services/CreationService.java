@@ -29,12 +29,17 @@ public class CreationService {
 
 
     public LocationModel createLocation(AddressModel address, String name, String description) {
+        addressRepository.save(address);
+        LocationModel locationModel = locationRepository.save(new LocationModel(null, name, description));
+        locationModel.setAddress(address);
 
-        return locationRepository.save(new LocationModel(address, name, description));
+        return locationRepository.save(locationModel);
     }
 
     public LocationModel createLocation(LocationDTO locationDTO) {
-        addressRepository.save(locationDTO.getAddressModel());
+
+        //locationRepository.save(locationDTO.getLocationModel());
+        //addressRepository.save(locationDTO.getAddressModel());
         return locationRepository.save(locationDTO.getLocationModel());
     }
 

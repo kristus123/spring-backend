@@ -15,12 +15,15 @@ public class ContactService {
     private ContactRepository contactRepository;
 
     public ContactModel save(ContactModel contactModel) {return contactRepository.save(contactModel);}
+
     public ContactModel update(Integer id, ContactModel contactModel) {
         if(!findById(id).isPresent())
             return null;
         contactModel.setContactId(id);
         return save(contactModel);
     }
+
+
 
     public void delete(Integer id) {contactRepository.deleteById(id);}
     public Optional<ContactModel> findById(Integer id) {return contactRepository.findById(id);}

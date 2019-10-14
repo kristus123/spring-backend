@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.models.MatchGoalModel;
+import com.example.demo.models.MatchModel;
+import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.MatchGoalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,4 +27,13 @@ public class MatchGoalService {
     public void delete(Integer id) {matchGoalRepository.deleteById(id);}
     public Optional<MatchGoalModel> findById(Integer id) {return matchGoalRepository.findById(id);}
     public List<MatchGoalModel> findAll() {return matchGoalRepository.findAll();}
+
+    public List<MatchGoalModel> findByPlayer(PlayerModel player) {
+        return matchGoalRepository.findByPlayer(player);
+    }
+
+    public List<MatchGoalModel> findByMatch(MatchModel match) {
+        return matchGoalRepository.findByMatch(match);
+    }
+
 }

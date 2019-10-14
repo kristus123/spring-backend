@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.models.OwnerModel;
+import com.example.demo.models.PersonModel;
 import com.example.demo.repositories.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,25 @@ public class OwnerService {
         return updatedOwner;
     }
 
+    public OwnerModel create(PersonModel person) {
+        return ownerRepository.save(new OwnerModel(person));
+    }
+
     public void delete(OwnerModel owner) {
         ownerRepository.delete(owner);
+    }
+    public void delete(int id) {
+        delete(ownerRepository.findById(id).get());
     }
 
     public Optional<OwnerModel> findById(int id) {
         return ownerRepository.findById(id);
     }
+
+
+    public Optional<OwnerModel> findByPerson(PersonModel personModel) {
+        return ownerRepository.findByPerson(personModel);
+    }
+
+
 }

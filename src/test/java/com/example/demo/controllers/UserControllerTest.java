@@ -30,6 +30,7 @@ class UserControllerTest {
         mockMvc.perform(post("/v1/users/signup")
             .param("username", "kristian")
             .param("password", "password"))
+                .andDo(print())
             .andExpect(content().json("{'username' : 'kristian'}")
         );
 
