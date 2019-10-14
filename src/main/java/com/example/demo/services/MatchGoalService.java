@@ -18,9 +18,10 @@ public class MatchGoalService {
 
     public MatchGoalModel save(MatchGoalModel matchGoalModel) {return matchGoalRepository.save(matchGoalModel);}
     public MatchGoalModel update(Integer id, MatchGoalModel personModel) {
-        if(!matchGoalRepository.findById(id).isPresent())
+        if(!findById(id).isPresent())
             return null;
-        return matchGoalRepository.save(personModel);
+        personModel.setGoalId(id);
+        return save(personModel);
 
     }
     public void delete(Integer id) {matchGoalRepository.deleteById(id);}
