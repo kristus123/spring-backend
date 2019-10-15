@@ -19,15 +19,19 @@ public class AnonymousMatchController {
 
     private MatchService matchService;
 
-    private MatchResourceAssembler matchResourceAssembler;
+    //private MatchResourceAssembler matchResourceAssembler;
+
 
     @GetMapping("/browse/match/{id}")
-    public Resource<MatchModel> oneMatch(@PathVariable Integer id) {
+    public void oneMatch(@PathVariable Integer id) {
 
         MatchModel match = matchService.findById(id)
                 .orElseThrow(() -> new MatchNotFoundException(id));
 
-        return matchResourceAssembler.toResource(match);
+        matchService.getFilteredMatchStats(match);
+
+        //return matchResourceAssembler.toResource(match);
     }
+
 
 }
