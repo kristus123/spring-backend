@@ -5,14 +5,21 @@ import com.example.demo.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AddressService {
     @Autowired
     AddressRepository addressRepository;
 
+    public Optional<AddressModel> findById(int id) {
+        return addressRepository.findById(id);
+    }
+
     public AddressModel save(AddressModel addressModel) {
         return addressRepository.save(addressModel);
     }
+
 
 
     public AddressModel createAddress(AddressModel addressModel) {
