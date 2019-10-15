@@ -29,13 +29,6 @@ public class AdministratorController {
         return userService.elevateUserToAdmin(userId);
     }
 
-    @PostMapping("/createAddress")
-    public AddressModel createAddress(@RequestBody AddressModel addressModel) {
-        return creationService.createAddress(addressModel);
-
-    }
-
-
     @PostMapping("/createLocation")
     public LocationModel createLocation(@RequestBody LocationDTO locationDTO) {
         return creationService.createLocation(locationDTO);
