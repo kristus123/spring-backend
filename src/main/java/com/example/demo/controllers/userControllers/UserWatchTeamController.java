@@ -7,6 +7,7 @@ import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,34 +22,77 @@ public class UserWatchTeamController {
     TeamService teamService;
 
     @GetMapping("/get/team/{id}")
-    TeamModel getTeam(@PathVariable Integer id) {
-        UserModel user = userService.getUser();
-        Optional<TeamModel> team = user.getTeams().stream().filter(t -> t.getTeamId() == id).findFirst();
-        if (team.isPresent())
-            return team.get();
-        return null;
+    TeamModel getTeam(@PathVariable Integer id, Principal principal) {
+        Optional<UserModel> user = userService.findByUsername(principal.getName());
+        if (!user.isPresent())
+            return null;
+
+        Optional<TeamModel> team = teamService.findById(id);
+        if (!team.isPresent())
+            return null;
+
+        if (!user.get().getTeams().contains(team.get()))
+            return null;
+
+        System.out.println("TEST: successfully retrieved team from watchlist");
+        return team.get();
     }
 
+
     @GetMapping("/get/team")
-    Set<TeamModel> getTeams() {
-        UserModel user = userService.getUser();
-        return user.getTeams();
+    Set<TeamModel> getTeams(Principal principal) {
+        Optional<UserModel> user = userService.findByUsername(principal.getName());
+        if (!user.isPresent())
+            return null;
+
+        Set<TeamModel> teams = user.get().getTeams();
+        if (teams.isEmpty())
+            System.out.println("TEST: no teams found");
+        else
+            System.out.println("TEST: successfully retrieved teams from watchlist");
+
+        return teams;
     }
 
     @PostMapping("/post/team")
-    TeamModel addTeam(@RequestBody TeamModel team) {
-        UserModel user = userService.getUser();
-        if (user.getTeams().add(team))
-            return team;
-        return null;
+    TeamModel addTeam(@RequestBody TeamModel team, Principal principal) {
+        Optional<UserModel> user = userService.findByUsername(principal.getName());
+        UserModel userModel = userService.getMe(principal);
+
+        // User exists?
+        if (!user.isPresent())
+            return null;
+
+        // Player exists?
+        if (!teamService.findById(team.getTeamId()).isPresent()) {
+            return null;
+        }
+
+        // Add player to watchlist
+        if(!user.get().addTeam(team))
+            return null;
+
+        userService.save(user.get());
+        teamService.save(team);
+
+        System.out.println("TEST: teams in user");
+        System.out.println(userModel.getTeams());
+        return team;
     }
+
 
     // updating fav team equals to removing that team and replacing it with (adding) another team...
     @PutMapping("/update/team/{id}")
-    TeamModel updateTeam(@PathVariable Integer id, @RequestBody Integer otherId) {
-
+    TeamModel updateTeam(@PathVariable Integer id, @RequestBody Integer otherId, Principal principal) {
         if (otherId == id)
             return null;
+
+        // User exists?
+        Optional<UserModel> user = userService.findByUsername(principal.getName());
+        if (!user.isPresent())
+            return null;
+
+        // Players exist?
 
         Optional<TeamModel> existingTeam = teamService.findById(id);
         if (!existingTeam.isPresent())
@@ -58,29 +102,40 @@ public class UserWatchTeamController {
         if (!otherTeam.isPresent())
             return null;
 
-        UserModel user = userService.getUser();
-        Set<TeamModel> teams = user.getTeams();
-        if (teams.contains(existingTeam)) {
-            teams.remove(existingTeam);
-        }
 
-        teams.add(otherTeam.get());
+        if (!user.get().deleteTeam(existingTeam.get()))
+            return null;
+
+        if (!user.get().addTeam(otherTeam.get()))
+            return null;
+
+        userService.save(user.get());
+        teamService.save(otherTeam.get());
+
+        System.out.println("TEST: updated team successfully");
         return otherTeam.get();
     }
 
     @DeleteMapping("/delete/team/{id}")
-    TeamModel deleteTeam(@PathVariable Integer id) {
+    TeamModel deleteTeam(@PathVariable Integer id, Principal principal) {
 
-        Optional<TeamModel> existingTeam = teamService.findById(id);
-        if (!existingTeam.isPresent())
+        Optional<TeamModel> team = teamService.findById(id);
+        if (!team.isPresent())
             return null;
 
-        UserModel user = userService.getUser();
-        if (!user.getTeams().remove(existingTeam.get()))
+        Optional<UserModel> user = userService.findByUsername(principal.getName());
+        if (!user.isPresent())
             return null;
 
-        return existingTeam.get();
+        if (!user.get().deleteTeam(team.get()))
+            return null;
+
+        userService.save(user.get());
+        teamService.save(team.get());
+
+        System.out.println("TEST: successfully deleted team from watchlist");
+
+        return team.get();
     }
-
 
 }
