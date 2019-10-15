@@ -12,14 +12,20 @@ public class AdministratorAddressController {
     @Autowired
     AddressService addressService;
 
-    @GetMapping("/address/get/{addressId}")
+    @GetMapping("/get/address/{addressId}")
     public AddressModel findById(@PathVariable int addressId) {
         Optional<AddressModel> address = addressService.findById(addressId);
         if (address.isPresent()) return address.get();
             return null; //Oca syntax baby
     }
 
-    @PutMapping("/address/update")
+    @PostMapping("/post/address")
+    public AddressModel createAddress(@RequestBody AddressModel addressModel) {
+        return addressService.save(addressModel);
+
+    }
+
+    @PutMapping("/update/address")
     public AddressModel updateAddress(@RequestBody AddressModel address) {
         return addressService.save(address);
     }
