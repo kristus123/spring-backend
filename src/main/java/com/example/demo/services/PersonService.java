@@ -55,8 +55,9 @@ public class PersonService {
         return save(personModel);
 
     }
-    public PersonModel delete(Integer id) {
 
+
+    public PersonModel delete(Integer id) {
         //slett andre ting
         Optional<PersonModel> personModel = personRepository.findById(id);
         if (personModel.isPresent()) {
