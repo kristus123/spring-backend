@@ -7,19 +7,14 @@ import com.vladmihalcea.hibernate.type.range.Range;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.TypeDef;
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.Audited;
 
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.hibernate.envers.query.AuditQuery;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name="PLAYER")
@@ -28,7 +23,6 @@ import java.util.List;
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @TypeDef(typeClass = PostgreSQLRangeType.class, defaultForType = Range.class) //Handling ranges the postgres way
 @EntityListeners({AuditingEntityListener.class})
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class PlayerModel implements LivingHuman {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "player_id")
@@ -37,11 +31,6 @@ public class PlayerModel implements LivingHuman {
     @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
     @Column(nullable = false)
     private String playername;
-
-    // Range is not supported by Envers (audit)
-    // Maybe just add two localDates? From data and to date
-//    @Column(name="teamRange" , columnDefinition = "daterange")
-//    private Range<LocalDate> sysTime;
 
     @Column(name = "team_date_from")
     private LocalDate teamDateFrom;

@@ -18,7 +18,6 @@ public class AdministratorPlayerController {
     @Autowired
     PlayerService playerService;
 
-
     private final IPlayerHistoryRepository playerHistoryRepository;
 
     @Autowired
@@ -81,7 +80,6 @@ public class AdministratorPlayerController {
             playerService.delete(player.get());
             return tempPlayer;
         }
-
         return null;
     }
 
