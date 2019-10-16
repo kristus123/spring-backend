@@ -47,15 +47,4 @@ public class AdministratorMatchController {
         return match.get();
     }
 
-    /* TODO PANDA: moved to user controller
-    @GetMapping("/get/match/{matchId}")
-    public MatchModel getMatch(@PathVariable int matchId) {
-        Optional<MatchModel> match = matchService.findById(matchId);
-        if(match.isPresent()) {
-            return  match.get();
-        }
-        return null;
-    }
-
-     */
 }

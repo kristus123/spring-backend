@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.exceptions.TeamNotFoundException;
 import com.example.demo.models.TeamModel;
@@ -12,8 +12,8 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/v1/user")
-public class UserTeamController {
+@RequestMapping("/v1/common")
+public class CommonTeamController {
 
     @Autowired
     private TeamService teamService;

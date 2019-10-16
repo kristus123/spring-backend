@@ -14,16 +14,6 @@ public class AdministratorContactController {
     @Autowired
     ContactService contactService;
 
-    @GetMapping("/get/contact/{id}")
-    public ContactModel getContact(@PathVariable Integer id) {
-        ContactModel contactModel = contactService.findById(id).orElseGet(null);
-        return contactModel;
-    }
-
-    @GetMapping("/get/contact")
-    public List<ContactModel> getAllContacts() {
-        return contactService.findAll();
-    }
 
     @PostMapping("/post/contact")
     public ContactModel createContact(@RequestBody ContactModel contact) {

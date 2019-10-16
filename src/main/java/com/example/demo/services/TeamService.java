@@ -28,12 +28,23 @@ public class TeamService {
         return updatedTeam;
     }
 
+    /*
+        We would like to keep our teams in DB for the sake of information in matches.
+        Hence only updating a variable regarding the team's active-status
+     */
     public void delete(TeamModel team) {
-        teamRepository.delete(team);
+        team.setActive(false);
+        teamRepository.save(team);
+        //teamRepository.delete(team);
     }
 
     public void deleteById(Integer id) {
-        teamRepository.deleteById(id);
+        Optional<TeamModel> team = findById(id);
+        if (!team.isPresent())
+            return;
+        team.get().setActive(false);
+        teamRepository.save(team.get());
+        //teamRepository.deleteById(id);
     }
 
     public Optional<TeamModel> findById(Integer id) {

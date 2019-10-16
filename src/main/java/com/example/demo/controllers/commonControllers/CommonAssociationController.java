@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.exceptions.AssociationNotFoundException;
 import com.example.demo.models.AssociationModel;
@@ -12,8 +12,8 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/v1/user")
-public class UserAssociationController {
+@RequestMapping("/v1/common")
+public class CommonAssociationController {
 
     @Autowired
     private AssociationService associationService;

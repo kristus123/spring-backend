@@ -1,7 +1,10 @@
 package com.example.demo.models;
 
 import com.example.demo.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,6 +19,8 @@ import java.util.Set;
 @Table(name="USER_MODEL")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserModel {
 
     @Id
@@ -34,25 +39,25 @@ public class UserModel {
 
     // Watchlist properties
 
-    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JsonIgnore
+    @ManyToMany//(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(
             name = "USER_PLAYER",
             joinColumns = { @JoinColumn(name = "id") },
             inverseJoinColumns = { @JoinColumn(name = "player_id") }
     )
-    Set<PlayerModel> players = new HashSet<>();
+    private Set<PlayerModel> players = new HashSet<>();
 
-
-    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JsonIgnore
+    @ManyToMany//(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(
             name = "USER_TEAM",
             joinColumns = { @JoinColumn(name = "id") },
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
-    Set<TeamModel> teams = new HashSet<>();
+    private Set<TeamModel> teams = new HashSet<>();
 
 
-    public UserModel() {}
     public UserModel(String username, String password, UserRole... roles) {
         this.username = username;
         this.password = password;
@@ -71,4 +76,25 @@ public class UserModel {
     public void changeRole(UserRole role) {
         this.roles = new String[] {role.getRole()};
     }
+
+    public boolean addPlayer(PlayerModel player) {
+        player.getUsers().add(this);
+        return players.add(player);
+    }
+
+    public boolean deletePlayer(PlayerModel player) {
+        player.getUsers().remove(this);
+        return players.remove(player);
+    }
+
+    public boolean addTeam(TeamModel team) {
+        team.getUsers().add(this);
+        return teams.add(team);
+    }
+
+    public boolean deleteTeam(TeamModel team) {
+        team.getUsers().remove(this);
+        return teams.remove(team);
+    }
+
 }

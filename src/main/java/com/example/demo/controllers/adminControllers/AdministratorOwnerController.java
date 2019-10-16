@@ -13,14 +13,6 @@ public class AdministratorOwnerController {
     @Autowired
     OwnerService ownerService;
 
-    @GetMapping("/get/owner/{ownerId}")
-    public OwnerModel getOwner(@PathVariable int ownerId) {
-        Optional<OwnerModel> ownerModel = ownerService.findById(ownerId);
-        if(ownerModel.isPresent()) {
-            return ownerModel.get();
-        }
-        return null;
-    }
 
     @PostMapping("/post/owner")
     public OwnerModel addOwner(@RequestBody OwnerModel ownerModel) {

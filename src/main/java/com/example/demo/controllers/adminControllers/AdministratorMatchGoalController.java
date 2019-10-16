@@ -14,15 +14,6 @@ public class AdministratorMatchGoalController {
     @Autowired
     private MatchGoalService matchGoalService;
 
-    @GetMapping("/get/matchgoal/{id}")
-    public MatchGoalModel getMatchGoal(@PathVariable Integer id) {
-        return matchGoalService.findById(id).orElseGet(null);
-    }
-
-    @GetMapping("/get/matchgoal")
-    public List<MatchGoalModel> getAllMatchGoals() {
-        return matchGoalService.findAll();
-    }
 
     @PostMapping("/post/matchgoal")
     public MatchGoalModel createMatchGoal(@RequestBody MatchGoalModel matchGoal) {

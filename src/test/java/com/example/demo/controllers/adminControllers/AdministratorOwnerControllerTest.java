@@ -35,24 +35,11 @@ public class AdministratorOwnerControllerTest {
     //@Test
     void runTests() throws Exception {
         addOwner();
-        getOwner();
         updateOwner();
         deleteOwner(); //COMMENTING THIS OUT FOR NOW
     }
 
-    void getOwner() throws Exception {
-        JSONObject json = new JSONObject()
-            .put("ownerId", 1)
-            .put("person", new JSONObject());
 
-        System.out.println("____________");
-        mockMvc.perform(get("/v1/admin/get/owner/1"))
-                .andDo(print())
-                .andExpect(content().json(json.toString()))
-                .andExpect(status().isOk());
-
-        System.out.println("____________");
-    }
 
     void addOwner() throws Exception {
         String json = "{\"person_id\" : 2}";

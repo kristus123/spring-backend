@@ -1,12 +1,15 @@
 package com.example.demo.models;
 
 import com.example.demo.interfaces.LivingHuman;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,9 +20,6 @@ public class PlayerModel implements LivingHuman {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "player_id")
     private Integer playerId;
-
-
-
 
 
     @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
@@ -43,6 +43,7 @@ public class PlayerModel implements LivingHuman {
 
     // Watchlist properties
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "players")
     private Set<UserModel> users = new HashSet<>();
 
@@ -68,11 +69,12 @@ public class PlayerModel implements LivingHuman {
 
   }
 
+  /*
   @Override
   public String toString() {
     return person.getFirstName() + " spiller for " + team.getAssociation().getName() + " : posisjonen hans er " + normalPosition + " og spillernummer er " + playerNumber;
   }
-
+*/
     // TODO PANDA: for testing purposes
     public PlayerModel(Integer id, String name) {
         this.playerId = id;

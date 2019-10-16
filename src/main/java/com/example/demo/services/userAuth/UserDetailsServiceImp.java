@@ -46,7 +46,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
         return builder.build();
     }
 
-    private UserModel findUserbyUername(String username) {
+    public UserModel findUserbyUername(String username) {
         Optional<UserModel> user = userRepository.findByUsername(username);
 
 

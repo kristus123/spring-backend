@@ -28,7 +28,6 @@ public class AdministratorAssociationControllerTest {
     @Test
     void runTests() throws Exception {
         addAssociation();
-        getAssociation();
         updateAssociation();
         //deleteAssociation();
     }
@@ -42,15 +41,6 @@ public class AdministratorAssociationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
-
-    void getAssociation() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/association/1"))
-                .andDo(print())
-                .andExpect(content().json("{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\"}"))
-                .andExpect(status().isOk());
-    }
-
 
     void updateAssociation() throws Exception {
         String json = "{\"associationId\" : 1, \"name\" : \"Updated name\", \"description\" : \"Updated description\"}";

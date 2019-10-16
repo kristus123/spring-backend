@@ -12,18 +12,6 @@ public class AdministratorPlayerController {
     @Autowired
     PlayerService playerService;
 
-    /* TODO PANDA: user operation moved to User controller
-    @GetMapping("/get/player/{playerId}")
-    public PlayerModel getPlayer(@PathVariable int playerId) {
-
-        Optional<PlayerModel> playerModel = playerService.findById(playerId);
-        if (playerModel.isPresent()) {
-            return playerModel.get();
-        }
-        return null;
-    }
-     */
-
     @PostMapping("/post/player")
     public PlayerModel addPlayer(@RequestBody PlayerModel playerModel) {
         PlayerModel newPlayer = playerService.save(playerModel);

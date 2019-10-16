@@ -19,17 +19,6 @@ public class AdministratorPersonController {
     @Autowired
     PersonService personService;
 
-    @GetMapping("/get/person/{id}")
-    public PersonModel getPlayer(@PathVariable Integer id) {
-        return personService.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
-    }
-
-
-
-    @GetMapping("/get/person")
-    public List<PersonModel> getAllPlayers() {
-        return personService.findAll();
-    }
 
     @PostMapping("/post/person")
     public String createPerson(@RequestBody PersonModel person) {

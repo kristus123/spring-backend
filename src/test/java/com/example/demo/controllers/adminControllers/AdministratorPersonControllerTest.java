@@ -57,7 +57,7 @@ class AdministratorPersonControllerTest {
                 content(json)).
                 andExpect(status().isOk());
 
-        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(json));
+        mockMvc.perform(get("/v1/common/get/person/" + ID++)).andExpect(content().json(json));
     }
 
     /*
@@ -66,7 +66,7 @@ class AdministratorPersonControllerTest {
     //@Test @Ignore
     void testThatExceptionIsThrownIfPersonDoesNotExist() throws PersonNotFoundException  {
         String personId = "10";
-        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + personId)));
+        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + personId)));
         org.junit.jupiter.api.Assertions.assertEquals(
                 "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
@@ -100,21 +100,12 @@ class AdministratorPersonControllerTest {
 
         // Check that person is not present
         String personId = "1";
-        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + ID++)));
+        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + ID++)));
         org.junit.jupiter.api.Assertions.assertEquals(
                 "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
     }
 
-    //@Test @Ignore
-    void testThatCanGetAllPersons() throws Exception {
-        String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
-        mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
-                content(json)).
-                andExpect(status().isOk());
-        ID++;
-        mockMvc.perform(get("/v1/admin/get/person/")).andExpect(jsonPath("$", hasSize(1)));
-    }
 
     //@Test @Ignore
     void testThatPersonIsUpdated() throws Exception {
@@ -128,6 +119,6 @@ class AdministratorPersonControllerTest {
         mockMvc.perform(put("/v1/admin/update/person/" + ID).contentType(MediaType.APPLICATION_JSON).
                 content(jsonUpdated));
 
-        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(jsonUpdated));
+        mockMvc.perform(get("/v1/common/get/person/" + ID++)).andExpect(content().json(jsonUpdated));
     }
 }

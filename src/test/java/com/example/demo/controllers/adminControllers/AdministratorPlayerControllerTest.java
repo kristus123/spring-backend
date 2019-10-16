@@ -53,25 +53,6 @@ public class AdministratorPlayerControllerTest {
     }
 
     @Test
-    void getPlayer() throws Exception {
-        JSONObject json = new JSONObject()
-                .put("personId", 3)
-                .put("teamId", 3)
-                .put("normalPosition", "Shooter")
-                .put("playerNumber", 11)
-                .put("playername", "Ramoirs");
-
-        System.out.println(json.toString());
-
-        mockMvc.perform(get("/v1/admin/get/player/1"))
-                .andDo(print())
-                .andDo(p -> {
-                    System.out.println(content());
-                });
-                //.andExpect(content().json(json.toString()));
-    }
-
-    @Test
     void updatePlayer() throws Exception {
         JSONObject json = new JSONObject()
                 .put("playerId", 1)

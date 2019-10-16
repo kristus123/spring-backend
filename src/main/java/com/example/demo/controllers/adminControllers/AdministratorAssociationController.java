@@ -12,17 +12,6 @@ public class AdministratorAssociationController {
     @Autowired
     AssociationService associationService;
 
-    /* TODO PANDA: moved to user controller
-    @GetMapping("/get/association/{associationId}")
-    public AssociationModel getAssociation(@PathVariable int associationId) {
-        Optional<AssociationModel> associationModel = associationService.findById(associationId);
-        if(associationModel.isPresent()) {
-            return associationModel.get();
-        }
-        return null;
-    }
-
-     */
 
     @PostMapping("/post/association")
     public AssociationModel addAssociation(@RequestBody AssociationModel associationModel) {

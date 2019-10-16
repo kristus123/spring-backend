@@ -1,6 +1,6 @@
 package com.example.demo.assembler;
 
-import com.example.demo.controllers.userControllers.UserPlayerController;
+import com.example.demo.controllers.commonControllers.CommonPlayerController;
 import com.example.demo.models.PlayerModel;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -15,7 +15,7 @@ public class PlayerResourceAssembler implements ResourceAssembler<PlayerModel, R
     @Override
     public Resource<PlayerModel> toResource(PlayerModel playerModel) {
         return new Resource<>(playerModel,
-                linkTo(methodOn(UserPlayerController.class).getPlayer(playerModel.getPlayerId())).withSelfRel(),
-                linkTo(methodOn(UserPlayerController.class).getPlayers()).withRel("players"));
+                linkTo(methodOn(CommonPlayerController.class).getPlayer(playerModel.getPlayerId())).withSelfRel(),
+                linkTo(methodOn(CommonPlayerController.class).getPlayers()).withRel("players"));
     }
 }

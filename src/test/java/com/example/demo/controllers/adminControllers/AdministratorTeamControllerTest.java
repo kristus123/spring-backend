@@ -101,7 +101,7 @@ class AdministratorTeamControllerTest {
     @Test
     void updateNonExistingTeam() throws Exception {
 
-        Integer id = 1;
+        Integer id = 10;
         TeamModel team = new TeamModel(id, id, "ManU");
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)

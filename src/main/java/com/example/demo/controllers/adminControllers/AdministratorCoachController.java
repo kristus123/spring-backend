@@ -16,6 +16,7 @@ public class AdministratorCoachController {
     @Autowired
     private CoachService coachService;
 
+    /*
     @GetMapping("/get/coach/{id}")
     public CoachModel getCoach(@PathVariable Integer id) {
         return coachService.findById(id).orElseGet(null);
@@ -23,6 +24,8 @@ public class AdministratorCoachController {
 
     @GetMapping("/get/coach")
     public List<CoachModel> getAllCoaches() {return coachService.findAll();}
+
+     */
 
     @PostMapping("/post/coach")
     public CoachModel createCoach(@RequestBody CoachModel coach) {

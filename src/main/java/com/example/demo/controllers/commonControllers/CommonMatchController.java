@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.exceptions.MatchNotFoundException;
 import com.example.demo.models.MatchModel;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/user")
-public class UserMatchController {
+@RequestMapping("/v1/common")
+public class CommonMatchController {
 
     @Autowired
     private MatchService matchService;

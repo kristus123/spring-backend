@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DummyDataService {
@@ -49,6 +51,16 @@ public class DummyDataService {
     @Autowired PlayerService playerService;
 
 
+    @Autowired UserService userService;
+
+    public void createUser(String username, String password) {
+        userService.signup(username, password);
+        Optional<UserModel> user = userService.findByUsername(username);
+        if (user.isPresent())
+            System.out.println("TEST: created user successfully");
+        System.out.println("TEST: ERROR could not create user :(");
+    }
+
     //Creates player and assigns to team
     public void createPlayer() {
         LocalDate date = LocalDate.of(2015, 2, 2);
@@ -58,17 +70,17 @@ public class DummyDataService {
         PlayerModel player = playerService.turnIntoPlayer(person);
 
         //player.setTeam();
-        System.out.println("_____ASDASDA_SD_ASD_ASD________");
+        //System.out.println("_____ASDASDA_SD_ASD_ASD________");
         //System.out.println(teamService.findAll());
-        System.out.println("_____ASDASDA_SD_ASD_ASD________");
+        //System.out.println("_____ASDASDA_SD_ASD_ASD________");
         player = playerService.save(player);
 
         //System.out.println(player.getTeam());
         player.setNormalPosition("BACK");
         player.setPlayerNumber("25");
 
-        System.out.println(player.getPlayerNumber());
-        System.out.println(player.getNormalPosition());
+        //System.out.println(player.getPlayerNumber());
+        //System.out.println(player.getNormalPosition());
 
 
 
@@ -85,11 +97,11 @@ public class DummyDataService {
         //Lag en standard person med
         AddressModel address = addressService.createAddress(new AddressModel("5306", "Erdal", "Norway", "Vestre 30"));
         PersonModel person = personService.create(new PersonModel("Kristian", "Solbakken", LocalDate.of(2018, Month.FEBRUARY, 1), address));
-        System.out.println(person);
+        //System.out.println(person);
 
         //Kristian har lyst å bli en coach
         CoachModel coach = coachService.save(new CoachModel(person));
-        System.out.println(coach);
+        //System.out.println(coach);
 
         // Et lag må jo eksistere før man kan bli en rik fortballspiller
 
@@ -109,14 +121,14 @@ public class DummyDataService {
         team.setLocation(location);
 
 
-        locationRepository.findAll().forEach(System.out::println);
+        //locationRepository.findAll().forEach(System.out::println);
 
-        System.out.println("_____222____");
-        personRepository.findAll().forEach(System.out::println);
-        System.out.println("_________");
-        coachRepository.findAll().forEach(System.out::println);
+        //System.out.println("_____222____");
+        //personRepository.findAll().forEach(System.out::println);
+        //System.out.println("_________");
+        //coachRepository.findAll().forEach(System.out::println);
 
-        ownerRepository.findAll().forEach(System.out::println);
+        //ownerRepository.findAll().forEach(System.out::println);
 
 
 

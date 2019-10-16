@@ -6,6 +6,7 @@ import com.example.demo.repositories.MatchPositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,10 @@ public class MatchPositionService {
 
     public Optional<MatchPositionModel> findById(MatchPositionId id) {
         return matchPositionRepository.findById(id);
+    }
+
+    public List<MatchPositionModel> findAll() {
+        return matchPositionRepository.findAll();
     }
 
     public MatchPositionModel update(MatchPositionModel matchPosition, MatchPositionModel oldMatchPosition) {

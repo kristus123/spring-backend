@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class UserPlayerControllerTest {
+class CommonMatchControllerTest {
 
     @Test
-    void onePlayer() {
+    void oneMatch() {
     }
 
     @Test
-    void allPlayers() {
+    void allMatches() {
     }
 }

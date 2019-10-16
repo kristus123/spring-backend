@@ -82,9 +82,10 @@ public class UserWatchTeamController {
 
 
     // updating fav team equals to removing that team and replacing it with (adding) another team...
-    @PutMapping("/update/team/{id}")
-    TeamModel updateTeam(@PathVariable Integer id, @RequestBody Integer otherId, Principal principal) {
-        if (otherId == id)
+    // doesn't make sense to allow this operation for a User
+    //@PutMapping("/update/team/{id}")
+    TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel updatedTeam, Principal principal) {
+        if (updatedTeam.getTeamId() != id)
             return null;
 
         // User exists?
@@ -94,26 +95,24 @@ public class UserWatchTeamController {
 
         // Players exist?
 
+        if (updatedTeam == null)
+            return null;
+
         Optional<TeamModel> existingTeam = teamService.findById(id);
         if (!existingTeam.isPresent())
             return null;
 
-        Optional<TeamModel> otherTeam = teamService.findById(otherId);
-        if (!otherTeam.isPresent())
-            return null;
-
-
         if (!user.get().deleteTeam(existingTeam.get()))
             return null;
 
-        if (!user.get().addTeam(otherTeam.get()))
+        if (!user.get().addTeam(updatedTeam))
             return null;
 
         userService.save(user.get());
-        teamService.save(otherTeam.get());
+        teamService.update(updatedTeam, existingTeam.get());
 
         System.out.println("TEST: updated team successfully");
-        return otherTeam.get();
+        return updatedTeam;
     }
 
     @DeleteMapping("/delete/team/{id}")

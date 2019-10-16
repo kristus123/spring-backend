@@ -2,23 +2,19 @@ package com.example.demo.controllers.userControllers;
 
 import com.example.demo.models.PlayerModel;
 import com.example.demo.models.UserModel;
-import com.example.demo.models.UserWatchPlayerModel;
 import com.example.demo.services.PlayerService;
 import com.example.demo.services.UserService;
-import com.example.demo.services.UserWatchPlayerService;
-import com.example.demo.services.userAuth.UserDetailsServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/user/watchlist")
 public class UserWatchPlayerController {
+
 
     @Autowired
     UserService userService;
@@ -88,39 +84,43 @@ public class UserWatchPlayerController {
 
 
     // updating fav player equals to removing that player and replacing it with (adding) another player...
-    @PutMapping("/update/player/{id}")
-    PlayerModel updatePlayer(@PathVariable Integer id, @RequestBody Integer otherId, Principal principal) {
+    // doesn't make sense to allow this operation for a User
+    //@PutMapping("/update/player/{id}")
+    PlayerModel updatePlayer(@PathVariable Integer id, @RequestBody PlayerModel updatedPlayer, Principal principal) {
 
-        if (otherId == id)
+        if (updatedPlayer.getPlayerId() != id)
             return null;
 
         // User exists?
         Optional<UserModel> user = userService.findByUsername(principal.getName());
         if (!user.isPresent())
             return null;
-
+        System.out.println("TEST: user exists");
         // Players exist?
+
+        if (updatedPlayer == null)
+            return null;
 
         Optional<PlayerModel> existingPlayer = playerService.findById(id);
         if (!existingPlayer.isPresent())
             return null;
-
-        Optional<PlayerModel> otherPlayer = playerService.findById(otherId);
-        if (!otherPlayer.isPresent())
-            return null;
-
+        System.out.println("TEST: player exists");
 
         if (!user.get().deletePlayer(existingPlayer.get()))
             return null;
+        System.out.println("TEST: old player deleted");
 
-        if (!user.get().addPlayer(otherPlayer.get()))
+
+        if (!user.get().addPlayer(updatedPlayer))
             return null;
+        System.out.println("TEST: new player added");
+
 
         userService.save(user.get());
-        playerService.save(otherPlayer.get());
+        playerService.update(updatedPlayer, existingPlayer.get());
 
         System.out.println("TEST: updated player successfully");
-        return otherPlayer.get();
+        return updatedPlayer;
     }
 
 

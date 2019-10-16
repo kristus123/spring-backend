@@ -1,6 +1,6 @@
 package com.example.demo.assembler;
 
-import com.example.demo.controllers.userControllers.UserTeamController;
+import com.example.demo.controllers.commonControllers.CommonTeamController;
 import com.example.demo.models.TeamModel;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -15,7 +15,7 @@ public class TeamResourceAssembler implements ResourceAssembler<TeamModel, Resou
     @Override
     public Resource<TeamModel> toResource(TeamModel teamModel) {
         return new Resource<>(teamModel,
-                linkTo(methodOn(UserTeamController.class).getTeam(teamModel.getTeamId())).withSelfRel(),
-                linkTo(methodOn(UserTeamController.class).getTeams()).withRel("teams"));
+                linkTo(methodOn(CommonTeamController.class).getTeam(teamModel.getTeamId())).withSelfRel(),
+                linkTo(methodOn(CommonTeamController.class).getTeams()).withRel("teams"));
     }
 }

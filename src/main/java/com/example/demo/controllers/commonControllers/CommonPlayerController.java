@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.models.PlayerModel;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/user")
-public class UserPlayerController {
+@RequestMapping("/v1/common")
+public class CommonPlayerController {
 
     @Autowired
     private PlayerService playerService;

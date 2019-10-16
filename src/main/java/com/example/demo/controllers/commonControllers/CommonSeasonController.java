@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.exceptions.SeasonNotFoundException;
 import com.example.demo.models.SeasonModel;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/user")
-public class UserSeasonController {
+@RequestMapping("/v1/common")
+public class CommonSeasonController {
 
     @Autowired
     private SeasonService seasonService;

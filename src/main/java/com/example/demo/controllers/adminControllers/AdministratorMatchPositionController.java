@@ -15,14 +15,7 @@ public class AdministratorMatchPositionController {
     @Autowired
     MatchPositionService matchPositionService;
 
-    @GetMapping("/get/matchPosition")
-    public MatchPositionModel getMatchPosition(@RequestBody MatchPositionId matchPositionId) {
-        Optional<MatchPositionModel> matchPositionModel = matchPositionService.findById(matchPositionId);
-        if(matchPositionModel.isPresent()) {
-            return matchPositionModel.get();
-        }
-        return null;
-    }
+
 
     @PostMapping("post/matchPosition")
     public MatchPositionModel addMatchPosition(@RequestBody MatchPositionModel matchPositionModel) {
