@@ -1,20 +1,23 @@
 package com.example.demo.dtos;
 
-import com.example.demo.models.PlayerModel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlayerDTO {
-    PlayerModel player;
-    public List<PlayerTeamHistoryDTO> playerTeamHistory;
-
-    public PlayerDTO() {
-        playerTeamHistory = new ArrayList<>();
-    }
+    private Integer playerId;
+    private LocalDate teamDateFrom;
+    private LocalDate teamDateTo;
+    private String playername;
+    private Integer personId;
+    private Integer teamId;
+    private String normalPosition;
+    private String playerNumber;
 }

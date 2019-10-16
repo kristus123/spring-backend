@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.interfaces.LivingHuman;
 import com.vladmihalcea.hibernate.type.range.PostgreSQLRangeType;
 import com.vladmihalcea.hibernate.type.range.Range;
@@ -77,6 +78,15 @@ public class PlayerModel implements LivingHuman {
         this.person = person;
         this.playername = person.getFirstName() + " " + person.getLastName();
 
+  }
+
+  public PlayerModel(PlayerDTO player) {
+        this.playerId = player.getPlayerId();
+        this.teamDateFrom = player.getTeamDateFrom();
+        this.teamDateTo = player.getTeamDateTo();
+        this.normalPosition = player.getNormalPosition();
+        this.playerNumber = player.getPlayerNumber();
+        this.playername = player.getPlayername();
   }
 
   @Override
