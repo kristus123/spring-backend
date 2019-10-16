@@ -55,6 +55,10 @@ public class PersonService {
         return save(personModel);
 
     }
+<<<<<<< HEAD
+=======
+    public PersonModel delete(Integer id) {
+>>>>>>> 7bf3548b1703d658b905ea14fe3d094288490911
 
 
     public void delete(Integer id) {
@@ -67,19 +71,23 @@ public class PersonService {
 
             if (owner.isPresent()) {
                 ownerService.delete(owner.get());
-                return;
+                return null;
             }
 
             if (coach.isPresent()) {
                 System.out.println("COACH ER PRESENT");
                 coachService.delete(coach.get().getCoachId());
-                return ;
+                return null;
 
             }
-            delete(personModel.get().getPersonId());
+            personRepository.deleteById(id);
+            return personModel.get();
 
         }
-        else { System.out.println("user not found"); }
+        else {
+            System.out.println("user not found");
+            return null;
+        }
 
     }
 
