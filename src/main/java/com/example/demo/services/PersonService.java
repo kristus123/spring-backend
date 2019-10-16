@@ -55,7 +55,7 @@ public class PersonService {
         return save(personModel);
 
     }
-    public void delete(Integer id) {
+    public PersonModel delete(Integer id) {
 
         //slett andre ting
         Optional<PersonModel> personModel = personRepository.findById(id);
@@ -66,19 +66,23 @@ public class PersonService {
 
             if (owner.isPresent()) {
                 ownerService.delete(owner.get());
-                return;
+                return null;
             }
 
             if (coach.isPresent()) {
                 System.out.println("COACH ER PRESENT");
                 coachService.delete(coach.get().getCoachId());
-                return ;
+                return null;
 
             }
-            delete(personModel.get().getPersonId());
+            personRepository.deleteById(id);
+            return personModel.get();
 
         }
-        else { System.out.println("user not found"); }
+        else {
+            System.out.println("user not found");
+            return null;
+        }
 
     }
 
