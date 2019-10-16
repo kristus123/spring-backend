@@ -8,31 +8,33 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="RESULT_MODEL")
+@Table (name = "RESULT_MODEL")
 @Getter
 @Setter
 public class ResultModel implements Serializable {
 
     @Id
-    @Column(name = "match_id")
+    @Column (name = "match_id")
     private Integer matchId; // NB!! Should not be auto-generated! Foreign-key to MatchModel.matchId
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "match_id", referencedColumnName = "match_id")
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "match_id", referencedColumnName = "match_id")
     @MapsId
     private MatchModel match;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "team_id", referencedColumnName = "team_id")
     private TeamModel team;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private Integer score;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String result;
 
-    public ResultModel() {}
+    public ResultModel() {
+    }
+
     public ResultModel(MatchModel match, TeamModel team, Integer score, String result) {
         this.match = match;
         this.team = team;

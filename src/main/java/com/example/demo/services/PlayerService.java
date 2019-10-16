@@ -32,7 +32,7 @@ public class PlayerService {
     public PlayerModel update(PlayerModel player, PlayerModel oldPlayer) {
 
         PlayerModel updatedPlayer = null;
-        if(oldPlayer.getPlayerId() == player.getPlayerId()){
+        if (oldPlayer.getPlayerId() == player.getPlayerId()) {
             updatedPlayer = save(player);
         }
 
@@ -51,8 +51,8 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public void filteredPlayer(PlayerModel player) {
-System.out.println("The player : " + player.getPlayername() + " plays for " + player.getTeam().getAssociation().getName());
+    public String filteredPlayer(PlayerModel player) {
+        return "The player : " + player.getPlayername() + " plays for " + player.getTeam().getAssociation().getName();
 
 
     }

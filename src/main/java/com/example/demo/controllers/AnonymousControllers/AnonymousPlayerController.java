@@ -18,11 +18,11 @@ private PlayerService playerService;
 private PlayerResourceAssembler playerResourceAssembler;
 
     @GetMapping("/browse/player/{id}")
-    public void onePlayer(@PathVariable Integer id) {
+    public String onePlayer(@PathVariable Integer id) {
 
         PlayerModel player = playerService.findById(id)
                 .orElseThrow(() -> new PlayerNotFoundException(id));
-        playerService.filteredPlayer(player);
+        return playerService.filteredPlayer(player);
 
     }
 
