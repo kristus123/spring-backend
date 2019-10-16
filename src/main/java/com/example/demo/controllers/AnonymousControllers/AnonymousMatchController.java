@@ -23,14 +23,14 @@ public class AnonymousMatchController {
 
 
     @GetMapping("/browse/match/{id}")
-    public void oneMatch(@PathVariable Integer id) {
+    public String oneMatch(@PathVariable Integer id) {
 
         MatchModel match = matchService.findById(id)
                 .orElseThrow(() -> new MatchNotFoundException(id));
 
-        matchService.getFilteredMatchStats(match);
+        return matchService.getFilteredMatchStats(match);
 
-        //return matchResourceAssembler.toResource(match);
+
     }
 
 
