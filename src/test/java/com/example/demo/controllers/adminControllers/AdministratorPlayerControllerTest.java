@@ -3,6 +3,11 @@ package com.example.demo.controllers.adminControllers;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.PlayerRepository;
 import com.vladmihalcea.hibernate.type.range.Range;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.internal.reader.AuditReaderImpl;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.query.AuditQueryCreator;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -13,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -24,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@Transactional
 public class AdministratorPlayerControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -96,13 +103,5 @@ public class AdministratorPlayerControllerTest {
         mockMvc.perform(delete("/v1/admin/delete/player/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void testRangeColumn() throws Exception {
-        PlayerModel playerModel = new PlayerModel();
-        playerModel.setSysTime(Range.closedOpen(LocalDate.of(2019, 11, 29),
-                LocalDate.of(2019, 12, 3)));
-
     }
 }
