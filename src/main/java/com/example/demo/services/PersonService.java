@@ -55,13 +55,9 @@ public class PersonService {
         return save(personModel);
 
     }
-<<<<<<< HEAD
-=======
+
+
     public PersonModel delete(Integer id) {
->>>>>>> 7bf3548b1703d658b905ea14fe3d094288490911
-
-
-    public void delete(Integer id) {
         //slett andre ting
         Optional<PersonModel> personModel = personRepository.findById(id);
         if (personModel.isPresent()) {
