@@ -13,9 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class MatchService {
 
-    @Autowired private MatchRepository matchRepository;
+    @Autowired
+    private MatchRepository matchRepository;
 
-    @Autowired MatchGoalService matchGoalService;
+    @Autowired
+    MatchGoalService matchGoalService;
 
     public MatchModel save(MatchModel match) {
         return matchRepository.save(match);
@@ -37,14 +39,14 @@ public class MatchService {
         return matchGoalService.save(new MatchGoalModel(
                 player, //player,
                 GoalType.SCORPION_KICK,
-                 match,
+                match,
                 description
         ));
     }
 
 
-    public  void getMatchStats(MatchModel match) {
-        //Get alle goals som er blitt scort
+    public void getMatchStats(MatchModel match) {
+        //Get all goals scored in the match:
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
         long home = 0;
         long away = 0;
@@ -52,11 +54,10 @@ public class MatchService {
 
         home = goals.stream()
                 .filter(g -> match.getHomeTeam()
-                                .getAssociation()
-                                .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
+                        .getAssociation()
+                        .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
 
         away = goals.size() - home;
-
 
 
         goals.forEach(g -> {
@@ -76,9 +77,25 @@ public class MatchService {
 
     }
 
+    public String getFilteredMatchStats(MatchModel match) {
+// For anonymous match browsing
+        List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
+        long home = 0;
+        long away = 0;
+        home = goals.stream()
+                .filter(g -> match.getHomeTeam()
+                        .getAssociation()
+                        .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
+
+        away = goals.size() - home;
+//System.out.println("Resultatet i kampen "+match.getHomeTeam().getAssociation().getName() + "-" + match.getAwayTeam().getAssociation().getName() + " ble: ");
+        if (home > away) {
+            return match.getHomeTeam().getAssociation().getName().toString();
+        } else if (home == away) return "Uavgjort";
+        else return match.getAwayTeam().getAssociation().getName().toString();
 
 
-
+    }
 
 
 }

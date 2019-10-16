@@ -70,5 +70,11 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    public String filteredPlayer(PlayerModel player) {
+        return "The player : " + player.getPlayername() + " plays for " + player.getTeam().getAssociation().getName();
+
+
+    }
+
 
 }

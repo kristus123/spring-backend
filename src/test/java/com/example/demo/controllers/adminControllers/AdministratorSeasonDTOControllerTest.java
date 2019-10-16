@@ -1,4 +1,4 @@
-package com.example.demo.controllers.userControllers;
+package com.example.demo.controllers.adminControllers;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,17 +8,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class UserSeasonControllerTest {
+class AdministratorSeasonDTOControllerTest {
 
     @Test
-    void oneSeason() {
+    void newSeason() {
     }
 
     @Test
-    void allSeasons() {
+    void updateMatch() {
+    }
+
+    @Test
+    void deleteMatch() {
     }
 }

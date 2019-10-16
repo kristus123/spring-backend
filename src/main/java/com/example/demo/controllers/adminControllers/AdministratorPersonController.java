@@ -45,8 +45,8 @@ public class AdministratorPersonController {
     }
 
     @DeleteMapping("/delete/person/{id}")
-    public void deletePerson(@PathVariable Integer id) {
-        personService.delete(id);
+    public PersonModel deletePerson(@PathVariable Integer id) {
+        return personService.delete(id);
     }
 
 
