@@ -33,7 +33,7 @@ class CommonOwnerControllerTest {
     void getOwners() {
     }
 
-    @Test
+    //@Test
     void getOwner() throws Exception {
         JSONObject json = new JSONObject()
                 .put("ownerId", 1)

@@ -82,10 +82,10 @@ public class UserWatchPlayerController {
         return player;
     }
 
-
+/*
     // updating fav player equals to removing that player and replacing it with (adding) another player...
     // doesn't make sense to allow this operation for a User
-    //@PutMapping("/update/player/{id}")
+    @PutMapping("/update/player/{id}")
     PlayerModel updatePlayer(@PathVariable Integer id, @RequestBody PlayerModel updatedPlayer, Principal principal) {
 
         if (updatedPlayer.getPlayerId() != id)
@@ -122,6 +122,8 @@ public class UserWatchPlayerController {
         System.out.println("TEST: updated player successfully");
         return updatedPlayer;
     }
+
+ */
 
 
 
