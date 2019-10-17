@@ -19,7 +19,6 @@ import java.util.Optional;
 @RequestMapping("/v1/admin")
 public class AdministratorTeamController {
 
-
     @Autowired
     TeamService teamService;
 

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class AdministratorSeasonControllerTest {
+class AdministratorSeasonDTOControllerTest {
 
     @Test
     void newSeason() {

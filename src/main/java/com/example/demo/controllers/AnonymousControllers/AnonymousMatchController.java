@@ -1,10 +1,9 @@
 package com.example.demo.controllers.AnonymousControllers;
 
-import com.example.demo.assembler.MatchResourceAssembler;
 import com.example.demo.exceptions.ElementNotFoundException;
+import com.example.demo.dtos.MatchResultDTO;
 import com.example.demo.models.MatchModel;
 import com.example.demo.services.MatchService;
-import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +15,15 @@ public class AnonymousMatchController {
 
     private MatchService matchService;
 
-    private MatchResourceAssembler matchResourceAssembler;
 
     @GetMapping("/browse/match/{id}")
-    public Resource<MatchModel> oneMatch(@PathVariable Integer id) {
+    public MatchResultDTO oneMatch(@PathVariable Integer id) {
 
         MatchModel match = matchService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find match with ID=" + id));
 
-        return matchResourceAssembler.toResource(match);
+        return matchService.getFilteredMatchStats(match);
+
     }
 
 }

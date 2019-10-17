@@ -46,13 +46,16 @@ public class PersonService {
 
 
     public PersonModel update(Integer id, PersonModel personModel) {
-        if(!personRepository.findById(id).isPresent())
+        if(!findById(id).isPresent())
             return null;
-        return personRepository.save(personModel);
+        // This must be set if the id is not set in the json
+        personModel.setPersonId(id);
+        return save(personModel);
 
     }
-    public void delete(Integer id) {
 
+
+    public PersonModel delete(Integer id) {
         //slett andre ting
         Optional<PersonModel> personModel = personRepository.findById(id);
         if (personModel.isPresent()) {
@@ -62,19 +65,23 @@ public class PersonService {
 
             if (owner.isPresent()) {
                 ownerService.delete(owner.get());
-                return;
+                return null;
             }
 
             if (coach.isPresent()) {
                 System.out.println("COACH ER PRESENT");
                 coachService.delete(coach.get().getCoachId());
-                return ;
+                return null;
 
             }
-            delete(personModel.get().getPersonId());
+            personRepository.deleteById(id);
+            return personModel.get();
 
         }
-        else { System.out.println("user not found"); }
+        else {
+            System.out.println("user not found");
+            return null;
+        }
 
     }
 

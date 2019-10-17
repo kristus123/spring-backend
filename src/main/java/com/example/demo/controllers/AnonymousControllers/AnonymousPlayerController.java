@@ -17,12 +17,11 @@ private PlayerService playerService;
 private PlayerResourceAssembler playerResourceAssembler;
 
     @GetMapping("/browse/player/{id}")
-    public Resource<PlayerModel> onePlayer(@PathVariable Integer id) {
+    public String onePlayer(@PathVariable Integer id) {
 
         PlayerModel player = playerService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
-
-        return playerResourceAssembler.toResource(player);
+        return playerService.filteredPlayer(player);
     }
 
 }

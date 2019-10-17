@@ -61,25 +61,20 @@ class AdministratorCoachControllerTest {
     @Test
     public void testThatCoachIsUpdated() throws Exception {
         // TODO: Add person object to coach
-//        String person_json = "{\"personId\":\"2\", \"addressId\":\"1\", \"first_name\":\"haakon\", \"last_name\":\"underdal\", \"date_of_birth\":\"1994-05-01\"}";
-//        String jsonBodyUpdated = "{\"coachId\":" + 2 + ",  \"personId\": 1 }";
+//        String person_json = "{\"addressId\":\"1\", \"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 //
 //        mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
 //                content(person_json)).
 //                andExpect(status().isOk());
 //
-//        jsonBody = "{\"personId\": 2 }";
-//
-//        mockMvc.perform(post("/v1/admin/post/coach").contentType(MediaType.APPLICATION_JSON).
-//                content(jsonBody)).
-//                andExpect(status().isOk());
+//        String jsonBodyUpdated = "{\"person\": " + 1 + "}";
 //
 //        mockMvc.perform(put("/v1/admin/update/coach/"+ID).contentType(MediaType.APPLICATION_JSON).
 //                content(jsonBodyUpdated)).
 //                andExpect(status().isOk());
 //
 //        mockMvc.perform(get("/v1/admin/get/coach/" + ID)).
-//                andExpect(content().json("{\"personId\":" + person_json + "}"));
+//                andExpect(content().json("{\"person\": {\"dateOfBirth\":\"1994-05-01\"} }"));
     }
 
 }

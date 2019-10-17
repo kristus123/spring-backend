@@ -16,9 +16,8 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
-    public Optional<LocationModel> findById(Integer id) {
-        return locationRepository.findById(id);
-    }
+    public Optional<LocationModel> findById(int id) { return locationRepository.findById(id); }
 
     public List<LocationModel> findAll() {return locationRepository.findAll(); }
+
 }
