@@ -28,12 +28,14 @@ public class UserPlayerController {
         return player.get();
     }
 
+    @PostMapping("/add/player")
+    public PlayerModel add(@RequestBody PlayerModel player) {
+        return playerService.save(player);
+    }
+
     @GetMapping("/get/player")
     public List<PlayerModel> allPlayers() {
-
-        List<PlayerModel> players = playerService.findAll();
-
-        return players;
+        return playerService.findAll();
     }
 
 

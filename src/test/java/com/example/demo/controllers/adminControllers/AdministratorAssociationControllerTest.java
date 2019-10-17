@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.json.JSONObject;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,8 +55,11 @@ public class AdministratorAssociationControllerTest {
 
 
     void updateAssociation() throws Exception {
-        String json = "{\"associationId\" : 1, \"name\" : \"Updated name\", \"description\" : \"Updated description\"}";
-        mockMvc.perform(put("/v1/admin/update/association/1")
+        String json = new JSONObject()
+                .put("associationId", 1)
+                .put("name", "Updated name")
+                .put("description", "Updated description").toString();
+        mockMvc.perform(put("/v1/admin/update/association")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())

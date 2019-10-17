@@ -17,9 +17,6 @@ public class PlayerModel implements LivingHuman {
     private Integer playerId;
 
 
-
-
-
     @Size(min = 4, max = 255, message = "Minimum player name length: 4 characters")
     @Column(nullable = false)
     private String playername;
