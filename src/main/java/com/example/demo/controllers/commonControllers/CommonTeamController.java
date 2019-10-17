@@ -1,14 +1,19 @@
 package com.example.demo.controllers.commonControllers;
 
-import com.example.demo.exceptions.TeamNotFoundException;
+import com.example.demo.assembler.TeamResourceAssembler;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -16,27 +21,30 @@ import java.util.Optional;
 public class CommonTeamController {
 
     @Autowired
-    private TeamService teamService;
+    TeamService teamService;
+
+    @Autowired
+    TeamResourceAssembler assembler;
 
 
     @GetMapping("/get/team/{id}")
-    public TeamModel getTeam(@PathVariable Integer id) {
+    public Resource<TeamModel> getTeam(@PathVariable Integer id) {
 
-        Optional<TeamModel> team = teamService.findById(id);
-        if(!team.isPresent())
-            return null;
+        TeamModel team = teamService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
-        return team.get();
+        return assembler.toResource(team);
     }
 
     @GetMapping("/get/team")
-    public List<TeamModel> getTeams() {
+    public Resources<Resource<TeamModel>> getTeams() {
 
-        List<TeamModel> teams = teamService.findAll();
+        List<Resource<TeamModel>> teams = teamService.findAll()
+                .stream()
+                .map(assembler::toResource)
+                .collect(Collectors.toList());
 
-        if (teams.isEmpty())
-            return null;
-
-        return teams;
+        return new Resources<>(teams,
+                linkTo(methodOn(CommonTeamController.class).getTeams()).withSelfRel());
     }
 }

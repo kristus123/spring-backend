@@ -1,15 +1,29 @@
 package com.example.demo.controllers.userControllers;
 
+import com.example.demo.assembler.TeamResourceAssembler;
+import com.example.demo.assembler.UserTeamResourceAssembler;
+import com.example.demo.dtos.UserTeamDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.TeamModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.TeamService;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/user/watchlist")
@@ -21,69 +35,71 @@ public class UserWatchTeamController {
     @Autowired
     TeamService teamService;
 
+    @Autowired
+    UserTeamResourceAssembler assembler;
+
     @GetMapping("/get/team/{id}")
-    TeamModel getTeam(@PathVariable Integer id, Principal principal) {
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+    public Resource<TeamModel> getTeam(@PathVariable Integer id, Principal principal) {
 
-        Optional<TeamModel> team = teamService.findById(id);
-        if (!team.isPresent())
-            return null;
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        if (!user.get().getTeams().contains(team.get()))
-            return null;
+        TeamModel team = teamService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
-        System.out.println("TEST: successfully retrieved team from watchlist");
-        return team.get();
+        if (!user.getTeams().contains(team))
+            throw new ElementNotFoundException("Team with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
+
+        assembler.setPrincipal(principal);
+        return assembler.toResource(team);
     }
 
 
     @GetMapping("/get/team")
-    Set<TeamModel> getTeams(Principal principal) {
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+    public Resources<Resource<TeamModel>> getTeams(Principal principal) {
 
-        Set<TeamModel> teams = user.get().getTeams();
-        if (teams.isEmpty())
-            System.out.println("TEST: no teams found");
-        else
-            System.out.println("TEST: successfully retrieved teams from watchlist");
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        return teams;
+        List<Resource<TeamModel>> teams = user.getTeams()
+                .stream()
+                .map(assembler::toResource)
+                .collect(Collectors.toList());
+
+        return new Resources<>(teams,
+                linkTo(methodOn(UserWatchTeamController.class).getTeams(principal)).withSelfRel());
     }
 
     @PostMapping("/post/team")
-    TeamModel addTeam(@RequestBody TeamModel team, Principal principal) {
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        UserModel userModel = userService.getMe(principal);
+    ResponseEntity<?> addTeam(@RequestBody UserTeamDTO dto, Principal principal) throws URISyntaxException {
 
         // User exists?
-        if (!user.isPresent())
-            return null;
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        // Player exists?
-        if (!teamService.findById(team.getTeamId()).isPresent()) {
-            return null;
-        }
+        // Team exists?
+        TeamModel team = teamService.findById(dto.getTeamId())
+                .orElseThrow(() -> new ElementNotFoundException("Team with ID=" + dto.getTeamId() + " does not exist"));
 
         // Add player to watchlist
-        if(!user.get().addTeam(team))
+        if(!user.addTeam(team))
             return null;
 
-        userService.save(user.get());
+        userService.save(user);
         teamService.save(team);
 
-        System.out.println("TEST: teams in user");
-        System.out.println(userModel.getTeams());
-        return team;
+        assembler.setPrincipal(principal);
+        Resource<TeamModel> resource = assembler.toResource(team);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-
+    /*
     // updating fav team equals to removing that team and replacing it with (adding) another team...
     // doesn't make sense to allow this operation for a User
-    //@PutMapping("/update/team/{id}")
+    @PutMapping("/update/team/{id}")
     TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel updatedTeam, Principal principal) {
         if (updatedTeam.getTeamId() != id)
             return null;
@@ -115,26 +131,27 @@ public class UserWatchTeamController {
         return updatedTeam;
     }
 
+     */
+
     @DeleteMapping("/delete/team/{id}")
-    TeamModel deleteTeam(@PathVariable Integer id, Principal principal) {
+    ResponseEntity<?> deleteTeam(@PathVariable Integer id, Principal principal) {
 
-        Optional<TeamModel> team = teamService.findById(id);
-        if (!team.isPresent())
+        // Team exists?
+        TeamModel team = teamService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Team with ID=" + id + " does not exist"));
+
+        // User exists?
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+
+
+        if (!user.deleteTeam(team))
             return null;
 
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+        userService.save(user);
+        teamService.save(team);
 
-        if (!user.get().deleteTeam(team.get()))
-            return null;
-
-        userService.save(user.get());
-        teamService.save(team.get());
-
-        System.out.println("TEST: successfully deleted team from watchlist");
-
-        return team.get();
+        return ResponseEntity.ok(team);
     }
 
 }
