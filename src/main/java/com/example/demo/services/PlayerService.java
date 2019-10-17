@@ -1,9 +1,11 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.models.MatchModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.PlayerRepository;
+import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,25 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private PersonService personService;
+
     public PlayerModel save(PlayerModel player) {
         return playerRepository.save(player);
+    }
+
+    public PlayerModel savePlayerDTO(PlayerDTO player) {
+        PlayerModel playerModel = new PlayerModel(player);
+        if(!teamService.findById(player.getTeamId()).isPresent())
+            return null;
+//        if(!personService.findById(player.getPersonId()).isPresent())
+//            return null;
+//        playerModel.setPerson(personService.findById(player.getPersonId()).get());
+        playerModel.setTeam(teamService.findById(player.getTeamId()).get());
+        return playerRepository.save(playerModel);
     }
 
     public PlayerModel turnIntoPlayer(PersonModel person) {
@@ -29,13 +48,13 @@ public class PlayerService {
         return playerRepository.save(new PlayerModel(person));
     }
 
-    public PlayerModel update(PlayerModel player, PlayerModel oldPlayer) {
+    public PlayerModel update(PlayerDTO player, PlayerModel oldPlayer) {
 
         PlayerModel updatedPlayer = null;
-        if (oldPlayer.getPlayerId() == player.getPlayerId()) {
-            updatedPlayer = save(player);
+        if(oldPlayer.getPlayerId() == player.getPlayerId()){
+            System.out.println("Do we even try to update?");
+            updatedPlayer = savePlayerDTO(player);
         }
-
         return updatedPlayer;
     }
 

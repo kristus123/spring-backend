@@ -3,6 +3,12 @@ dist: trusty
 jdk:
   oraclejdk8
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c "CREATE DATABASE football";
+
 before_install:
   - chmod +x mvnw
   - pip install --user codecov

@@ -2,6 +2,7 @@ package com.example.demo.controllers.AnonymousControllers;
 
 import com.example.demo.assembler.MatchResourceAssembler;
 import com.example.demo.controllers.MatchController;
+import com.example.demo.dtos.MatchResultDTO;
 import com.example.demo.exceptions.MatchNotFoundException;
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.models.MatchModel;
@@ -19,19 +20,15 @@ public class AnonymousMatchController {
 
     private MatchService matchService;
 
-    //private MatchResourceAssembler matchResourceAssembler;
-
 
     @GetMapping("/browse/match/{id}")
-    public String oneMatch(@PathVariable Integer id) {
+    public MatchResultDTO oneMatch(@PathVariable Integer id) {
 
         MatchModel match = matchService.findById(id)
                 .orElseThrow(() -> new MatchNotFoundException(id));
 
         return matchService.getFilteredMatchStats(match);
 
-
     }
-
 
 }
