@@ -1,8 +1,7 @@
 package com.example.demo.controllers.AnonymousControllers;
 
 import com.example.demo.assembler.PlayerResourceAssembler;
-import com.example.demo.controllers.PlayerController;
-import com.example.demo.exceptions.PlayerNotFoundException;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.services.PlayerService;
 import org.springframework.hateoas.Resource;
@@ -21,7 +20,7 @@ private PlayerResourceAssembler playerResourceAssembler;
     public Resource<PlayerModel> onePlayer(@PathVariable Integer id) {
 
         PlayerModel player = playerService.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(id));
+                .orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
 
         return playerResourceAssembler.toResource(player);
     }

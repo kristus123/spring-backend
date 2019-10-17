@@ -27,7 +27,7 @@ public class DummyDataFiller implements CommandLineRunner {
     public void run(String...args) throws Exception {
         //dummyDataService.createUser("panda", "password");
         dummyDataService.TEST();
-        dummyDataService.createPlayer();
+        //dummyDataService.createPlayer();
 
 
 

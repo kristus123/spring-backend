@@ -1,6 +1,5 @@
 package com.example.demo.controllers.commonControllers;
 
-import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -132,6 +132,24 @@ public class DummyDataService {
 
 
 
+        LocalDate date = LocalDate.of(2015, 2, 2);
+        AddressModel address2 = addressService.createAddress(new AddressModel("489489", "OSLO", "SWEDEN", "ve30"));
+        PersonModel person2 =  personService.create(new PersonModel("Alex", "Johansen", date, address2));
+
+        PlayerModel player = playerService.turnIntoPlayer(person2);
+        player.setTeam(team);
+        player.setNormalPosition("BACK");
+        player.setPlayerNumber("25");
+
+        //player.setTeam();
+        //System.out.println("_____ASDASDA_SD_ASD_ASD________");
+        //System.out.println(teamService.findAll());
+        //System.out.println("_____ASDASDA_SD_ASD_ASD________");
+        player = playerService.save(player);
+
+        //System.out.println(player.getTeam());
+
+
 
     }
 

@@ -1,24 +1,13 @@
 package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.exceptions.PersonNotFoundException;
-import com.example.demo.models.AddressModel;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PersonModel;
 import com.example.demo.services.PersonService;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.assertj.core.api.Assertions.*;
-
-import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -64,7 +53,7 @@ class AdministratorPersonControllerTest {
     * There is no easy way to capture nested exceptions
     */
     //@Test @Ignore
-    void testThatExceptionIsThrownIfPersonDoesNotExist() throws PersonNotFoundException  {
+    void testThatExceptionIsThrownIfPersonDoesNotExist() throws ElementNotFoundException {
         String personId = "10";
         Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + personId)));
         org.junit.jupiter.api.Assertions.assertEquals(

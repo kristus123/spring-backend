@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LocationService {
@@ -13,6 +14,10 @@ public class LocationService {
 
     public LocationModel save(LocationModel location) {
         return locationRepository.save(location);
+    }
+
+    public Optional<LocationModel> findById(Integer id) {
+        return locationRepository.findById(id);
     }
 
     public List<LocationModel> findAll() {return locationRepository.findAll(); }

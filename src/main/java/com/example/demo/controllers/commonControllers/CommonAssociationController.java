@@ -1,6 +1,5 @@
 package com.example.demo.controllers.commonControllers;
 
-import com.example.demo.exceptions.AssociationNotFoundException;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.services.AssociationService;
 import org.springframework.beans.factory.annotation.Autowired;

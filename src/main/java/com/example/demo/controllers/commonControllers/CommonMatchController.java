@@ -1,6 +1,5 @@
 package com.example.demo.controllers.commonControllers;
 
-import com.example.demo.exceptions.MatchNotFoundException;
 import com.example.demo.models.MatchModel;
 import com.example.demo.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;

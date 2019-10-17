@@ -1,6 +1,5 @@
 package com.example.demo.controllers.commonControllers;
 
-import com.example.demo.exceptions.SeasonNotFoundException;
 import com.example.demo.models.SeasonModel;
 import com.example.demo.services.SeasonService;
 import org.springframework.beans.factory.annotation.Autowired;
