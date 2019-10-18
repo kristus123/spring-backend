@@ -11,26 +11,18 @@ import java.time.LocalDate;
 import java.time.Month;
 
 
-//@Configuration
+@Configuration
 public class DummyDataFiller {
-
-    @Autowired TeamService teamService;
-
-    @Autowired AssociationService associationService;
-
-    @Autowired AddressService addressService;
-
-    @Autowired PersonService personService;
-
-    @Autowired CoachService coachService;
-
-    @Autowired LocationService locationService;
-
-    @Autowired PlayerService playerService;
 
 
     @Bean
-    public CommandLineRunner initDatabase() {
+    public CommandLineRunner initDatabase(TeamService teamService,
+                                          AssociationService associationService,
+                                          AddressService addressService,
+                                          PersonService personService,
+                                          CoachService coachService,
+                                          LocationService locationService,
+                                          PlayerService playerService) {
         return args -> {
 
             //Lag en standard person med

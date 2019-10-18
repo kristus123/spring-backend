@@ -1,7 +1,7 @@
 package com.example.demo.envers.model;
 
-import org.hibernate.envers.RevisionNumber;
-import org.hibernate.envers.RevisionTimestamp;
+//import org.hibernate.envers.RevisionNumber;
+//import org.hibernate.envers.RevisionTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,12 +14,12 @@ public class CustomRevisionEntity implements Serializable {
     private static final long serialVersionUID = 8530213963961662300L;
 
     @Id
-    @RevisionNumber
+    //@RevisionNumber
     @GeneratedValue
     @Column(name = "revision_number")
     private int revisionNumber;
 
-    @RevisionTimestamp
+    //@RevisionTimestamp
 
     @Column(name = "revision_timestamp")
     private long revisionTimestamp;

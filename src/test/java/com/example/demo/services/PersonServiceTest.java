@@ -50,7 +50,7 @@ class PersonServiceTest {
 
     @Test
     void makePersonPlayerOf() {
-        int teamId = teamService.findAll().get(0).getTeamId();
+        int teamId = teamService.findAllActive().get(0).getTeamId();
 
         PlayerModel player =  personService.makePersonPlayerOf(teamId, 1);
         System.out.println(player.getPlayerId());
@@ -67,7 +67,7 @@ class PersonServiceTest {
     @Test
     void makePersonOwnerOf(){
         PersonModel person = personService.findAll().get(0);
-        TeamModel team = teamService.findAll().get(0);
+        TeamModel team = teamService.findAllActive().get(0);
 
         team.setOwner(null);
         teamService.save(team);

@@ -4,9 +4,15 @@ import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PersonModel;
 import com.example.demo.services.PersonService;
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -19,9 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@AutoConfigureMockMvc
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 class AdministratorPersonControllerTest {
 
     @Autowired
@@ -38,7 +44,8 @@ class AdministratorPersonControllerTest {
     }
 
 
-    //@Test @Ignore
+    @Test
+    @Ignore
     void testThatCanGetPersonAfterPost() throws Exception {
         String json = "{\"firstName\":\"haadasdaskon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
@@ -52,7 +59,7 @@ class AdministratorPersonControllerTest {
     /*
     * There is no easy way to capture nested exceptions
     */
-    //@Test @Ignore
+    @Test @Ignore
     void testThatExceptionIsThrownIfPersonDoesNotExist() throws ElementNotFoundException {
         String personId = "10";
         Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + personId)));
@@ -61,7 +68,7 @@ class AdministratorPersonControllerTest {
                 t.getMessage());
     }
 
-    //@Test @Ignore
+    @Test @Ignore
     void testThatPersonIsDeleted() throws Exception {
         String json = "{\"firstName\":\"haakdsadason\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
@@ -96,7 +103,7 @@ class AdministratorPersonControllerTest {
     }
 
 
-    //@Test @Ignore
+    @Test @Ignore
     void testThatPersonIsUpdated() throws Exception {
         String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
         String jsonUpdated = "{\"personId\":" + ID + ", \"firstName\":\"OLA\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";

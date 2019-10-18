@@ -18,12 +18,16 @@ public class AdministratorPlayerController {
     @Autowired
     PlayerService playerService;
 
+    /*
+
     private final IPlayerHistoryRepository playerHistoryRepository;
 
     @Autowired
     public AdministratorPlayerController(IPlayerHistoryRepository repo) {
         this.playerHistoryRepository = repo;
     }
+
+     */
 
     @GetMapping("/get/player/{playerId}")
     public PlayerModel getPlayer(@PathVariable int playerId) {
@@ -35,6 +39,7 @@ public class AdministratorPlayerController {
         return null;
     }
 
+    /*
     @GetMapping("/get/player/{playerId}/history")
     public PlayerHistoryDTO getPlayerHistory(@PathVariable int playerId) {
         if(!playerService.findById(playerId).isPresent())
@@ -55,6 +60,8 @@ public class AdministratorPlayerController {
         }
         return playerHistoryDTO;
     }
+
+     */
 
     @PostMapping("/post/player")
     public PlayerModel addPlayer(@RequestBody PlayerDTO playerModel) {

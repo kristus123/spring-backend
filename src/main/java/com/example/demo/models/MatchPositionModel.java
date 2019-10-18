@@ -1,15 +1,19 @@
 package com.example.demo.models;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 @Entity
 @IdClass (MatchPositionId.class)
-@Table(name="MATCH_POSITION")
+@Table(name="MATCH_POSITION_blabla")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchPositionModel {
 
     @Id
@@ -22,15 +26,7 @@ public class MatchPositionModel {
     @JoinColumn(name = "match_id", referencedColumnName = "match_id")
     private MatchModel match;
 
-    private String position; // TODO PANDA: Integer? String?
+    private String position;
 
-    public MatchPositionModel() {
 
-    }
-
-    public MatchPositionModel(PlayerModel player, MatchModel match, String position) {
-        this.player = player;
-        this.match = match;
-        this.position = position;
-    }
 }

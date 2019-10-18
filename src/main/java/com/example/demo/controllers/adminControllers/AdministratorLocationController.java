@@ -14,24 +14,14 @@ import java.util.Optional;
 @RestController @RequestMapping("/v1/admin")
 public class AdministratorLocationController {
     @Autowired
-    private LocationService  locationService;
+    LocationService  locationService;
 
     @Autowired
     AddressService addressService;
 
 
 
-    @GetMapping("/get/location")
-    public List<LocationModel> getAll() {
-        return locationService.findAll();
-    }
 
-    @GetMapping("/get/location/{locationId}")
-    public LocationModel getAll(@PathVariable int locationId) {
-        Optional<LocationModel> location = locationService.findById(locationId);
-        if (location.isPresent()) return location.get();
-        return null;
-    }
 
     @PostMapping("/add/location") //Logikken her burde bli puttet inn i en service, but for now tshi will do
     public LocationModel save(@RequestBody LocationDTO locationDTO) {

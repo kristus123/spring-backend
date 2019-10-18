@@ -39,10 +39,13 @@ public class CommonTeamController {
     @GetMapping("/get/team")
     public Resources<Resource<TeamModel>> getTeams() {
 
-        List<Resource<TeamModel>> teams = teamService.findAll()
+        List<Resource<TeamModel>> teams = teamService.findAllActive()
                 .stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
+
+        if (teams.isEmpty())
+            throw new ElementNotFoundException("Could not find any data about teams");
 
         return new Resources<>(teams,
                 linkTo(methodOn(CommonTeamController.class).getTeams()).withSelfRel());

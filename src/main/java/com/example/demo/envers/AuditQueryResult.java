@@ -1,10 +1,11 @@
 package com.example.demo.envers;
 
 import com.example.demo.envers.model.CustomRevisionEntity;
-import org.hibernate.envers.RevisionType;
+//import org.hibernate.envers.RevisionType;
 
 public class AuditQueryResult<T> {
 
+    /*
     private final T entity;
     private final CustomRevisionEntity revision;
     private final RevisionType type;
@@ -26,4 +27,6 @@ public class AuditQueryResult<T> {
     public RevisionType getType() {
         return type;
     }
+
+     */
 }

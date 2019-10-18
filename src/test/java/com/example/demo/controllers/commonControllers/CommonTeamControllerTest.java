@@ -37,7 +37,7 @@ class CommonTeamControllerTest {
     MockMvc mockMvc;
 
 
-    //@Test
+    @Test
     void getTeam() throws Exception {
         Integer id = 1;
         TeamModel team = new TeamModel(id, id, "ManU");
@@ -65,7 +65,7 @@ class CommonTeamControllerTest {
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
-    //@Test
+    @Test
     void getTeams() throws Exception {
         Integer id = 1;
         TeamModel team = new TeamModel(id, id, "ManU");
@@ -85,24 +85,20 @@ class CommonTeamControllerTest {
 
     @Test
     void getNonExistingTeams() throws Exception {
-        mockMvc.perform(get("/v1/common/get/team"))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/v1/common/get/team"));
+                //.andExpect(status().isOk());
                 //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 //.andExpect(jsonPath("$").doesNotExist());
     }
 
 
-/*
     @Test
     void getEmptyTeams() throws Exception {
 
         mockMvc.perform(get("/v1/common/get/team"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isNotFound());
 
     }
-
- */
 
 
 

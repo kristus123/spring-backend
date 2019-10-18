@@ -97,7 +97,7 @@ public class TeamService {
         return team;
     }
 
-    public List<TeamModel> findAll() {
+    public List<TeamModel> findAllActive() {
         return teamRepository.findAll().stream().filter(team -> team.isActive()).collect(Collectors.toList());
     }
 
@@ -107,5 +107,9 @@ public class TeamService {
         );
 
         return teamRepository.save(teamModel);
+    }
+
+    public List<TeamModel> findAllIncludingInactive() {
+        return teamRepository.findAll();
     }
 }

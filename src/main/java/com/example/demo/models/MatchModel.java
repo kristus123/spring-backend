@@ -1,16 +1,23 @@
 package com.example.demo.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="MATCH_MODEL")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchModel {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -35,8 +42,18 @@ public class MatchModel {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 
-    public MatchModel() {
-    }
+    /*
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "MATCH_POSITION",
+            joinColumns = { @JoinColumn(name = "match_id") },
+            inverseJoinColumns = { @JoinColumn(name = "player_id") }
+    )
+    private Set<PlayerModel> positions = new HashSet<>();
+
+     */
+
 
     public MatchModel(LocalDate matchDate, TeamModel homeTeam, TeamModel awayTeam, SeasonModel season, LocationModel location) {
         this.matchDate = matchDate;

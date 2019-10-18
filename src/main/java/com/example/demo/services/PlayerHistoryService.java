@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 public class PlayerHistoryService {
 
+    /*
     @Autowired
     private IPlayerHistoryRepository playerHistoryRepository;
 
@@ -24,8 +25,7 @@ public class PlayerHistoryService {
         playerHistoryDTO.setPlayerTeamHistory(createPreviousTeamList(list));
         return playerHistoryDTO;
     }
-    /*
-    * */
+
     private List<PlayerTeamHistoryDTO> createPreviousTeamList(List<PlayerHistoryModel> playerHistoryModelList) {
         Integer tempTeamId = null;
         List<PlayerTeamHistoryDTO> previousTeams = new ArrayList<>();
@@ -43,5 +43,8 @@ public class PlayerHistoryService {
         }
         return previousTeams;
     }
+
+     */
+
 
 }

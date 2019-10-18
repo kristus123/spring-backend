@@ -3,15 +3,16 @@ package com.example.demo.models;
 import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.interfaces.LivingHuman;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vladmihalcea.hibernate.type.range.PostgreSQLRangeType;
-import com.vladmihalcea.hibernate.type.range.Range;
+//import com.vladmihalcea.hibernate.type.range.PostgreSQLRangeType;
+//import com.vladmihalcea.hibernate.type.range.Range;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.envers.Audited;
+//import org.hibernate.annotations.TypeDef;
+//import org.hibernate.envers.Audited;
 
-import org.hibernate.envers.RelationTargetAuditMode;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+//import org.hibernate.envers.RelationTargetAuditMode;
+//import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -23,9 +24,10 @@ import java.util.Set;
 @Table(name="PLAYER")
 @Getter
 @Setter
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-@TypeDef(typeClass = PostgreSQLRangeType.class, defaultForType = Range.class) //Handling ranges the postgres way
-@EntityListeners({AuditingEntityListener.class})
+@NoArgsConstructor
+//@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+//@TypeDef(typeClass = PostgreSQLRangeType.class, defaultForType = Range.class) //Handling ranges the postgres way
+//@EntityListeners({AuditingEntityListener.class})
 public class PlayerModel implements LivingHuman {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "player_id")
@@ -61,9 +63,18 @@ public class PlayerModel implements LivingHuman {
     @ManyToMany(mappedBy = "players")
     private Set<UserModel> users = new HashSet<>();
 
+/*
+    // Match goal properties
 
-    public PlayerModel() {
-    }
+    @JsonIgnore
+    @ManyToMany(mappedBy = "positions")
+    private Set<MatchModel> matches = new HashSet<>();
+
+ */
+
+
+
+
 
   public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername) {
 

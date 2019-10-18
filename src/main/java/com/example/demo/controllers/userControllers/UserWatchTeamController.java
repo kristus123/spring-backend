@@ -21,8 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -96,42 +94,9 @@ public class UserWatchTeamController {
                 .body(resource);
     }
 
-    /*
     // updating fav team equals to removing that team and replacing it with (adding) another team...
     // doesn't make sense to allow this operation for a User
-    @PutMapping("/update/team/{id}")
-    TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel updatedTeam, Principal principal) {
-        if (updatedTeam.getTeamId() != id)
-            return null;
 
-        // User exists?
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
-
-        // Players exist?
-
-        if (updatedTeam == null)
-            return null;
-
-        Optional<TeamModel> existingTeam = teamService.findById(id);
-        if (!existingTeam.isPresent())
-            return null;
-
-        if (!user.get().deleteTeam(existingTeam.get()))
-            return null;
-
-        if (!user.get().addTeam(updatedTeam))
-            return null;
-
-        userService.save(user.get());
-        teamService.update(updatedTeam, existingTeam.get());
-
-        System.out.println("TEST: updated team successfully");
-        return updatedTeam;
-    }
-
-     */
 
     @DeleteMapping("/delete/team/{id}")
     ResponseEntity<?> deleteTeam(@PathVariable Integer id, Principal principal) {

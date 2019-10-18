@@ -85,8 +85,7 @@ class TeamServiceTest {
         teamService.delete(team);
 
         Optional<TeamModel> empty = teamService.findById(id);
-        assertTrue(empty.isPresent());
-        assertFalse(empty.get().isActive());
+        assertFalse(empty.isPresent());
 
     }
 
@@ -105,8 +104,7 @@ class TeamServiceTest {
         teamService.deleteById(id);
 
         Optional<TeamModel> empty = teamService.findById(id);
-        assertTrue(empty.isPresent());
-        assertFalse(empty.get().isActive());
+        assertFalse(empty.isPresent());
     }
 
     @Test
@@ -137,23 +135,19 @@ class TeamServiceTest {
     @Test
     void findTeams() {
 
-        Integer id = 2;
+        Integer id = 1;
         String name = "Juventus Premium";
         teamService.save(new TeamModel(id, id, name));
 
-        List<TeamModel> teams = teamService.findAll();
+        List<TeamModel> teams = teamService.findAllActive();
         assertFalse(teams.isEmpty());
-
-        TeamModel found = teams.get(0);
-        assertEquals(id, found.getTeamId());
-        assertEquals(name, found.getAssociation().getName());
 
     }
 
     @Test
     void findNonExistingTeams() {
 
-        List<TeamModel> empty = teamService.findAll();
+        List<TeamModel> empty = teamService.findAllActive();
         //assertTrue(empty.isEmpty());
 
     }

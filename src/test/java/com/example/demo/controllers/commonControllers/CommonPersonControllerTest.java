@@ -1,6 +1,7 @@
 package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.services.PersonService;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class CommonPersonControllerTest {
     void getPeople() {
     }
 
-    //@Test @Ignore
+    @Test @Ignore
     void testThatCanGetAllPeople() throws Exception {
         String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).

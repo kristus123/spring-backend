@@ -32,7 +32,7 @@ public class AdministratorOwnerControllerTest {
     @Autowired
     OwnerRepository ownerRepository;
 
-    //@Test
+    @Test
     void runTests() throws Exception {
         addOwner();
         updateOwner();
