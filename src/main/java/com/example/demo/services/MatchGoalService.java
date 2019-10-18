@@ -4,6 +4,7 @@ import com.example.demo.models.MatchGoalModel;
 import com.example.demo.models.MatchModel;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.MatchGoalRepository;
+import com.example.demo.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class MatchGoalService {
 
     @Autowired
     private MatchGoalRepository matchGoalRepository;
+
+    @Autowired
+    private MatchService matchService;
 
     public MatchGoalModel save(MatchGoalModel matchGoalModel) {return matchGoalRepository.save(matchGoalModel);}
     public MatchGoalModel update(Integer id, MatchGoalModel personModel) {
@@ -34,6 +38,13 @@ public class MatchGoalService {
 
     public List<MatchGoalModel> findByMatch(MatchModel match) {
         return matchGoalRepository.findByMatch(match);
+    }
+
+    public List<MatchGoalModel> findByMatchId(Integer matchId) {
+        if(matchService.findById(matchId).isPresent()) {
+            return findByMatch(matchService.findById(matchId).get());
+        }
+        return null;
     }
 
 }
