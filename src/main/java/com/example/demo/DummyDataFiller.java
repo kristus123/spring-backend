@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.models.PlayerModel;
+import com.example.demo.models.SeasonModel;
 import com.example.demo.models.TeamModel;
 import com.example.demo.repositories.PlayerRepository;
 import com.example.demo.repositories.TeamRepository;
@@ -8,7 +9,8 @@ import com.example.demo.services.DummyDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-/*
+
+import java.time.LocalDate;
 
 
 @Component
@@ -25,30 +27,17 @@ public class DummyDataFiller implements CommandLineRunner {
 
     @Override
     public void run(String...args) throws Exception {
-        dummyDataService.TEST();
-        dummyDataService.createPlayer();
+        // ------------------ CREATING TEAMS ------------------ //
+        TeamModel team_1 = dummyDataService.createTeam("Barcelona", "Camp Nou", "persons_barcelona");
+        TeamModel team_2 =  dummyDataService.createTeam("Real Madrid", "Estadio Santiago Bernabéu", "persons_madrid");
 
+        // ------------------ CREATING MATCH ------------------ //
+        SeasonModel season = new SeasonModel(LocalDate.of(2015, 01, 01),
+                LocalDate.of(2016, 01,01),
+                "La Liga",
+                "Top division in the spanish league. Renowned for its acting");
 
-
-
-        //dummyDataService.insertPlayerToTeam();
-        //System.out.println(teamRepository.findAll().get(0));
-
-        //TeamModel teamModel = teamRepository.findAll().get(0);
-
-
-        //PlayerModel player = playerRepository.findAll().get(0);
-
-        //System.out.println(player.getTeam().getAssociation().getName());
-
-        //player.setTeam(teamModel);
-
-        //System.out.println(player.getTeam().getAssociation().getName());
-
-        //playerRepository.save(player);
-
-
+        dummyDataService.createMatch(season, team_1, team_2, "matchGoals_1");
 
     }
 }
- */

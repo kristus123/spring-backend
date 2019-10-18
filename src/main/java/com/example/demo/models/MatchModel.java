@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="MATCH_MODEL")
+@Table(name="MATCH")
 @Getter
 @Setter
 public class MatchModel {
