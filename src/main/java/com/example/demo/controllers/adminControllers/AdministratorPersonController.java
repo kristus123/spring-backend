@@ -34,7 +34,6 @@ public class AdministratorPersonController {
     @PostMapping("/post/person")
     public String createPerson(@RequestBody PersonModel person) {
         personService.save(person);
-
         return "added";
         //return personService.findAll().stream().filter(p -> p.getLastName().equals(person.getLastName())).findFirst();
     }
