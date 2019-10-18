@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.PlayerAnonDTO;
 import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.models.MatchModel;
 import com.example.demo.models.PersonModel;
@@ -70,11 +71,9 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public String filteredPlayer(PlayerModel player) {
-        return "The player : " + player.getPlayername() + " plays for " + player.getTeam().getAssociation().getName();
-
+    public PlayerAnonDTO filteredPlayer(PlayerModel player) {
+        return new PlayerAnonDTO(player, player.getPlayername(), player.getTeam().toString());
 
     }
-
 
 }

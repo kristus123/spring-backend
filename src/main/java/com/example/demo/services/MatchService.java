@@ -80,7 +80,7 @@ public class MatchService {
 
 
     public MatchResultDTO getFilteredMatchStats(MatchModel match) {
-String result;
+        String result;
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
         long home = 0;
         long away = 0;
@@ -94,7 +94,10 @@ String result;
         if (home > away) {
             result = match.getHomeTeam().getAssociation().getName().toString();
         } else if (home == away) result = "Uavgjort";
-        else {result = match.getAwayTeam().getAssociation().getName().toString();}
+        else {
+            result = match.getAwayTeam().getAssociation().getName().toString();
+        }
+
         return new MatchResultDTO(match, match.getHomeTeam(), match.getAwayTeam(), result);
 
 
