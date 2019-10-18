@@ -11,14 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Setter
 @NoArgsConstructor
 public class TeamDTO {
-
-    @Autowired
-    TeamService teamService;
-
-    private TeamModel teamModel;
-
-    public TeamDTO(TeamModel teamModel) {
-        teamModel.getTeamId();
-        this.teamModel = teamModel;
-    }
+    private int ownerId;
+    private int locationId;
+    private int associationId;
+    private int coachId;
 }
