@@ -25,16 +25,10 @@ public class HumanService {
     @Autowired OwnerRepository ownerRepository;
 
     public <T extends LivingHuman> void delete(T human) {
-
         PersonModel person = human.getPersonObject();
-
-
         Optional<CoachModel> possibleCoach = coachRepository.findByPerson(person);
-
         Optional<OwnerModel> possibleOwner = ownerRepository.findByPerson(person);
-
         Optional<PlayerModel> possiblePlayer = playerRepository.findByPerson(person);
-
 
         if (possibleCoach.isPresent()) {
             coachRepository.delete(possibleCoach.get());
