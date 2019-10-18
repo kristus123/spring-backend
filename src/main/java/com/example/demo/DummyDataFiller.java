@@ -1,56 +1,72 @@
 package com.example.demo;
 
-import com.example.demo.models.PlayerModel;
-import com.example.demo.models.TeamModel;
-import com.example.demo.repositories.PlayerRepository;
-import com.example.demo.repositories.TeamRepository;
-import com.example.demo.repositories.UserRepository;
-import com.example.demo.services.DummyDataService;
-import com.example.demo.services.UserService;
+import com.example.demo.models.*;
+import com.example.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 
+//@Configuration
+public class DummyDataFiller {
 
-@Component
-public class DummyDataFiller implements CommandLineRunner {
+    @Autowired TeamService teamService;
 
-    @Autowired
-    DummyDataService dummyDataService;
+    @Autowired AssociationService associationService;
 
-    @Autowired
-    TeamRepository teamRepository;
+    @Autowired AddressService addressService;
 
-    @Autowired
-    PlayerRepository playerRepository;
+    @Autowired PersonService personService;
 
-    @Override
-    public void run(String...args) throws Exception {
-        //dummyDataService.createUser("panda", "password");
-        dummyDataService.TEST();
-        //dummyDataService.createPlayer();
+    @Autowired CoachService coachService;
+
+    @Autowired LocationService locationService;
+
+    @Autowired PlayerService playerService;
 
 
+    @Bean
+    public CommandLineRunner initDatabase() {
+        return args -> {
+
+            //Lag en standard person med
+            AddressModel address = addressService.createAddress(new AddressModel("5306", "Erdal", "Norway", "Vestre 30"));
+            PersonModel person = personService.create(new PersonModel("Kristian", "Solbakken", LocalDate.of(2018, Month.FEBRUARY, 1), address));
+
+            //Kristian har lyst å bli en coach
+            CoachModel coach = coachService.save(new CoachModel(person));
+
+            // Et lag må jo eksistere før man kan bli en rik fortballspiller
 
 
-        //dummyDataService.insertPlayerToTeam();
-        //System.out.println(teamRepository.findAll().get(0));
+            // In the beginning there was manchester
+            AssociationModel association = associationService.create(new AssociationModel("Manchester", "Best team"));
 
-        //TeamModel teamModel = teamRepository.findAll().get(0);
+            TeamModel team = teamService.createTeam(association, null, null, null);
 
+            // Kristian har lyst å bli eier av laget
+            personService.makePersonOwnerOf(person, team);
+            //kristian er også coachen
+            team.setCoach(coach);
 
-        //PlayerModel player = playerRepository.findAll().get(0);
-
-        //System.out.println(player.getTeam().getAssociation().getName());
-
-        //player.setTeam(teamModel);
-
-        //System.out.println(player.getTeam().getAssociation().getName());
-
-        //playerRepository.save(player);
+            LocationModel location = locationService.save(new LocationModel(address, "Macnhester stadium", "it's in Kristian's backyard"));
+            team.setLocation(location);
 
 
+            LocalDate date = LocalDate.of(2015, 2, 2);
+            AddressModel address2 = addressService.createAddress(new AddressModel("489489", "OSLO", "SWEDEN", "ve30"));
+            PersonModel person2 =  personService.create(new PersonModel("Alex", "Johansen", date, address2));
 
+            PlayerModel player = playerService.turnIntoPlayer(person2);
+            player.setTeam(team);
+            player.setNormalPosition("BACK");
+            player.setPlayerNumber("25");
+
+            player = playerService.save(player);
+        };
     }
 }
