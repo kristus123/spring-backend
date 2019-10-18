@@ -25,7 +25,7 @@ public class TeamModel {
     @JoinColumn(name = "coach_id", referencedColumnName = "coach_id")
     private CoachModel coach;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
     private OwnerModel owner;
 
@@ -50,6 +50,8 @@ public class TeamModel {
         this.owner = owner;
         this.location = location;
     }
+
+
 
     @Override
     public String toString() {

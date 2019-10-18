@@ -37,7 +37,6 @@ public class CreationService {
     }
 
     public LocationModel createLocation(LocationDTO locationDTO) {
-
         //locationRepository.save(locationDTO.getLocationModel());
         //addressRepository.save(locationDTO.getAddressModel());
         return locationRepository.save(locationDTO.getLocationModel());

@@ -37,8 +37,9 @@ public class PersonService {
     @Autowired PlayerService playerService;
 
     public PersonModel save(PersonModel personModel) {
-
-        addressRepository.save(personModel.getAddress());
+        if (personModel.getAddress() != null) {
+            addressRepository.save(personModel.getAddress());
+        }
         return personRepository.save(personModel);
     }
 
