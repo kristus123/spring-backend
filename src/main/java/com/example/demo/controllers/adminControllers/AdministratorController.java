@@ -24,13 +24,30 @@ public class AdministratorController {
     @Autowired
     AddressRepository addressRepository;
 
+
+
+    @PutMapping("/giveUserStandard/{userId}")
+    public boolean elevateUserToStandard(@PathVariable int userId) {
+        return userService.elevateUserToStandard(userId);
+    }
+
+
     @PutMapping("/giveUserAdmin/{userId}")
     public boolean elevateUserToAdmin(@PathVariable int userId) {
         return userService.elevateUserToAdmin(userId);
     }
 
+
+    //Denne er en duplicate av -  /v1/admin/add/location
     @PostMapping("/createLocation")
     public LocationModel createLocation(@RequestBody LocationDTO locationDTO) {
+        if (locationDTO.getAddressId().isPresent()) {
+            Optional<AddressModel> address = addressRepository.findById(locationDTO.getAddressId().get());
+            if (address.isPresent()) locationDTO.getLocationModel().setAddress(address.get());
+
+
+        }
+        System.out.println(locationDTO.getLocationModel().getAddress().getCity());
         return creationService.createLocation(locationDTO);
     }
 

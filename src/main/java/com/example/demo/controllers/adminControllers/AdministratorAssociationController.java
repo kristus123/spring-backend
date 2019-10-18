@@ -5,6 +5,7 @@ import com.example.demo.services.AssociationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController @RequestMapping("/v1/admin")
@@ -21,15 +22,20 @@ public class AdministratorAssociationController {
         return null;
     }
 
+    @GetMapping("/get/association")
+    public List<AssociationModel> getAll() {
+        return associationService.findAll();
+    }
+
     @PostMapping("/post/association")
     public AssociationModel addAssociation(@RequestBody AssociationModel associationModel) {
         AssociationModel newAssociation = associationService.save(associationModel);
         return newAssociation;
     }
 
-    @PutMapping("/update/association/{associationId}")
-    public AssociationModel updateAssociation(@PathVariable int associationId, @RequestBody AssociationModel associationModel) {
-        Optional<AssociationModel> oldAssociation = associationService.findById(associationId);
+    @PutMapping("/update/association")
+    public AssociationModel updateAssociation(@RequestBody AssociationModel associationModel) {
+        Optional<AssociationModel> oldAssociation = associationService.findById(associationModel.getAssociationId());
         if(oldAssociation.isPresent()) {
             AssociationModel updatedAssociation = associationService.update(associationModel, oldAssociation.get());
             return updatedAssociation;

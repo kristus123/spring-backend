@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.MatchResultDTO;
 import com.example.demo.enums.GoalType;
 import com.example.demo.models.*;
 import com.example.demo.repositories.MatchRepository;
@@ -77,8 +78,9 @@ public class MatchService {
 
     }
 
-    public String getFilteredMatchStats(MatchModel match) {
-// For anonymous match browsing
+
+    public MatchResultDTO getFilteredMatchStats(MatchModel match) {
+String result;
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
         long home = 0;
         long away = 0;
@@ -88,11 +90,12 @@ public class MatchService {
                         .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
 
         away = goals.size() - home;
-//System.out.println("Resultatet i kampen "+match.getHomeTeam().getAssociation().getName() + "-" + match.getAwayTeam().getAssociation().getName() + " ble: ");
+
         if (home > away) {
-            return match.getHomeTeam().getAssociation().getName().toString();
-        } else if (home == away) return "Uavgjort";
-        else return match.getAwayTeam().getAssociation().getName().toString();
+            result = match.getHomeTeam().getAssociation().getName().toString();
+        } else if (home == away) result = "Uavgjort";
+        else {result = match.getAwayTeam().getAssociation().getName().toString();}
+        return new MatchResultDTO(match, match.getHomeTeam(), match.getAwayTeam(), result);
 
 
     }

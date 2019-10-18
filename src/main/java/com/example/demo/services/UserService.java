@@ -45,6 +45,19 @@ public class UserService {
         return false;
     }
 
+    public boolean elevateUserToStandard(int id) {
+        Optional<UserModel> userModel = userRepository.findById(id);
+        if (userModel.isPresent()) {
+            userModel.get().changeRole(UserRole.STANDARD);
+            System.out.println(userModel.get().getRoles()[0]);
+            userRepository.save(userModel.get());
+            return true;
+        }
+        return false;
+    }
+
+
+
     public boolean elevateUserToAdmin(UserModel user) {
         return elevateUserToAdmin(user.getId());
     }

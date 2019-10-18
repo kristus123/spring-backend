@@ -40,7 +40,6 @@ public class PersonService {
         if (personModel.getAddress() != null) {
             addressRepository.save(personModel.getAddress());
         }
-
         return personRepository.save(personModel);
     }
 
