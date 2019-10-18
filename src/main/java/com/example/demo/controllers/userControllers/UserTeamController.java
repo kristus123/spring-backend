@@ -32,7 +32,7 @@ public class UserTeamController {
     public List<TeamModel> allTeams() {
 
         List<TeamModel> teams = teamService.findAll();
-
+        System.out.println(teams);
         return teams;
     }
 }

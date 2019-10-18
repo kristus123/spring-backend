@@ -1,5 +1,6 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.dtos.TeamDTO;
 import com.example.demo.exceptions.InvalidTeamRequestException;
 import com.example.demo.exceptions.TeamNotFoundException;
 import com.example.demo.models.TeamModel;
@@ -18,8 +19,8 @@ public class AdministratorTeamController {
 
 
     @PostMapping("/post/team")
-    public TeamModel newTeam(@RequestBody TeamModel teamModel) {
-        return teamService.save(teamModel);
+    public TeamModel newTeam(@RequestBody TeamDTO team) {
+        return teamService.createTeam(team);
     }
 
     @PutMapping("/update/team/{id}")
