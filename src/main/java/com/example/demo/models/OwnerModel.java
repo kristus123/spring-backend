@@ -26,11 +26,6 @@ public class OwnerModel implements LivingHuman {
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    private List<PersonModel> ownedPlayers = new ArrayList<PersonModel>();
-     */
 
     public OwnerModel(PersonModel person) {
         this.person = person;

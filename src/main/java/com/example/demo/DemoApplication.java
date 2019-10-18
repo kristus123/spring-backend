@@ -1,15 +1,15 @@
 package com.example.demo;
-
+import org.omg.SendingContext.RunTime;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 @SpringBootApplication
 public class DemoApplication {
-	// ${ ENVIRONMENT : dev }
-	
-
 	public static void main(String[] args) {
-		short s =  5;
 		SpringApplication.run(DemoApplication.class, args);
 	}
 }
