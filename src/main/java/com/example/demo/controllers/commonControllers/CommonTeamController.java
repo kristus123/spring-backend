@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,16 +30,19 @@ public class CommonTeamController {
 
 
     @GetMapping("/get/team/{id}")
-    public Resource<TeamModel> getTeam(@PathVariable Integer id) {
+    public ResponseEntity<Resource<TeamModel>> getTeam(@PathVariable Integer id) {
 
         TeamModel team = teamService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
-        return assembler.toResource(team);
+        Resource<TeamModel> resource = assembler.toResource(team);
+
+        return ResponseEntity
+                .ok(resource);
     }
 
     @GetMapping("/get/team")
-    public Resources<Resource<TeamModel>> getTeams() {
+    public ResponseEntity<Resources<Resource<TeamModel>>> getTeams() {
 
         List<Resource<TeamModel>> teams = teamService.findAllActive()
                 .stream()
@@ -45,9 +50,10 @@ public class CommonTeamController {
                 .collect(Collectors.toList());
 
         if (teams.isEmpty())
-            throw new ElementNotFoundException("Could not find any data about teams");
+            throw new ElementNotFoundException("No teams registered");
 
-        return new Resources<>(teams,
-                linkTo(methodOn(CommonTeamController.class).getTeams()).withSelfRel());
+        return ResponseEntity
+                .ok(new Resources<>(teams,
+                        linkTo(methodOn(CommonTeamController.class).getTeams()).withSelfRel()));
     }
 }

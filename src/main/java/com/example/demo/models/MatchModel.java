@@ -42,6 +42,11 @@ public class MatchModel {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 
+    // Match goal properties
+
+    @OneToMany(mappedBy = "match")
+    private Set<MatchGoalModel> positions;
+
     /*
     @JsonIgnore
     @ManyToMany
@@ -51,8 +56,8 @@ public class MatchModel {
             inverseJoinColumns = { @JoinColumn(name = "player_id") }
     )
     private Set<PlayerModel> positions = new HashSet<>();
-
      */
+
 
 
     public MatchModel(LocalDate matchDate, TeamModel homeTeam, TeamModel awayTeam, SeasonModel season, LocationModel location) {

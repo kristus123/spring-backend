@@ -11,6 +11,7 @@ import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class UserWatchTeamController {
     UserTeamResourceAssembler assembler;
 
     @GetMapping("/get/team/{id}")
-    public Resource<TeamModel> getTeam(@PathVariable Integer id, Principal principal) {
+    public ResponseEntity<Resource<TeamModel>> getTeam(@PathVariable Integer id, Principal principal) {
 
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
@@ -49,12 +50,15 @@ public class UserWatchTeamController {
             throw new ElementNotFoundException("Team with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
 
         assembler.setPrincipal(principal);
-        return assembler.toResource(team);
+        Resource<TeamModel> resource = assembler.toResource(team);
+
+        return ResponseEntity
+                .ok(resource);
     }
 
 
     @GetMapping("/get/team")
-    public Resources<Resource<TeamModel>> getTeams(Principal principal) {
+    public ResponseEntity<Resources<Resource<TeamModel>>> getTeams(Principal principal) {
 
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
@@ -64,12 +68,16 @@ public class UserWatchTeamController {
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
 
-        return new Resources<>(teams,
-                linkTo(methodOn(UserWatchTeamController.class).getTeams(principal)).withSelfRel());
+        if (teams.isEmpty())
+            throw new ElementNotFoundException("No teams in watchlist for user with username=" + principal.getName());
+
+        return ResponseEntity
+                .ok(new Resources<>(teams,
+                        linkTo(methodOn(UserWatchTeamController.class).getTeams(principal)).withSelfRel()));
     }
 
     @PostMapping("/post/team")
-    ResponseEntity<?> addTeam(@RequestBody UserTeamDTO dto, Principal principal) throws URISyntaxException {
+    public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody UserTeamDTO dto, Principal principal) throws URISyntaxException {
 
         // User exists?
         UserModel user = userService.findByUsername(principal.getName())
@@ -99,7 +107,7 @@ public class UserWatchTeamController {
 
 
     @DeleteMapping("/delete/team/{id}")
-    ResponseEntity<?> deleteTeam(@PathVariable Integer id, Principal principal) {
+    public ResponseEntity<TeamModel> deleteTeam(@PathVariable Integer id, Principal principal) {
 
         // Team exists?
         TeamModel team = teamService.findById(id)

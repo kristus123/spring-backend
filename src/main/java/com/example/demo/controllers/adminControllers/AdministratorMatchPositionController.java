@@ -26,8 +26,8 @@ public class AdministratorMatchPositionController {
     @PutMapping("/update/matchPosition")
     public MatchPositionModel updateMatchPosition(@RequestBody MatchPositionModel matchPositionModel) {
         MatchPositionId matchPositionId = null;
-        matchPositionId.setPlayer(matchPositionModel.getPlayer());
-        matchPositionId.setMatch(matchPositionModel.getMatch());
+        matchPositionId.setPlayerId(matchPositionModel.getPlayer().getPlayerId());
+        matchPositionId.setMatchId(matchPositionModel.getMatch().getMatchId());
         Optional<MatchPositionModel> oldMatchPosition = matchPositionService.findById(matchPositionId);
         if(oldMatchPosition.isPresent()) {
             MatchPositionModel updatedMatchPositionModel = matchPositionService.update(matchPositionModel, oldMatchPosition.get());

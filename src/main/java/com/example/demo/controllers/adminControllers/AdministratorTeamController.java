@@ -27,7 +27,7 @@ public class AdministratorTeamController {
 
 
     @PostMapping("/post/team")
-    public ResponseEntity<?> addTeam(@RequestBody TeamDTO team) throws URISyntaxException {
+    public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody TeamDTO team) throws URISyntaxException {
 
         TeamModel teamModel = teamService.save(team);
         if (teamModel == null)
@@ -41,7 +41,7 @@ public class AdministratorTeamController {
     }
 
     @PutMapping("/update/team/{id}")
-    public ResponseEntity<?> updateTeam(@PathVariable Integer id, @RequestBody TeamDTO team) throws URISyntaxException {
+    public ResponseEntity<Resource> updateTeam(@PathVariable Integer id, @RequestBody TeamDTO team) throws URISyntaxException {
         if (team == null)
             throw new ElementBadRequestException("Empty JSON object provided");
         if (team.getTeamId() != id)
@@ -59,7 +59,7 @@ public class AdministratorTeamController {
     }
 
     @DeleteMapping("/delete/team/{id}")
-    public ResponseEntity<?> deleteTeam(@PathVariable Integer id) {
+    public ResponseEntity<TeamModel> deleteTeam(@PathVariable Integer id) {
         TeamModel team = teamService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
