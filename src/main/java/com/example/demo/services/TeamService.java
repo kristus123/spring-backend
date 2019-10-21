@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.TeamDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,54 +41,34 @@ public class TeamService {
         return new TeamModel(association.get(), coach.get(), owner.get(), location.get());
     }
 
-    public TeamModel save(TeamDTO input) {
-
-        Optional<TeamModel> returned = teamRepository.findById(input.getTeamId());
-        if (returned.isPresent())
-            return null;
+    public TeamModel create(TeamDTO input) throws ElementNotFoundException {
 
         TeamModel converted = convert(input);
         if (converted == null)
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
-        return teamRepository.save(converted);
+        return save(converted);
     }
 
-    public TeamModel update(TeamModel team, TeamModel oldTeam) {
+    public TeamModel update(Integer id, TeamDTO input) throws ElementNotFoundException {
 
-        TeamModel updatedTeam = null;
-        if (oldTeam.getTeamId() == team.getTeamId()) {
-            updatedTeam = save(team);
-        }
-
-        return updatedTeam;
-    }
-
-    public TeamModel update(TeamDTO input, TeamModel oldTeam) {
-
-        if (oldTeam.getTeamId() != input.getTeamId() || !oldTeam.isActive())
-            return null;
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
         TeamModel updatedTeam = convert(input);
-        updatedTeam.setTeamId(input.getTeamId());
-        return teamRepository.save(updatedTeam);
+        updatedTeam.setTeamId(id);
+        return save(updatedTeam);
     }
 
     /*
         We would like to keep our teams in DB for the sake of information in matches.
         Hence only updating a variable regarding the team's active-status
      */
-    public void delete(TeamModel team) {
-        team.setActive(false);
-        teamRepository.save(team);
-    }
 
-    public void deleteById(Integer id) {
-        Optional<TeamModel> team = findById(id);
-        if (!team.isPresent())
-            return;
-        team.get().setActive(false);
-        teamRepository.save(team.get());
+    public TeamModel deleteById(Integer id) throws ElementNotFoundException {
+        TeamModel team = findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
+        team.setActive(false);
+        return teamRepository.save(team);
     }
 
     public Optional<TeamModel> findById(Integer id) {
@@ -95,6 +76,11 @@ public class TeamService {
         if (!team.isPresent() || !team.get().isActive())
             return Optional.empty();
         return team;
+    }
+
+    // including inactive
+    public Optional<TeamModel> findByIdForced(Integer id) {
+        return teamRepository.findById(id);
     }
 
     public List<TeamModel> findAllActive() {
@@ -109,7 +95,8 @@ public class TeamService {
         return teamRepository.save(teamModel);
     }
 
-    public List<TeamModel> findAllIncludingInactive() {
+    // including inactive
+    public List<TeamModel> findAllForced() {
         return teamRepository.findAll();
     }
 }

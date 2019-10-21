@@ -2,6 +2,7 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.dtos.TeamDTO;
 import com.example.demo.models.TeamModel;
+import com.example.demo.services.LifeHack;
 import com.example.demo.services.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,112 +36,97 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AdministratorTeamControllerTest {
 
+
+    /**
+     *  NB!!! TESTS DEPEND ON THE DB CREATED THROUGH DUMMYDATAFILLER .-.
+     */
+
+
     @Autowired
     MockMvc mockMvc;
 
 
+
     @Test
-    void addTeam() throws Exception {
+    void testThatTeamIsCreated() throws Exception {
+
         Integer id = 1;
-        TeamDTO team = new TeamDTO(1, 1, 1, 1, 1);
+        TeamDTO team = new TeamDTO(1, 1, 1, 1);
 
         mockMvc.perform(post("/v1/admin/post/team")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
-                .accept(MediaType.APPLICATION_JSON));
-                //.andExpect(status().isCreated());
+                .content(LifeHack.asJsonString(team))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.active").value(is(true)));
+    }
+
+    void testThatCreateFailsForFaultyInput() throws Exception {
+        mockMvc.perform(post("/v1/admin/post/team")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(LifeHack.asJsonString(null))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    void updateTeam() throws Exception {
+    void testThatTeamIsUpdated() throws Exception {
 
         Integer id = 1;
+        TeamDTO team = new TeamDTO(2, 1, 1, 1);
 
-        TeamModel team = new TeamModel(id, id, "ManU");
-        mockMvc.perform(post("/v1/admin/post/team")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
-                .accept(MediaType.APPLICATION_JSON));
-                //.andExpect(status().isCreated())
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-
-        TeamModel updatedTeam = new TeamModel(id, id, "Chelsea");
         mockMvc.perform(put("/v1/admin/update/team/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(updatedTeam))
-                .accept(MediaType.APPLICATION_JSON));
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                .content(LifeHack.asJsonString(team))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    void updateWrongTeam() throws Exception {
+    void testThatUpdateFailsForNonExistingTeam() throws Exception {
 
-        Integer pathId = 1;
-        Integer id = 2;
-
-        TeamModel team = new TeamModel(id, id, "ManU");
+        Integer pathId = -1;
+        TeamDTO team = new TeamDTO(1, 1, 1, 1);
 
         mockMvc.perform(put("/v1/admin/update/team/{id}", pathId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
+                .content(LifeHack.asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isNotFound());
     }
 
-    @Test
-    void updateEmptyTeam() throws Exception {
-
-        Integer id = 1;
-
-        mockMvc.perform(put("/v1/admin/update/team/{id}", id)
+    void testThatUpdateFailsForFaultyInput() throws Exception {
+        mockMvc.perform(put("/v1/admin/update/team/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(Optional.empty()))
+                .content(LifeHack.asJsonString(""))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void updateNonExistingTeam() throws Exception {
-
-        Integer id = 10;
-        TeamModel team = new TeamModel(id, id, "ManU");
-
-        mockMvc.perform(put("/v1/admin/update/team/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").doesNotExist());
-    }
 
     @Test
-    void deleteTeam() throws Exception {
-        Integer id = 1;
-        TeamModel team = new TeamModel(id, id, "ManU");
+    void testThatTeamIsDeleted() throws Exception {
+
+        TeamDTO team = new TeamDTO(1, 1, 1, 1);
 
         mockMvc.perform(post("/v1/admin/post/team")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
+                .content(LifeHack.asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
-                //.andExpect(status().isCreated())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        mockMvc.perform(delete("/v1/admin/delete/team/{id}", id))
+        mockMvc.perform(delete("/v1/admin/delete/team/{id}", 1))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteNonExistingTeam() throws Exception {
-        Integer id = 1;
-
-        mockMvc.perform(delete("/v1/admin/delete/team/{id}", id));
+    void testThatDeleteFailsForNonExistingTeam() throws Exception {
+        mockMvc.perform(delete("/v1/admin/delete/team/{id}", -1))
+                .andExpect(status().isNotFound());
     }
 
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

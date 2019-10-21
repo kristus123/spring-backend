@@ -79,11 +79,9 @@ public class UserWatchTeamController {
     @PostMapping("/post/team")
     public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody UserTeamDTO dto, Principal principal) throws URISyntaxException {
 
-        // User exists?
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        // Team exists?
         TeamModel team = teamService.findById(dto.getTeamId())
                 .orElseThrow(() -> new ElementNotFoundException("Team with ID=" + dto.getTeamId() + " does not exist"));
 
@@ -116,7 +114,6 @@ public class UserWatchTeamController {
         // User exists?
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
-
 
         if (!user.deleteTeam(team))
             return null;

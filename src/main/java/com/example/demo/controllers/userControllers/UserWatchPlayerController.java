@@ -1,15 +1,28 @@
 package com.example.demo.controllers.userControllers;
 
+import com.example.demo.assembler.UserPlayerResourceAssembler;
+import com.example.demo.dtos.UserPlayerDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.PlayerService;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/v1/user/watchlist")
@@ -22,131 +35,92 @@ public class UserWatchPlayerController {
     @Autowired
     PlayerService playerService;
 
+    @Autowired
+    UserPlayerResourceAssembler assembler;
 
     @GetMapping("/get/player/{id}")
-    PlayerModel getPlayer(@PathVariable Integer id, Principal principal) {
-        //UserModel user = userService.findByUsername(principal.getName()).get();
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+    public ResponseEntity<Resource<PlayerModel>> getPlayer(@PathVariable Integer id, Principal principal) {
 
-        Optional<PlayerModel> player = playerService.findById(id);
-        if (!player.isPresent())
-            return null;
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        if (!user.get().getPlayers().contains(player.get()))
-            return null;
+        PlayerModel player = playerService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
 
-        System.out.println("TEST: successfully retrieved player from watchlist");
-        return player.get();
+        if (!user.getPlayers().contains(player))
+            throw new ElementNotFoundException("Player with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
+
+        assembler.setPrincipal(principal);
+        Resource<PlayerModel> resource = assembler.toResource(player);
+
+        return ResponseEntity
+                .ok(resource);
     }
 
     @GetMapping("/get/player")
-    Set<PlayerModel> getPlayers(Principal principal) {
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+    public ResponseEntity<Resources<Resource<PlayerModel>>> getPlayers(Principal principal) {
 
-        Set<PlayerModel> players = user.get().getPlayers();
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+
+        List<Resource<PlayerModel>> players = user.getPlayers()
+                .stream()
+                .map(assembler::toResource)
+                .collect(Collectors.toList());
+
         if (players.isEmpty())
-            System.out.println("TEST: no players found");
-        else
-            System.out.println("TEST: successfully retrieved players from watchlist");
+            throw new ElementNotFoundException("No players in watchlist for user with username=" + principal.getName());
 
-        return players;
+        return ResponseEntity
+                .ok(new Resources<>(players,
+                        linkTo(methodOn(UserWatchPlayerController.class).getPlayers(principal)).withSelfRel()));
+
     }
 
     @PostMapping("/post/player")
-    PlayerModel addPlayer(@RequestBody PlayerModel player, Principal principal) {
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        UserModel userModel = userService.getMe(principal);
+    public ResponseEntity<Resource<PlayerModel>> addPlayer(@RequestBody UserPlayerDTO dto, Principal principal) throws URISyntaxException {
 
-        // User exists?
-        if (!user.isPresent())
-            return null;
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
 
-        // Player exists?
-        if (!playerService.findById(player.getPlayerId()).isPresent()) {
-            return null;
-        }
+        PlayerModel player = playerService.findById(dto.getPlayerId())
+                .orElseThrow(() -> new ElementNotFoundException("Player with ID=" + dto.getPlayerId() + " does not exist"));
 
         // Add player to watchlist
-        if(!user.get().addPlayer(player))
+        if(!user.addPlayer(player))
             return null;
 
-        userService.save(user.get());
+        userService.save(user);
         playerService.save(player);
 
-        System.out.println("TEST: players in user");
-        System.out.println(userModel.getPlayers());
-        return player;
+        assembler.setPrincipal(principal);
+        Resource<PlayerModel> resource = assembler.toResource(player);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-/*
     // updating fav player equals to removing that player and replacing it with (adding) another player...
     // doesn't make sense to allow this operation for a User
-    @PutMapping("/update/player/{id}")
-    PlayerModel updatePlayer(@PathVariable Integer id, @RequestBody PlayerModel updatedPlayer, Principal principal) {
-
-        if (updatedPlayer.getPlayerId() != id)
-            return null;
-
-        // User exists?
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
-        System.out.println("TEST: user exists");
-        // Players exist?
-
-        if (updatedPlayer == null)
-            return null;
-
-        Optional<PlayerModel> existingPlayer = playerService.findById(id);
-        if (!existingPlayer.isPresent())
-            return null;
-        System.out.println("TEST: player exists");
-
-        if (!user.get().deletePlayer(existingPlayer.get()))
-            return null;
-        System.out.println("TEST: old player deleted");
-
-
-        if (!user.get().addPlayer(updatedPlayer))
-            return null;
-        System.out.println("TEST: new player added");
-
-
-        userService.save(user.get());
-        playerService.update(updatedPlayer, existingPlayer.get());
-
-        System.out.println("TEST: updated player successfully");
-        return updatedPlayer;
-    }
-
- */
-
 
 
     @DeleteMapping("/delete/player/{id}")
-    PlayerModel deletePlayer(@PathVariable Integer id, Principal principal) {
+    public ResponseEntity<PlayerModel> deletePlayer(@PathVariable Integer id, Principal principal) {
 
-        Optional<PlayerModel> player = playerService.findById(id);
-        if (!player.isPresent())
+        PlayerModel player = playerService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Player with ID=" + id + " does not exist"));
+
+        UserModel user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+
+        if (!user.deletePlayer(player))
             return null;
 
-        Optional<UserModel> user = userService.findByUsername(principal.getName());
-        if (!user.isPresent())
-            return null;
+        userService.save(user);
+        playerService.save(player);
 
-        if (!user.get().deletePlayer(player.get()))
-            return null;
-
-        userService.save(user.get());
-        playerService.save(player.get());
-
-        System.out.println("TEST: successfully deleted player from watchlist");
-
-        return player.get();
+        return ResponseEntity.ok(player);
     }
 
 }

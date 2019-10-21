@@ -42,6 +42,8 @@ public class DummyDataFiller {
 
             // Kristian har lyst å bli eier av laget
             personService.makePersonOwnerOf(person, team);
+
+
             //kristian er også coachen
             team.setCoach(coach);
 
@@ -59,6 +61,13 @@ public class DummyDataFiller {
             player.setPlayerNumber("25");
 
             player = playerService.save(player);
+
+
+            // TODO PANDA
+
+            associationService.create(new AssociationModel("Juventus", "Better than best team"));
+            locationService.save(new LocationModel(address2, "Bislett stadion", "ved bislett kebab"));
+
         };
     }
 }

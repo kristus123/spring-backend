@@ -1,6 +1,8 @@
 package com.example.demo.controllers.commonControllers;
 
+import com.example.demo.dtos.TeamDTO;
 import com.example.demo.models.TeamModel;
+import com.example.demo.services.LifeHack;
 import com.example.demo.services.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,74 +41,53 @@ class CommonTeamControllerTest {
 
     @Test
     void getTeam() throws Exception {
+
         Integer id = 1;
-        TeamModel team = new TeamModel(id, id, "ManU");
+        TeamDTO team = new TeamDTO(1, 1, 1, 1);
 
         mockMvc.perform(post("/v1/admin/post/team")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
+                .content(LifeHack.asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
-                //.andExpect(status().isCreated())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        mockMvc.perform(get("/v1/common/get/team/{id}", id))
-                //.accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-
-
+        mockMvc.perform(get("/v1/common/get/team/{id}", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     void getNonExistingTeam() throws Exception {
-        Integer id = 10;
-
-        mockMvc.perform(get("/v1/common/get/team/{id}", id))
-                .andExpect(jsonPath("$").doesNotExist());
+        mockMvc.perform(get("/v1/common/get/team/{id}", -1))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     void getTeams() throws Exception {
-        Integer id = 1;
-        TeamModel team = new TeamModel(id, id, "ManU");
+        TeamDTO team = new TeamDTO(1, 1, 1, 1);
 
         mockMvc.perform(post("/v1/admin/post/team")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(team))
+                .content(LifeHack.asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
-                //.andExpect(status().isCreated())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        mockMvc.perform(get("/v1/common/get/team"))
-                .andExpect(status().isOk());
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-
+        mockMvc.perform(get("/v1/common/get/team")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     void getNonExistingTeams() throws Exception {
+
+        // delete everything first, then..
+
         mockMvc.perform(get("/v1/common/get/team"));
-                //.andExpect(status().isOk());
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                //.andExpect(jsonPath("$").doesNotExist());
+                //.andExpect(status().isNotFound());
     }
 
-
-    @Test
-    void getEmptyTeams() throws Exception {
-
-        mockMvc.perform(get("/v1/common/get/team"))
-                .andExpect(status().isNotFound());
-
-    }
-
-
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

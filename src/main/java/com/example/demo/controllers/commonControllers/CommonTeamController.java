@@ -49,6 +49,7 @@ public class CommonTeamController {
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
 
+        // TODO PANDA: throw exception or return ResponseEntity.ok()?
         if (teams.isEmpty())
             throw new ElementNotFoundException("No teams registered");
 

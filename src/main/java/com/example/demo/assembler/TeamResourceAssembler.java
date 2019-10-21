@@ -1,9 +1,6 @@
 package com.example.demo.assembler;
 
-import com.example.demo.controllers.commonControllers.CommonAssociationController;
-import com.example.demo.controllers.commonControllers.CommonCoachController;
-import com.example.demo.controllers.commonControllers.CommonOwnerController;
-import com.example.demo.controllers.commonControllers.CommonTeamController;
+import com.example.demo.controllers.commonControllers.*;
 import com.example.demo.models.TeamModel;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -22,8 +19,8 @@ public class TeamResourceAssembler implements ResourceAssembler<TeamModel, Resou
                 linkTo(methodOn(CommonTeamController.class).getTeams()).withRel("teams"),
                 linkTo(methodOn(CommonAssociationController.class).getAssociation(team.getAssociation().getAssociationId())).withRel("association"),
                 linkTo(methodOn(CommonCoachController.class).getCoach(team.getCoach().getCoachId())).withRel("coach"),
-                linkTo(methodOn(CommonOwnerController.class).getOwner(team.getOwner().getOwnerId())).withRel("owner")
-                // TODO PANDA: missing Location controller??
+                linkTo(methodOn(CommonOwnerController.class).getOwner(team.getOwner().getOwnerId())).withRel("owner"),
+                linkTo(methodOn(CommonLocationController.class).getLocation(team.getLocation().getLocationId())).withRel("location")
         );
     }
 }

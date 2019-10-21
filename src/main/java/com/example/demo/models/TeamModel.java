@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@DynamicUpdate
 @Table(name="TEAM")
 @Getter
 @Setter
@@ -32,7 +34,7 @@ public class TeamModel {
     @JoinColumn(name = "coach_id", referencedColumnName = "coach_id")
     private CoachModel coach;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
     private OwnerModel owner;
 
@@ -40,6 +42,7 @@ public class TeamModel {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 
+    @JsonIgnore
     @Column(name = "active")
     private boolean active = true;
 

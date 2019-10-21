@@ -4,6 +4,7 @@ import com.example.demo.interfaces.LivingHuman;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,10 @@ public class OwnerModel implements LivingHuman {
     @Column(name = "owner_id")
     private Integer ownerId;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
-
-    /*
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    private List<PersonModel> ownedPlayers = new ArrayList<PersonModel>();
-     */
 
     public OwnerModel(PersonModel person) {
         this.person = person;

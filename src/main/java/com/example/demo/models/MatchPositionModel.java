@@ -29,6 +29,7 @@ public class MatchPositionModel {
     @JoinColumn(name = "match_id")
     private MatchModel match;
 
+    @Enumerated(EnumType.STRING)
     private PositionType position;
 
 

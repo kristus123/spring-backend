@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.TeamDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.TeamModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,131 +26,111 @@ class TeamServiceTest {
      * https://stackoverflow.com/questions/34793104/what-is-the-best-way-to-test-controllers-and-services-with-junit
      */
     @Test
-    void save() {
+    void testThatTeamIsSaved() {
 
-        Integer id = 1;
-        String name = "Juventus";
-        TeamModel team = new TeamModel(id, id, name);
+        TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
 
-        TeamModel saved = teamService.save(team);
         assertNotNull(saved);
-        assertEquals(id, saved.getTeamId());
-        assertEquals(name, saved.getAssociation().getName());
-
+        assertEquals(2, saved.getAssociation().getAssociationId());
+        assertEquals("Juventus", saved.getAssociation().getName());
     }
 
     @Test
-    void updateTeam() {
+    void testThatSaveFailsForFaultyInput() {
 
-        Integer id = 1;
-        String name = "Juventus";
-        TeamModel saved = teamService.save(new TeamModel(id, id, name));
+        assertThrows(ElementNotFoundException.class, () ->
+                teamService.create(new TeamDTO(-1, 1, 1, 1))
+        );
+    }
 
-        name = "ManU";
-        TeamModel updated = teamService.update(new TeamModel(id, id, name), saved);
+    @Test
+    void testThatTeamIsUpdated() {
+
+        TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
+        TeamModel updated = teamService.update(saved.getTeamId(), new TeamDTO(2, 1, 1, 1));
+
         assertNotNull(updated);
-        assertEquals(id, updated.getTeamId());
-        assertEquals(name, updated.getAssociation().getName());
-
+        assertEquals(2, updated.getAssociation().getAssociationId());
+        assertEquals("Juventus", updated.getAssociation().getName());
     }
 
     @Test
-    void updateWrongTeam() {
+    void testThatUpdateFailsForNonExistingTeam() {
 
-        Integer id = 1;
-        String name = "Juventus";
-        TeamModel saved = teamService.save(new TeamModel(id, id, name));
+        assertThrows(ElementNotFoundException.class, () ->
+            teamService.update(-1, new TeamDTO(2, 1, 1, 1))
+        );
+    }
 
-        name = "ManU";
-        TeamModel updated = teamService.update(new TeamModel(2, id, name), saved);
-        assertNull(updated);
+
+    @Test
+    void testThatTeamIsDeleted() {
+
+        TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
+        TeamModel deleted = teamService.deleteById(saved.getTeamId());
+
+        assertNotNull(deleted);
+        assertFalse(deleted.isActive());
     }
 
     @Test
-    void updateEmptyTeam() {
+    void testThatDeleteFailsForNonExistingTeam() {
 
+        assertThrows(ElementNotFoundException.class, () ->
+                teamService.deleteById(-1)
+        );
     }
 
     @Test
-    void updateNonExistingTeam() {
+    void testThatTeamIsFound() {
 
-    }
+        TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
+        Optional<TeamModel> found = teamService.findById(saved.getTeamId());
 
-    @Test
-    void deleteTeam() {
-
-        Integer id = 1;
-        String name = "Juventus";
-        TeamModel team = new TeamModel(id, id, name);
-        teamService.save(team);
-
-        teamService.delete(team);
-
-        Optional<TeamModel> empty = teamService.findById(id);
-        assertFalse(empty.isPresent());
-
-    }
-
-    @Test
-    void deleteNonExistingTeam() {
-
-    }
-
-    @Test
-    void deleteById() {
-
-        Integer id = 1;
-        String name = "Juventus";
-        teamService.save(new TeamModel(id, id, name));
-
-        teamService.deleteById(id);
-
-        Optional<TeamModel> empty = teamService.findById(id);
-        assertFalse(empty.isPresent());
-    }
-
-    @Test
-    void findTeam() {
-
-        Integer id = 1;
-        String name = "Juventus";
-        TeamModel team = new TeamModel(id, id, name);
-
-        teamService.save(team);
-
-        Optional<TeamModel> found = teamService.findById(id);
         assertTrue(found.isPresent());
-
+        assertEquals(saved.getAssociation().getName(), found.get().getAssociation().getName());
     }
 
 
     @Test
-    void findNonExistingTeam() {
+    void testThatFindFailsForNonExistingTeam() {
 
-        Integer id = 10;
-
-        Optional<TeamModel> found = teamService.findById(id);
+        Optional<TeamModel> found = teamService.findById(-1);
         assertFalse(found.isPresent());
     }
 
-
     @Test
-    void findTeams() {
+    void testThatTeamIsFoundAfterDeletion() {
+        TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
+        TeamModel deleted = teamService.deleteById(saved.getTeamId());
 
-        Integer id = 1;
-        String name = "Juventus Premium";
-        teamService.save(new TeamModel(id, id, name));
-
-        List<TeamModel> teams = teamService.findAllActive();
-        assertFalse(teams.isEmpty());
-
+        Optional<TeamModel> found = teamService.findByIdForced(deleted.getTeamId());
+        assertTrue(found.isPresent());
+        assertEquals(deleted.getAssociation().getName(), found.get().getAssociation().getName());
     }
 
     @Test
-    void findNonExistingTeams() {
+    void testThatAllTeamsAreFound() {
 
-        List<TeamModel> empty = teamService.findAllActive();
-        //assertTrue(empty.isEmpty());
+        List<TeamModel> teams = teamService.findAllActive();
+        assertFalse(teams.isEmpty());
+    }
 
+    @Test
+    void testThatFindAllFailsForNonExistingTeams() {
+
+        teamService.findAllActive().forEach(team -> teamService.deleteById(team.getTeamId()));
+
+        List<TeamModel> teams = teamService.findAllActive();
+        assertTrue(teams.isEmpty());
+    }
+
+    @Test
+    void testThatAllTeamsAreFoundAfterDeletion() {
+
+        teamService.findAllActive().forEach(team -> teamService.deleteById(team.getTeamId()));
+        List<TeamModel> teams = teamService.findAllForced();
+
+        assertFalse(teams.isEmpty());
     }
 }

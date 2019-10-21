@@ -78,23 +78,19 @@ public class UserModel {
     }
 
     public boolean addPlayer(PlayerModel player) {
-        player.getUsers().add(this);
-        return players.add(player);
+        return player.getUsers().add(this) && players.add(player);
     }
 
     public boolean deletePlayer(PlayerModel player) {
-        player.getUsers().remove(this);
-        return players.remove(player);
+        return player.getUsers().remove(this) && players.remove(player);
     }
 
     public boolean addTeam(TeamModel team) {
-        team.getUsers().add(this);
-        return teams.add(team);
+        return team.getUsers().add(this) && teams.add(team);
     }
 
     public boolean deleteTeam(TeamModel team) {
-        team.getUsers().remove(this);
-        return teams.remove(team);
+        return team.getUsers().remove(this) && teams.remove(team);
     }
 
 }

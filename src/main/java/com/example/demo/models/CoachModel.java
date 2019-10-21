@@ -25,7 +25,6 @@ public class CoachModel implements LivingHuman {
     private Integer coachId;
 
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
-
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 

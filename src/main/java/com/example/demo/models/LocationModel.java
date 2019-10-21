@@ -4,6 +4,7 @@ package com.example.demo.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -18,7 +19,8 @@ public class LocationModel {
     @Column(name = "location_id")
     private int locationId;
 
-    @OneToOne(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 

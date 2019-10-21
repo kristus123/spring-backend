@@ -23,6 +23,17 @@ public class CommonLocationController {
         return locationService.findAll();
     }
 
+    @GetMapping("/get/location/{id}")
+    public LocationModel getLocation(@PathVariable Integer id) {
+
+        Optional<LocationModel> location = locationService.findById(id);
+        if(!location.isPresent())
+            return null;
+
+        return location.get();
+    }
+
+
     @GetMapping("/get/location/{locationId}")
     public LocationModel getAll(@PathVariable int locationId) {
         Optional<LocationModel> location = locationService.findById(locationId);
