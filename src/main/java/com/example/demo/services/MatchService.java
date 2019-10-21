@@ -134,24 +134,24 @@ public class MatchService {
     }
 
 
-    public MatchResultDTO getFilteredMatchStats(Optional <MatchModel> match) {
+    public MatchResultDTO getFilteredMatchStats(MatchModel match) {
         String result;
-        List<MatchGoalModel> goals = matchGoalService.findByMatch(match.get());
+        List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
         long home = 0;
         long away = 0;
         home = goals.stream()
-                .filter(g -> match.get().getHomeTeam()
+                .filter(g -> match.getHomeTeam()
                         .getAssociation()
                         .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
 
         away = goals.size() - home;
 
         if (home > away) {
-            result = match.get().getHomeTeam().getAssociation().getName().toString();
+            result = match.getHomeTeam().getAssociation().getName().toString();
         } else if (home == away) result = "Uavgjort";
         else {
-            result = match.get().getAwayTeam().getAssociation().getName().toString();
+            result = match.getAwayTeam().getAssociation().getName().toString();
         }
-        return new MatchResultDTO(match.get(), match.get().getHomeTeam(), match.get().getAwayTeam(), result);
+        return new MatchResultDTO(match, match.getHomeTeam(), match.getAwayTeam(), result);
     }
 }
