@@ -3,6 +3,7 @@ package com.example.demo.controllers.adminControllers;
 import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.dtos.PlayerHistoryDTO;
 import com.example.demo.dtos.PlayerTeamHistoryDTO;
+import com.example.demo.models.PersonModel;
 import com.example.demo.models.PlayerHistoryModel;
 import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.audit.IPlayerHistoryRepository;
@@ -33,6 +34,11 @@ public class AdministratorPlayerController {
             return playerModel.get();
         }
         return null;
+    }
+
+    @GetMapping("/get/player")
+    public List<PlayerModel> getAll() {
+        return playerService.findAll();
     }
 
     @GetMapping("/get/player/{playerId}/history")
