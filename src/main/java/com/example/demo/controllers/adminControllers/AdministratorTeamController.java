@@ -8,6 +8,7 @@ import com.example.demo.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +18,11 @@ public class AdministratorTeamController {
     @Autowired
     private TeamService teamService;
 
+
+    @GetMapping("/get/team")
+    public List<TeamModel> getAll() {
+        return teamService.findAll();
+    }
 
     @PostMapping("/post/team")
     public TeamModel newTeam(@RequestBody TeamDTO team) {
