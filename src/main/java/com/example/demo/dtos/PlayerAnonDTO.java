@@ -27,5 +27,4 @@ public class PlayerAnonDTO {
         this.teamName = teamName;
 
     }
-
 }
