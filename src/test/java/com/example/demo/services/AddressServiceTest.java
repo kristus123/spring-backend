@@ -68,7 +68,8 @@ class AddressServiceTest {
     void createAddress() {
         AddressModel address = addressService.createAddress(new AddressModel("V30", "V30", "V30", "V30"));
         AddressModel queryAddress = addressService.findById(address.getAddressId()).get();
-
+        double d = 9;
+        float f = 10;
         //assertEquals(address.getAddressId(), queryAddress.getAddressId());
 
     }
