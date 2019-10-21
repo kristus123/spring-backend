@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 public class AssociationResourceAssembler implements ResourceAssembler<AssociationModel, Resource<AssociationModel>> {
 
     @Override
-    public Resource<AssociationModel> toResource(AssociationModel associationModel) {
-        return new Resource<AssociationModel>(associationModel,
-                linkTo(methodOn(CommonAssociationController.class).getAssociation(associationModel.getAssociationId())).withSelfRel(),
+    public Resource<AssociationModel> toResource(AssociationModel association) {
+        return new Resource<AssociationModel>(association,
+                linkTo(methodOn(CommonAssociationController.class).getAssociation(association.getAssociationId())).withSelfRel(),
                 linkTo(methodOn(CommonAssociationController.class).getAssociations()).withRel("associations"));
     }
 }

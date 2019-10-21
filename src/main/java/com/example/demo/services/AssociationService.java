@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.repositories.AssociationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,19 @@ public class AssociationService {
         return associationRepository.save(association);
     }
 
-    public AssociationModel update(AssociationModel associationModel, AssociationModel oldAssociationModel) {
-        AssociationModel updatedAssociation = null;
-        if(oldAssociationModel.getAssociationId() == associationModel.getAssociationId()) {
-            updatedAssociation = save(associationModel);
-        }
-
-        return updatedAssociation;
+    public AssociationModel update(Integer id, AssociationModel association) throws ElementNotFoundException {
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
+        return save(association);
     }
 
     public void delete(AssociationModel association) {
         associationRepository.delete(association);
     }
 
-    public void deleteById(int id) {
+    public AssociationModel deleteById(int id) {
+        AssociationModel association = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
         associationRepository.deleteById(id);
+        return association;
     }
 
     public Optional<AssociationModel> findById(int id) {

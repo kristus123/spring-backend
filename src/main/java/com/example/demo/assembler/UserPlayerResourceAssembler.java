@@ -23,6 +23,6 @@ public class UserPlayerResourceAssembler implements ResourceAssembler<PlayerMode
     public Resource<PlayerModel> toResource(PlayerModel player) {
         return new Resource<>(player,
                 linkTo(methodOn(UserWatchPlayerController.class).getPlayer(player.getPlayerId(), principal)).withSelfRel(),
-                linkTo(methodOn(UserWatchPlayerController.class).getPlayers(principal)).withRel("teams"));
+                linkTo(methodOn(UserWatchPlayerController.class).getPlayers(principal)).withRel("players"));
     }
 }

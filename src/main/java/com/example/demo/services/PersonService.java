@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.PersonDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,33 +13,49 @@ import java.util.Optional;
 @Service
 public class PersonService {
 
-    @Autowired PersonService personService;
+    @Autowired PersonRepository personRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+    @Autowired OwnerService ownerService;
 
-    @Autowired
-    OwnerService ownerService;
+    @Autowired AddressService addressService;
 
     @Autowired TeamRepository teamRepository;
 
     @Autowired CoachService coachService;
 
-    @Autowired
-    AddressRepository addressRepository;
+    @Autowired AddressRepository addressRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
+    @Autowired CoachRepository coachRepository;
 
-    @Autowired
-    PlayerRepository playerRepository;
+    @Autowired PlayerRepository playerRepository;
 
     @Autowired PlayerService playerService;
 
-    public PersonModel save(PersonModel personModel) {
+    private PersonModel convert(PersonDTO input) {
+        Optional<AddressModel> address = addressService.findById(input.getAddressId());
 
-        addressRepository.save(personModel.getAddress());
+        if (!address.isPresent())
+            return null;
+
+        return new PersonModel(
+                input.getFirstName(),
+                input.getLastName(),
+                input.getDateOfBirth(),
+                address.get()
+        );
+    }
+
+    public PersonModel save(PersonModel personModel) {
         return personRepository.save(personModel);
+    }
+
+    public PersonModel create(PersonDTO input) {
+
+        PersonModel converted = convert(input);
+        if (converted == null)
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
+
+        return save(converted);
     }
 
     public Optional<PersonModel> findByFirstName(String firstName) {
@@ -45,43 +63,38 @@ public class PersonService {
     }
 
 
-    public PersonModel update(Integer id, PersonModel personModel) {
-        if(!findById(id).isPresent())
-            return null;
-        // This must be set if the id is not set in the json
-        personModel.setPersonId(id);
-        return save(personModel);
+    public PersonModel update(Integer id, PersonDTO input) throws ElementNotFoundException {
+
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find person with ID=" + id));
+
+        PersonModel updatedPerson = convert(input);
+        updatedPerson.setPersonId(id);
+        return save(updatedPerson);
 
     }
 
 
-    public PersonModel delete(Integer id) {
+    public PersonModel deleteById(Integer id) throws ElementNotFoundException {
         //slett andre ting
-        Optional<PersonModel> personModel = personRepository.findById(id);
-        if (personModel.isPresent()) {
-            System.out.println("DEN ER PRESENT" + personModel.isPresent());
-            Optional<CoachModel> coach = coachRepository.findByPerson(personModel.get());
-            Optional<OwnerModel> owner = ownerService.findByPerson(personModel.get());
+        PersonModel personModel = findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find person with ID=" + id));
 
-            if (owner.isPresent()) {
-                ownerService.delete(owner.get());
-                return null;
-            }
+        Optional<CoachModel> coach = coachRepository.findByPerson(personModel);
+        Optional<OwnerModel> owner = ownerService.findByPerson(personModel);
 
-            if (coach.isPresent()) {
-                System.out.println("COACH ER PRESENT");
-                coachService.delete(coach.get().getCoachId());
-                return null;
+        if (owner.isPresent()) {
+            ownerService.delete(owner.get());
+            return null; // TODO PANDA: hvorfor har vi dette?
+        }
 
-            }
-            personRepository.deleteById(id);
-            return personModel.get();
+        if (coach.isPresent()) {
+            System.out.println("COACH ER PRESENT");
+            coachService.deleteById(coach.get().getCoachId());
+            return null; // TODO PANDA: hvorfor har vi dette?
 
         }
-        else {
-            System.out.println("user not found");
-            return null;
-        }
+        personRepository.deleteById(id);
+        return personModel;
 
     }
 

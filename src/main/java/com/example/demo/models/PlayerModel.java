@@ -76,6 +76,14 @@ public class PlayerModel implements LivingHuman {
      */
 
 
+    public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, LocalDate teamDateFrom, LocalDate teamDateTo) {
+        this.person = person;
+        this.team = team;
+        this.normalPosition = normalPosition;
+        this.playerNumber = playerNumber;
+        this.teamDateFrom = teamDateFrom;
+        this.teamDateTo = teamDateTo;
+    }
 
     public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername) {
 

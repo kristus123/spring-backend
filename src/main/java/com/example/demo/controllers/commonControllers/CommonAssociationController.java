@@ -1,13 +1,22 @@
 package com.example.demo.controllers.commonControllers;
 
+import com.example.demo.assembler.AssociationResourceAssembler;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.services.AssociationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 
 @RestController
@@ -15,27 +24,38 @@ import java.util.Optional;
 public class CommonAssociationController {
 
     @Autowired
-    private AssociationService associationService;
+    AssociationService associationService;
+
+    @Autowired
+    AssociationResourceAssembler assembler;
 
 
     @GetMapping("/get/association/{id}")
-    public AssociationModel getAssociation(@PathVariable Integer id) {
+    public ResponseEntity<Resource<AssociationModel>> getAssociation(@PathVariable Integer id) {
 
-        Optional<AssociationModel> association = associationService.findById(id);
-        if (!association.isPresent())
-            return null;
+        AssociationModel association = associationService.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
 
-        return association.get();
+        Resource<AssociationModel> resource = assembler.toResource(association);
+
+        return ResponseEntity
+                .ok(resource);
     }
 
     @GetMapping("/get/association")
-    public List<AssociationModel> getAssociations() {
+    public ResponseEntity<Resources<Resource<AssociationModel>>> getAssociations() {
 
-        List<AssociationModel> associations = associationService.findAll();
+        List<Resource<AssociationModel>> associations = associationService.findAll()
+                .stream()
+                .map(assembler::toResource)
+                .collect(Collectors.toList());
 
+        // TODO PANDA: throw exception or return ResponseEntity.ok()?
         if (associations.isEmpty())
-            return null;
+            throw new ElementNotFoundException("No associations registered");
 
-        return associations;
+        return ResponseEntity
+                .ok(new Resources<>(associations,
+                        linkTo(methodOn(CommonAssociationController.class).getAssociations()).withSelfRel()));
     }
 }

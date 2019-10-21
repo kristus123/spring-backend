@@ -99,7 +99,7 @@ class PersonServiceTest {
         CoachModel coach = coachService.makePersonCoach(person);
         System.out.println(person.getPersonId());
         System.out.println("________");
-        personService.delete(person.getPersonId());
+        personService.deleteById(person.getPersonId());
         assertFalse(personService.findById(person.getPersonId()).isPresent());
 
     }

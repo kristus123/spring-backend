@@ -1,7 +1,9 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.MatchDTO;
 import com.example.demo.dtos.MatchResultDTO;
 import com.example.demo.enums.GoalType;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,31 +17,70 @@ import java.util.stream.Collectors;
 public class MatchService {
 
     @Autowired
-    private MatchRepository matchRepository;
+    MatchRepository matchRepository;
 
     @Autowired
     MatchGoalService matchGoalService;
+
+    @Autowired
+    TeamService teamService;
+
+    @Autowired
+    SeasonService seasonService;
+
+    @Autowired
+    LocationService locationService;
+
+
+    private MatchModel convert(MatchDTO input) {
+        Optional<TeamModel> homeTeam = teamService.findById(input.getHomeTeamId());
+        Optional<TeamModel> awayTeam = teamService.findById(input.getAwayTeamId());
+        Optional<SeasonModel> season = seasonService.findById(input.getSeasonId());
+        Optional<LocationModel> location = locationService.findById(input.getLocationId());
+
+        if ( !homeTeam.isPresent() || !awayTeam.isPresent() || !season.isPresent() || !location.isPresent() )
+            return null;
+
+        return new MatchModel(
+                input.getMatchDate(),
+                homeTeam.get(),
+                awayTeam.get(),
+                season.get(),
+                location.get()
+        );
+    }
 
     public MatchModel save(MatchModel match) {
         return matchRepository.save(match);
     }
 
-    public MatchModel update(MatchModel match, MatchModel oldMatch) {
+    public MatchModel create(MatchDTO input) throws ElementNotFoundException {
 
-        MatchModel updatedMatch = null;
-        if (oldMatch.getMatchId() == match.getMatchId()) {
-            updatedMatch = save(match);
-        }
+        MatchModel converted = convert(input);
+        if (converted == null)
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
-        return updatedMatch;
+        return save(converted);
+    }
+
+    public MatchModel update(Integer id, MatchDTO input) {
+
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find match with ID=" + id));
+
+        MatchModel updatedMatch = convert(input);
+        updatedMatch.setMatchId(id);
+        return save(updatedMatch);
     }
 
     public void delete(MatchModel match) {
         matchRepository.delete(match);
     }
 
-    public void deleteById(Integer id) {
+    public MatchModel deleteById(Integer id) {
+        MatchModel match = findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find match with ID=" + id));
         matchRepository.deleteById(id);
+        return match;
     }
 
     public Optional<MatchModel> findById(Integer id) {

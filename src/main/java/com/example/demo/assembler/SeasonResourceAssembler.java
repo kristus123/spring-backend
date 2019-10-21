@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 public class SeasonResourceAssembler implements ResourceAssembler<SeasonModel, Resource<SeasonModel>> {
 
     @Override
-    public Resource<SeasonModel> toResource(SeasonModel seasonModel) {
-        return new Resource<>(seasonModel,
-                linkTo(methodOn(CommonSeasonController.class).getSeason(seasonModel.getSeasonId())).withSelfRel(),
-                linkTo(methodOn(CommonSeasonController.class).getSeasons()).withRel("seasons"));
+    public Resource<SeasonModel> toResource(SeasonModel season) {
+        return new Resource<>(season,
+                linkTo(methodOn(CommonSeasonController.class).getSeason(season.getSeasonId())).withSelfRel(),
+                linkTo(methodOn(CommonSeasonController.class).getSeasons()).withRel("seasons")
+        );
     }
 }

@@ -1,10 +1,16 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.OwnerResourceAssembler;
+import com.example.demo.dtos.OwnerDTO;
 import com.example.demo.models.OwnerModel;
 import com.example.demo.services.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.acl.Owner;
 import java.util.Optional;
 
@@ -13,31 +19,35 @@ public class AdministratorOwnerController {
     @Autowired
     OwnerService ownerService;
 
+    @Autowired
+    OwnerResourceAssembler assembler;
+
 
     @PostMapping("/post/owner")
-    public OwnerModel addOwner(@RequestBody OwnerModel ownerModel) {
-        OwnerModel newOwner = ownerService.save(ownerModel);
-        return newOwner;
+    public ResponseEntity<Resource<OwnerModel>> addOwner(@RequestBody OwnerDTO owner) throws URISyntaxException {
+
+        OwnerModel teamModel = ownerService.create(owner);
+        Resource<OwnerModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/update/owner/{ownerId}")
-    public OwnerModel updateOwner(@PathVariable int ownerId, @RequestBody OwnerModel ownerModel) {
-        Optional<OwnerModel> oldOwner = ownerService.findById(ownerId);
-        if(oldOwner.isPresent()) {
-            OwnerModel updatedOwner = ownerService.update(ownerModel, ownerModel);
-            return updatedOwner;
-        }
-        return null;
+    public ResponseEntity<Resource> updateOwner(@PathVariable int ownerId, @RequestBody OwnerDTO owner) throws URISyntaxException {
+
+        OwnerModel updated = ownerService.update(ownerId, owner);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/owner/{ownerId}")
-    public OwnerModel deleteOwner(@PathVariable int ownerId) {
-        Optional<OwnerModel> owner = ownerService.findById(ownerId);
-        if(owner.isPresent()) {
-            OwnerModel tempOwner = owner.get();
-            ownerService.delete(owner.get());
-            return tempOwner;
-        }
-        return null;
+    public ResponseEntity<OwnerModel> deleteOwner(@PathVariable int ownerId) {
+        OwnerModel owner = ownerService.deleteById(ownerId);
+        return ResponseEntity.ok(owner);
     }
 }

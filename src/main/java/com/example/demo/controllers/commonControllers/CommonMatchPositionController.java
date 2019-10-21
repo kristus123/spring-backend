@@ -1,5 +1,6 @@
 package com.example.demo.controllers.commonControllers;
 
+import com.example.demo.dtos.MatchPositionDTO;
 import com.example.demo.models.MatchPositionId;
 import com.example.demo.models.MatchPositionModel;
 import com.example.demo.services.MatchPositionService;
@@ -17,11 +18,8 @@ public class CommonMatchPositionController {
     MatchPositionService matchPositionService;
 
     @GetMapping("/get/matchPosition")
-    public MatchPositionModel getMatchPosition(@RequestBody MatchPositionId matchPositionId) {
-        Optional<MatchPositionModel> matchPositionModel = matchPositionService.findById(matchPositionId);
-        if(matchPositionModel.isPresent()) {
-            return matchPositionModel.get();
-        }
+    public MatchPositionModel getMatchPosition(@RequestBody MatchPositionDTO dto) {
+
         return null;
     }
 

@@ -32,5 +32,11 @@ public class MatchPositionModel {
     @Enumerated(EnumType.STRING)
     private PositionType position;
 
+    public MatchPositionModel(PlayerModel player, MatchModel match, PositionType position) {
+        this.player = player;
+        this.match = match;
+        this.position = position;
+    }
+
 
 }

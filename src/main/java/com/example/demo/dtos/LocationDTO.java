@@ -16,40 +16,8 @@ import java.util.Optional;
 @NoArgsConstructor
 public class LocationDTO {
 
-    @Autowired
-    LocationService locationService;
-    @Autowired
-    AddressService addressService;
+    private Integer addressId;
+    private String name;
+    private String description;
 
-    private AddressModel addressModel;
-    private LocationModel locationModel;
-
-    private Optional<Integer> addressId;
-
-    public LocationDTO(LocationModel locationModel, AddressModel addressModel) {
-        System.out.println("consturctor 1 blir brukt");
-        addressModel.getAddresses();
-        this.addressModel  = addressModel;
-        this.locationModel = locationModel;
-
-
-
-        locationModel.setAddress(addressModel);
-
-
-    }
-
-    public LocationDTO(LocationModel locationModel, int addressId) {
-        System.out.println("INNI RETT KONSTURTURO BABY");
-        Optional<AddressModel> address = addressService.findById(addressId);
-        if (address.isPresent()) {
-            System.out.println("ADDRESS ISS PRESENT BABYYYY");
-
-            this.addressModel  = address.get();
-            this.locationModel = locationModel;
-
-            locationModel.setAddress(addressModel);
-
-        }
-    }
 }

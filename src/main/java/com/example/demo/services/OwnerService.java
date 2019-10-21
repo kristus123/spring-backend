@@ -1,11 +1,14 @@
 package com.example.demo.services;
 
+import com.example.demo.dtos.OwnerDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.OwnerModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.repositories.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.acl.Owner;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,18 +16,40 @@ import java.util.Optional;
 public class OwnerService {
 
     @Autowired
-    private OwnerRepository ownerRepository;
+    OwnerRepository ownerRepository;
+
+    @Autowired
+    PersonService personService;
+
+    private OwnerModel convert(OwnerDTO input) {
+        Optional<PersonModel> person = personService.findById(input.getPersonId());
+
+        if (!person.isPresent())
+            return null;
+
+        return new OwnerModel(person.get());
+    }
 
     public OwnerModel save(OwnerModel owner) {
         return ownerRepository.save(owner);
     }
 
-    public OwnerModel update(OwnerModel owner, OwnerModel oldOwner) {
-        OwnerModel updatedOwner = null;
-        if(oldOwner.getOwnerId() == owner.getOwnerId()) {
-            updatedOwner = save(owner);
-        }
-        return updatedOwner;
+    public OwnerModel create(OwnerDTO input) throws ElementNotFoundException {
+
+        OwnerModel converted = convert(input);
+        if (converted == null)
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
+
+        return save(converted);
+    }
+
+    public OwnerModel update(Integer id, OwnerDTO input) throws ElementNotFoundException {
+
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
+
+        OwnerModel updatedOwner = convert(input);
+        updatedOwner.setOwnerId(id);
+        return save(updatedOwner);
     }
 
     public OwnerModel create(PersonModel person) {
@@ -34,8 +59,12 @@ public class OwnerService {
     public void delete(OwnerModel owner) {
         ownerRepository.delete(owner);
     }
-    public void delete(int id) {
+
+    public OwnerModel deleteById(int id) throws ElementNotFoundException {
+        OwnerModel owner = findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find owner with ID=" + id));
         delete(ownerRepository.findById(id).get());
+        return owner;
     }
 
     public Optional<OwnerModel> findById(int id) {
