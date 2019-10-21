@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package com.example.demo.controllers.anonymousControllers;
 
 import com.example.demo.controllers.AnonymousControllers.AnonymousMatchController;
 import com.example.demo.controllers.AnonymousControllers.AnonymousPlayerController;

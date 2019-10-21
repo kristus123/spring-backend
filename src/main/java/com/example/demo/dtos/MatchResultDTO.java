@@ -36,6 +36,5 @@ public class MatchResultDTO{
         this.awayTeamModel = awayTeamModel;
         this.result = result;
 
-
     }
 }
