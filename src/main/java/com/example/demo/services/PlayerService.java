@@ -33,7 +33,7 @@ public class PlayerService {
         Optional<TeamModel> team = teamService.findById(input.getTeamId());
 
         if ( !person.isPresent() || !team.isPresent() )
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new PlayerModel(
                 person.get(),
@@ -41,19 +41,16 @@ public class PlayerService {
                 input.getNormalPosition(),
                 input.getPlayerNumber(),
                 input.getTeamDateFrom(),
-                input.getTeamDateTo());
+                input.getTeamDateTo(),
+                input.getPlayername());
     }
 
     public PlayerModel save(PlayerModel player) {
         return playerRepository.save(player);
     }
 
-    public PlayerModel savePlayerDTO(PlayerDTO input) {
-
+    public PlayerModel create(PlayerDTO input) {
         PlayerModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

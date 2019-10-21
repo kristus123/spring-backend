@@ -22,17 +22,13 @@ public class LocationService {
         Optional<AddressModel> address = addressService.findById(input.getAddressId());
 
         if (!address.isPresent())
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new LocationModel(address.get(), input.getName(), input.getDescription());
     }
 
     public LocationModel create(LocationDTO input) throws ElementNotFoundException {
-
         LocationModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

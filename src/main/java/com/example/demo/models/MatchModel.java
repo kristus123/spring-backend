@@ -42,8 +42,9 @@ public class MatchModel {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 
-    // Match goal properties
 
+    // Match position properties
+    @JsonIgnore
     @OneToMany(mappedBy = "match")
     private Set<MatchGoalModel> positions;
 

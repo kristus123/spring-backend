@@ -20,4 +20,9 @@ public class LocationDTO {
     private String name;
     private String description;
 
+    public LocationDTO(Integer addressId, String name) {
+        this.addressId = addressId;
+        this.name = name;
+    }
+
 }

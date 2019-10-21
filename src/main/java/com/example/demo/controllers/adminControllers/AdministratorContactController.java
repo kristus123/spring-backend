@@ -25,8 +25,15 @@ public class AdministratorContactController {
 
 
     @PostMapping("/post/contact")
-    public ContactModel createContact(@RequestBody ContactModel contact) {
-        return contactService.save(contact);
+    public ResponseEntity<Resource<ContactModel>> createContact(@RequestBody ContactDTO contact) throws URISyntaxException {
+
+        ContactModel contactModel = contactService.create(contact);
+        Resource<ContactModel> resource = assembler.toResource(contactModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
+
     }
 
     @PutMapping("/update/contact/{id}")

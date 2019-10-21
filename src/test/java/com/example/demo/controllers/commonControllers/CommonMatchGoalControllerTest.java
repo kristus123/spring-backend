@@ -24,29 +24,29 @@ class CommonMatchGoalControllerTest {
     MockMvc mockMvc;
 
     String jsonBody;
-    static int ID = 0;
+    static int ID = 1;
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonBody = "{\"playerId\": 1,\"goalTypeId\": 1, \"matchId\": 1, \"description\": \"Incredible goal!\" }";
+        jsonBody = "{\"playerId\": 2,\"goalType\": \"SCORPION_KICK\", \"matchId\": 1, \"description\": \"Incredible goal!\" }";
 
         mockMvc.perform(post("/v1/admin/post/matchgoal").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
         ID++;
     }
 
-    @Test
+    //@Test
     void getMatchGoal() {
     }
 
-    @Test
+    //@Test
     void getMatchGoals() {
     }
 
     @Test
     void testThatCanGetMatchGoalAfterPost() throws Exception {
-        mockMvc.perform(get("/v1/common/get/matchgoal/" + ID)).andExpect(content().json("{\"description\": \"Incredible goal!\" }"));
+        mockMvc.perform(get("/v1/common/get/matchgoal/" + 2)).andExpect(content().json("{\"description\": \"Incredible goal!\" }"));
     }
 
     @Test

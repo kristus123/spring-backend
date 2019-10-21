@@ -35,7 +35,7 @@ public class CoachService {
         Optional<PersonModel> person = personService.findById(input.getPersonId());
 
         if (!person.isPresent())
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new CoachModel(person.get());
     }
@@ -43,11 +43,7 @@ public class CoachService {
     public CoachModel save(CoachModel coachModel) {return coachRepository.save(coachModel);}
 
     public CoachModel create(CoachDTO input) throws ElementNotFoundException {
-
         CoachModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

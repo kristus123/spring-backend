@@ -30,11 +30,11 @@ public class MatchGoalService {
         Optional<MatchModel> match = matchService.findById(input.getMatchId());
 
         if ( !player.isPresent() || !match.isPresent() )
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new MatchGoalModel(
                 player.get(),
-                input.getGoalTypeId(),
+                input.getGoalType(),
                 match.get(),
                 input.getDescription()
         );
@@ -42,12 +42,8 @@ public class MatchGoalService {
 
     public MatchGoalModel save(MatchGoalModel matchGoalModel) {return matchGoalRepository.save(matchGoalModel);}
 
-    public MatchGoalModel create(MatchGoalDTO input) throws ElementBadRequestException {
-
+    public MatchGoalModel create(MatchGoalDTO input) throws ElementNotFoundException {
         MatchGoalModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

@@ -35,7 +35,7 @@ public class PersonService {
         Optional<AddressModel> address = addressService.findById(input.getAddressId());
 
         if (!address.isPresent())
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new PersonModel(
                 input.getFirstName(),
@@ -50,11 +50,7 @@ public class PersonService {
     }
 
     public PersonModel create(PersonDTO input) {
-
         PersonModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 
@@ -107,7 +103,7 @@ public class PersonService {
     }
 
     public PersonModel create(PersonModel personModel) {
-        System.out.println("saving in database + " + personModel);
+        //System.out.println("saving in database + " + personModel);
         personRepository.save(personModel);
         return personModel;
     }

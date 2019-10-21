@@ -25,26 +25,26 @@ class CommonContactControllerTest {
     MockMvc mockMvc;
 
     String jsonBody;
-    static int ID = 0;
+    static int ID = 1;
 
     @BeforeEach
     void setUp() throws Exception {
 
-        jsonBody = "{\"personId\":" + ID + ", \"contactType\":\"phone\", \"contactDetail\":\"41003239\"}";
+        jsonBody = "{\"personId\":" + ID + ", \"contactType\":\"PHONE\", \"contactDetail\":\"41003239\"}";
 
         mockMvc.perform(post("/v1/admin/post/contact").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
         ID++;
     }
 
     @Test
     public void testThatCanGetContactAfterPost() throws Exception {
-        mockMvc.perform(get("/v1/common/get/contact/" + ID)).andExpect(content().json("{\"contactType\":\"phone\", \"contactDetail\":\"41003239\"}"));
+        mockMvc.perform(get("/v1/common/get/contact/" + 3)).andExpect(content().json("{\"contactType\":\"PHONE\", \"contactDetail\":\"41003239\"}"));
     }
 
     @Test
     public void testThatCanGetAllContacts() throws Exception {
-        mockMvc.perform(get("/v1/common/get/contact/")).andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/v1/common/get/contact/")).andExpect(jsonPath("$._embedded.contactModelList", hasSize(3)));
     }
 }

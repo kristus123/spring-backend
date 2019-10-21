@@ -9,11 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeamDTO {
+public class ResultDTO {
 
-    private Integer associationId;
-    private Integer coachId;
-    private Integer ownerId;
-    private Integer locationId;
+    private Integer teamId;
+    private Integer score;
+    private String result;
 
 }

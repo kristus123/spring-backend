@@ -1,8 +1,10 @@
 package com.example.demo;
 
+import com.example.demo.dtos.*;
+import com.example.demo.enums.ContactType;
+import com.example.demo.enums.GoalType;
 import com.example.demo.models.*;
 import com.example.demo.services.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,52 +24,61 @@ public class DummyDataFiller {
                                           PersonService personService,
                                           CoachService coachService,
                                           LocationService locationService,
-                                          PlayerService playerService) {
+                                          PlayerService playerService,
+                                          ContactService contactService,
+                                          SeasonService seasonService,
+                                          OwnerService ownerService,
+                                          MatchService matchService,
+                                          MatchGoalService matchGoalService) {
         return args -> {
 
             //Lag en standard person med
             AddressModel address = addressService.createAddress(new AddressModel("5306", "Erdal", "Norway", "Vestre 30"));
-            PersonModel person = personService.create(new PersonModel("Kristian", "Solbakken", LocalDate.of(2018, Month.FEBRUARY, 1), address));
-
-            //Kristian har lyst å bli en coach
-            CoachModel coach = coachService.save(new CoachModel(person));
-
-            // Et lag må jo eksistere før man kan bli en rik fortballspiller
-
-
-            // In the beginning there was manchester
-            AssociationModel association = associationService.create(new AssociationModel("Manchester", "Best team"));
-
-            TeamModel team = teamService.createTeam(association, null, null, null);
-
-            // Kristian har lyst å bli eier av laget
-            personService.makePersonOwnerOf(person, team);
-
-
-            //kristian er også coachen
-            team.setCoach(coach);
-
             LocationModel location = locationService.save(new LocationModel(address, "Macnhester stadium", "it's in Kristian's backyard"));
-            team.setLocation(location);
+
+            PersonModel person = personService.create(new PersonModel("Kristian", "Solbakken", LocalDate.of(2018, Month.FEBRUARY, 1), address));
+            contactService.create(new ContactDTO(person.getPersonId(), ContactType.EMAIL, "panda@panda.com"));
+
+            CoachModel coach = coachService.create(new CoachDTO(person.getPersonId()));
+            OwnerModel owner = ownerService.create(new OwnerDTO(person.getPersonId()));
+
+            AssociationModel association = associationService.create(new AssociationModel("Manchester", "Best team"));
+            TeamModel homeTeam = teamService.create(new TeamDTO(association.getAssociationId(), coach.getCoachId(), owner.getOwnerId(), location.getLocationId()));
 
 
-            LocalDate date = LocalDate.of(2015, 2, 2);
-            AddressModel address2 = addressService.createAddress(new AddressModel("489489", "OSLO", "SWEDEN", "ve30"));
-            PersonModel person2 =  personService.create(new PersonModel("Alex", "Johansen", date, address2));
 
-            PlayerModel player = playerService.turnIntoPlayer(person2);
-            player.setTeam(team);
+
+            address = addressService.createAddress(new AddressModel("489489", "OSLO", "SWEDEN", "ve30"));
+            location = locationService.save(new LocationModel(address, "Bislett stadion", "ved bislett kebab"));
+
+            person =  personService.create(new PersonModel("Alex", "Johansen", LocalDate.of(2015, 2, 2), address));
+            contactService.create(new ContactDTO(person.getPersonId(), ContactType.PHONE, "21212121"));
+
+            PlayerModel player = playerService.create(new PlayerDTO(person.getPersonId(), homeTeam.getTeamId(), person.getFirstName()+" "+person.getLastName()));
             player.setNormalPosition("BACK");
             player.setPlayerNumber("25");
+            playerService.save(player);
 
-            player = playerService.save(player);
+            association = associationService.create(new AssociationModel("Juventus", "Better than best team"));
+            TeamModel awayTeam = teamService.create(new TeamDTO(association.getAssociationId(), coach.getCoachId(), owner.getOwnerId(), location.getLocationId()));
 
+            person =  personService.create(new PersonModel("Ole", "Dole", LocalDate.of(2020, 2, 2), address));
+            player = playerService.create(new PlayerDTO(person.getPersonId(), awayTeam.getTeamId(), person.getFirstName()+" "+person.getLastName()));
 
-            // TODO PANDA
+            SeasonModel season = seasonService.save(new SeasonModel(LocalDate.of(2000, Month.JANUARY, 1), LocalDate.of(2005, Month.JANUARY, 1), "S1E2", "good times"));
+            MatchModel match = matchService.create(new MatchDTO(LocalDate.of(2019, Month.DECEMBER, 24), homeTeam.getTeamId(), awayTeam.getTeamId(), season.getSeasonId(), location.getLocationId()));
 
-            associationService.create(new AssociationModel("Juventus", "Better than best team"));
-            locationService.save(new LocationModel(address2, "Bislett stadion", "ved bislett kebab"));
+            MatchGoalModel goal = matchGoalService.create(new MatchGoalDTO(player.getPlayerId(), GoalType.SCORPION_KICK, match.getMatchId()));
+            System.out.println(
+                    "goal="+goal.getGoalId()+
+                    "\nplayer="+goal.getPlayer().getPlayerId()+
+                    "\nmatch="+goal.getMatch().getMatchId());
 
         };
     }
 }
+
+/**
+ * OBSERVATION:
+ * - every time I create a player, the playerId is previousPlayerId+=2... why??
+ */

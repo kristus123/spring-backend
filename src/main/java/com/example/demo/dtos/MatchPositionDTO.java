@@ -16,4 +16,9 @@ public class MatchPositionDTO {
     private Integer matchId;
     private PositionType position;
 
+    public MatchPositionDTO(Integer playerId, Integer matchId) {
+        this.playerId = playerId;
+        this.matchId = matchId;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.example.demo.enums.ContactType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -25,7 +26,8 @@ public class ContactModel {
     @Column(nullable = false)
     private String contactDetail;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToOne// (cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 

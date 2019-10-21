@@ -35,7 +35,9 @@ class PersonServiceTest {
     @Test
     void testCreatePerson() {
         PersonModel person = new PersonModel("kristian", "lavik", LocalDate.of(2015, 1, 2));
-        person.setAddress(new AddressModel("D", "C" ,"B" ,"A"));
+        AddressModel addressModel = new AddressModel("D", "C" ,"B" ,"A");
+        addressService.save(addressModel);
+        person.setAddress(addressModel);
         personService.save(person);
 
         int x = 5_______________________________________5;

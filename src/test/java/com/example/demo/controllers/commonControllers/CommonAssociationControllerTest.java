@@ -32,7 +32,7 @@ class CommonAssociationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mockMvc.perform(get("/v1/common/get/association/1"))
                 .andDo(print())

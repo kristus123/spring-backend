@@ -29,19 +29,19 @@ class AdministratorMatchGoalControllerTest {
     String jsonBody;
     static int ID = 0;
 
-    @BeforeEach
+    //@BeforeEach
     void setUp() throws Exception {
-        jsonBody = "{\"playerId\": 1,\"goalTypeId\": 1, \"matchId\": 1, \"description\": \"Incredible goal!\" }";
+        jsonBody = "{\"playerId\": 1,\"goalType\": 1, \"matchId\": 1, \"description\": \"Incredible goal!\" }";
 
         mockMvc.perform(post("/v1/admin/post/matchgoal").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
         ID++;
     }
 
     @Test
     void testThatMatchGoalIsDeleted() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/matchgoal/" + ID));
+        mockMvc.perform(delete("/v1/admin/delete/matchgoal/" + ID--));
         // This is not a good testing method
         // Should be checked by http status set by a custom exception
         // We are actually expecting a nullPointerException, but it is wrapped inside a Spring exception
@@ -54,11 +54,14 @@ class AdministratorMatchGoalControllerTest {
 
     @Test
     void testThatMatchGoalIsUpdated() throws Exception {
-        String jsonBodyUpdated = "{\"goalId\": " + ID + ",\"playerId\": 1,\"goalTypeId\": 1, \"matchId\": 1, \"description\": \"Not so Incredible goal!\" }";
+        String jsonBodyUpdated = "{\"playerId\": 2,\"goalType\": \"PENALTY\", \"matchId\": 1, \"description\": \"Not so Incredible goal!\" }";
 
-        mockMvc.perform(put("/v1/admin/update/matchgoal/" + ID).contentType(MediaType.APPLICATION_JSON).
-                content(jsonBodyUpdated));
 
-        mockMvc.perform(get("/v1/common/get/matchgoal/" + ID)).andExpect(content().json("{\"description\": \"Not so Incredible goal!\" }"));
+        mockMvc.perform(put("/v1/admin/update/matchgoal/" + 1).contentType(MediaType.APPLICATION_JSON).
+                content(jsonBodyUpdated))
+                .andExpect(status().isCreated());
+
+
+        mockMvc.perform(get("/v1/common/get/matchgoal/" + 1));//.andExpect(jsonPath("$.description").value("Not so Incredible goal!"));
     }
 }

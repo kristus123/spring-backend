@@ -25,7 +25,7 @@ public class OwnerService {
         Optional<PersonModel> person = personService.findById(input.getPersonId());
 
         if (!person.isPresent())
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new OwnerModel(person.get());
     }
@@ -35,11 +35,7 @@ public class OwnerService {
     }
 
     public OwnerModel create(OwnerDTO input) throws ElementNotFoundException {
-
         OwnerModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

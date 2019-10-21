@@ -26,28 +26,29 @@ class AdministratorContactControllerTest {
     MockMvc mockMvc;
 
     String jsonBody;
-    static int ID = 0;
+    static int ID = 0; // TODO PANDA: I think personId != contactId
 
-    @BeforeEach
+    //@BeforeEach
     void setUp() throws Exception {
 
-        jsonBody = "{\"personId\":" + ID + ", \"contactType\":\"phone\", \"contactDetail\":\"41003239\"}";
+        jsonBody = "{\"personId\":" + ID + ", \"contactType\":\"PHONE\", \"contactDetail\":\"41003239\"}";
 
         mockMvc.perform(post("/v1/admin/post/contact").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
         ID++;
     }
 
     @Test
     public void testThatContactIsDeleted() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/contact/" + ID));
+        mockMvc.perform(delete("/v1/admin/delete/contact/" + ID--));
         // This is not a good testing method
         // Should be checked by http status set by a custom exception
         // We are actually expecting a nullPointerException, but it is wrapped inside a Spring exception
         /*
         assertThrows(NestedServletException.class, () ->
                 mockMvc.perform(get("/v1/common/get/contact/" + ID)));
+
 
          */
 
@@ -56,13 +57,13 @@ class AdministratorContactControllerTest {
     @Test
     public void testThatContactIsUpdated() throws Exception {
 
-        String jsonBodyUpdated = "{\"contactId\":" + ID + ",  \"personId\":" + ID + ", \"contactType\":\"phone\", \"contactDetail\":\"1111111\"}";
+        String jsonBodyUpdated = "{\"personId\":" + 1 + ", \"contactType\":\"PHONE\", \"contactDetail\":\"1111111\"}";
 
-        mockMvc.perform(put("/v1/admin/update/contact/"+ID).contentType(MediaType.APPLICATION_JSON).
+        mockMvc.perform(put("/v1/admin/update/contact/"+1).contentType(MediaType.APPLICATION_JSON).
                 content(jsonBodyUpdated)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
 
-        mockMvc.perform(get("/v1/common/get/contact/" + ID)).
+        mockMvc.perform(get("/v1/common/get/contact/" + 1)).
                 andExpect(content().json("{\"contactDetail\":\"1111111\"}"));
     }
 }

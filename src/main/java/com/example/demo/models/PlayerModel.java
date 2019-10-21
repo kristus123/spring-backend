@@ -38,35 +38,35 @@ public class PlayerModel implements LivingHuman {
     @Column(nullable = false)
     private String playername;
 
-    @Column(name = "team_date_from")
+    @Column(name = "team_date_from", nullable = true)
     private LocalDate teamDateFrom;
 
-    @Column(name = "team_date_to")
+    @Column(name = "team_date_to", nullable = true)
     private LocalDate teamDateTo;
 
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 
-
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "team_id", referencedColumnName = "team_id")
     private TeamModel team;
 
+    @Column(nullable = true)
     private String normalPosition;
 
+    @Column(nullable = true)
     private String playerNumber;
 
 
     // Watchlist properties
-
     @JsonIgnore
     @ManyToMany(mappedBy = "players")
     private Set<UserModel> users = new HashSet<>();
 
 
-    // Match goal properties
-
+    // Match position properties
+    @JsonIgnore
     @OneToMany(mappedBy = "player")
     private Set<MatchGoalModel> positions;
 
@@ -77,13 +77,14 @@ public class PlayerModel implements LivingHuman {
      */
 
 
-    public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, LocalDate teamDateFrom, LocalDate teamDateTo) {
+    public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, LocalDate teamDateFrom, LocalDate teamDateTo, String playername) {
         this.person = person;
         this.team = team;
         this.normalPosition = normalPosition;
         this.playerNumber = playerNumber;
         this.teamDateFrom = teamDateFrom;
         this.teamDateTo = teamDateTo;
+        this.playername = playername;
     }
 
     public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername) {
@@ -103,7 +104,6 @@ public class PlayerModel implements LivingHuman {
 
 
     public PlayerModel(PlayerDTO player) {
-        this.playerId = player.getPlayerId();
         this.teamDateFrom = player.getTeamDateFrom();
         this.teamDateTo = player.getTeamDateTo();
         this.normalPosition = player.getNormalPosition();

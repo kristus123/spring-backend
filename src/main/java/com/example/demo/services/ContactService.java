@@ -24,7 +24,7 @@ public class ContactService {
         Optional<PersonModel> person = personService.findById(input.getPersonId());
 
         if (!person.isPresent())
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new ContactModel(input.getContactType(), input.getContactDetail(), person.get());
     }
@@ -32,11 +32,7 @@ public class ContactService {
     public ContactModel save(ContactModel contactModel) {return contactRepository.save(contactModel);}
 
     public ContactModel create(ContactDTO input) throws ElementNotFoundException {
-
         ContactModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

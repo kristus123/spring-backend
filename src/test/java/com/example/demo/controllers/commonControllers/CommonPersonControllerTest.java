@@ -48,11 +48,11 @@ class CommonPersonControllerTest {
 
     @Test @Ignore
     void testThatCanGetAllPeople() throws Exception {
-        String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
+        String json = "{\"addressId\": 1, \"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
         mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
                 content(json)).
-                andExpect(status().isOk());
+                andExpect(status().isCreated());
         ID++;
-        mockMvc.perform(get("/v1/common/get/person/")).andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/v1/common/get/person/")).andExpect(jsonPath("$._embedded.personModelList", hasSize(4)));
     }
 }

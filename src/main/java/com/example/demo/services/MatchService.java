@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -39,7 +38,7 @@ public class MatchService {
         Optional<LocationModel> location = locationService.findById(input.getLocationId());
 
         if ( !homeTeam.isPresent() || !awayTeam.isPresent() || !season.isPresent() || !location.isPresent() )
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new MatchModel(
                 input.getMatchDate(),
@@ -55,11 +54,7 @@ public class MatchService {
     }
 
     public MatchModel create(MatchDTO input) throws ElementNotFoundException {
-
         MatchModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 

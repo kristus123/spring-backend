@@ -35,7 +35,7 @@ public class TeamService {
         Optional<LocationModel> location = locationService.findById(input.getLocationId());
 
         if ( !association.isPresent() || !coach.isPresent() || !owner.isPresent() || !location.isPresent() ) {
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
         }
 
         return new TeamModel(association.get(), coach.get(), owner.get(), location.get());
@@ -44,9 +44,6 @@ public class TeamService {
     public TeamModel create(TeamDTO input) throws ElementNotFoundException {
 
         TeamModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 
