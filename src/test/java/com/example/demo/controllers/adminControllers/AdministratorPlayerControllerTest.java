@@ -82,7 +82,7 @@ public class AdministratorPlayerControllerTest {
                 .put("playerNumber", 21)
                 .put("playername", "Ronaldo");
 
-        mockMvc.perform(put("/v1/admin/update/player/2")
+        mockMvc.perform(put("/v1/admin/update/player/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.toString()))
                 .andDo(print())
@@ -91,7 +91,7 @@ public class AdministratorPlayerControllerTest {
 
     @Test
     void deletePlayer() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/player/2"))
+        mockMvc.perform(delete("/v1/admin/delete/player/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
