@@ -97,11 +97,6 @@ public class MatchService {
         else {
             result = match.getAwayTeam().getAssociation().getName().toString();
         }
-
         return new MatchResultDTO(match, match.getHomeTeam(), match.getAwayTeam(), result);
-
-
     }
-
-
 }
