@@ -1,5 +1,10 @@
 package com.example.demo.enums;
 
 public enum  GoalType {
-    SCORPION_KICK
+    SCORPION_KICK,
+    PENALTY,
+    HEADER,
+    FREE_KICK;
+
+
 }

@@ -70,6 +70,8 @@ public class TeamModel {
         this.location = location;
     }
 
+
+
     @Override
     public String toString() {
         return association.getName();

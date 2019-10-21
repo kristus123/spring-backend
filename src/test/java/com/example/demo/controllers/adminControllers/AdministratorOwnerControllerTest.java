@@ -42,7 +42,8 @@ public class AdministratorOwnerControllerTest {
 
 
     void addOwner() throws Exception {
-        String json = "{\"person_id\" : 2}";
+        String json = new JSONObject().put("person_id", 2).toString();
+
         mockMvc.perform(post("/v1/admin/post/owner")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))

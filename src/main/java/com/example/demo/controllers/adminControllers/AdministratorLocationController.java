@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController @RequestMapping("/v1/admin")
@@ -53,6 +54,16 @@ public class AdministratorLocationController {
     public ResponseEntity<LocationModel> deleteLocation(@PathVariable Integer id) {
         LocationModel team = locationService.deleteById(id);
         return ResponseEntity.ok(team);
+    }
+
+
+    @PutMapping("/update/location")
+    public LocationModel update(@RequestBody Map<String, String> testMap) {
+        LocationModel address = locationService.findById(Integer.parseInt(testMap.get("id"))).get();
+
+        address.setName(testMap.get("name"));
+        address.setDescription(testMap.get("description"));
+        return locationService.save(address);
     }
 
 }

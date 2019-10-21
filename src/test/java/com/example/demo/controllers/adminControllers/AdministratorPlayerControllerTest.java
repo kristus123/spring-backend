@@ -43,7 +43,13 @@ public class AdministratorPlayerControllerTest {
 
     @Before
     void addDummyData() throws Exception {
-        String json = "{\"personId\" : 2, \"teamId\" : 3, \"normalPosition\" : \"Attacker\", \"playerNumber\" : 7 }";
+        //String json = "{\"personId\" : 2, \"teamId\" : 3, \"normalPosition\" : \"Attacker\", \"playerNumber\" : 7 }";
+        String json = new JSONObject()
+                .put("personId", 2)
+                .put("teamId", 3)
+                .put("normalPosition", "Attacker")
+                .put("playerNumber", 7).toString();
+
         mockMvc.perform(post("/v1/admin/post/player")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))

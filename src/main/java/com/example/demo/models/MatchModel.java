@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="MATCH_MODEL")
+@Table(name="MATCH")
 @Getter
 @Setter
 @NoArgsConstructor
