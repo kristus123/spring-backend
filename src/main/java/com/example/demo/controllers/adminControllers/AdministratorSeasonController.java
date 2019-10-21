@@ -36,7 +36,7 @@ public class AdministratorSeasonController {
     }
 
     @PutMapping("/update/season/{id}")
-    public ResponseEntity<Resource> updateMatch(@PathVariable Integer id, @RequestBody SeasonModel season) throws URISyntaxException {
+    public ResponseEntity<Resource> updateSeason(@PathVariable Integer id, @RequestBody SeasonModel season) throws URISyntaxException {
 
         SeasonModel updated = seasonService.update(id, season);
         Resource resource = assembler.toResource(updated);
@@ -47,7 +47,7 @@ public class AdministratorSeasonController {
     }
 
     @DeleteMapping("/delete/season/{id}")
-    public ResponseEntity<SeasonModel> deleteMatch(@PathVariable Integer id) {
+    public ResponseEntity<SeasonModel> deleteSeason(@PathVariable Integer id) {
         SeasonModel season = seasonService.deleteById(id);
         return ResponseEntity.ok(season);
     }

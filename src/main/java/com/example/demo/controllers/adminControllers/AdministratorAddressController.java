@@ -45,8 +45,8 @@ public class AdministratorAddressController {
                 .body(resource);
     }
 
-    @DeleteMapping("/delete/season/{id}")
-    public ResponseEntity<AddressModel> deleteMatch(@PathVariable Integer id) {
+    @DeleteMapping("/delete/address/{id}")
+    public ResponseEntity<AddressModel> deleteAddress(@PathVariable Integer id) {
         AddressModel address = addressService.deleteById(id);
         return ResponseEntity.ok(address);
     }

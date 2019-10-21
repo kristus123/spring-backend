@@ -58,9 +58,7 @@ class AdministratorTeamControllerTest {
                 .content(LifeHack.asJsonString(team))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.active").value(is(true)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     void testThatCreateFailsForFaultyInput() throws Exception {
