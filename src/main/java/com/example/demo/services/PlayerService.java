@@ -71,8 +71,8 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public PlayerAnonDTO filteredPlayer(PlayerModel player) {
-        return new PlayerAnonDTO(player, player.getPlayername(), player.getTeam().toString());
+    public PlayerAnonDTO filteredPlayer(Optional<PlayerModel> player) {
+        return new PlayerAnonDTO(player.get(), player.get().getPlayername(), player.get().getTeam().toString());
 
     }
 
