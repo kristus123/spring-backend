@@ -76,7 +76,7 @@ public class AdministratorPlayerControllerTest {
     @Test
     void updatePlayer() throws Exception {
         JSONObject json = new JSONObject()
-                .put("personId", 2)
+                .put("personId", 1)
                 .put("teamId", 1)
                 .put("normalPosition", "Defender")
                 .put("playerNumber", 21)
