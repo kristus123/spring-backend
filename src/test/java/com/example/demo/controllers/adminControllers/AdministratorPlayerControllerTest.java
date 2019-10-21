@@ -41,7 +41,7 @@ public class AdministratorPlayerControllerTest {
     @Autowired
     PlayerRepository playerRepository;
 
-    @Before
+    //@Before
     void addDummyData() throws Exception {
         //String json = "{\"personId\" : 2, \"teamId\" : 3, \"normalPosition\" : \"Attacker\", \"playerNumber\" : 7 }";
         String json = new JSONObject()
@@ -60,8 +60,8 @@ public class AdministratorPlayerControllerTest {
     @Test
     void addPlayer() throws Exception {
         JSONObject json = new JSONObject()
-                .put("personId", 3)
-                .put("teamId", 3)
+                .put("personId", 1)
+                .put("teamId", 1)
                 .put("normalPosition", "Shooter")
                 .put("playerNumber", 11)
                 .put("playername", "Ramoirs");
@@ -82,7 +82,7 @@ public class AdministratorPlayerControllerTest {
                 .put("playerNumber", 21)
                 .put("playername", "Ronaldo");
 
-        mockMvc.perform(put("/v1/admin/update/player/1")
+        mockMvc.perform(put("/v1/admin/update/player/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.toString()))
                 .andDo(print())
@@ -91,7 +91,7 @@ public class AdministratorPlayerControllerTest {
 
     @Test
     void deletePlayer() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/player/1"))
+        mockMvc.perform(delete("/v1/admin/delete/player/2"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
