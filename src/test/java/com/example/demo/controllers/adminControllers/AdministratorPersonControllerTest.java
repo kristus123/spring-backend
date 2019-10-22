@@ -5,8 +5,7 @@ import com.example.demo.models.AddressModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.services.PersonService;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
