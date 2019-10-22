@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.example.demo.interfaces.LivingHuman;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,10 @@ public class CoachModel implements LivingHuman {
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
+
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
 
     public CoachModel(PersonModel person) {
         this.person = person;

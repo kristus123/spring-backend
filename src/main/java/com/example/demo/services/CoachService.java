@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CoachService {
@@ -59,10 +60,30 @@ public class CoachService {
     public CoachModel deleteById(Integer id) {
         CoachModel coach = findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find coach with ID=" + id));
-        coachRepository.deleteById(id);
+        coach.setActive(false);
+        return coachRepository.save(coach);
+    }
+
+    public Optional<CoachModel> findById(Integer id) {
+        Optional<CoachModel> coach = coachRepository.findById(id);
+        if (!coach.isPresent() || !coach.get().isActive())
+            return Optional.empty();
         return coach;
     }
 
-    public Optional<CoachModel> findById(Integer id) {return coachRepository.findById(id);}
-    public List<CoachModel> findAll() {return coachRepository.findAll();}
+    public List<CoachModel> findAllActive() {
+        return coachRepository.findAll().stream().filter(coach -> coach.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<CoachModel> findByIdForced(Integer id) {
+        return coachRepository.findById(id);
+    }
+
+    public List<CoachModel> findAllForced() {
+        return coachRepository.findAll();
+    }
+
+    public Optional<CoachModel> findByPerson(PersonModel personModel) {
+        return coachRepository.findByPerson(personModel);
+    }
 }

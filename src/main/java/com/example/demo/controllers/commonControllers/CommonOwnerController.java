@@ -46,7 +46,7 @@ public class CommonOwnerController {
     @GetMapping("/get/owner")
     public ResponseEntity<Resources<Resource<OwnerModel>>> getOwners() {
 
-        List<Resource<OwnerModel>> owners = ownerService.findAll()
+        List<Resource<OwnerModel>> owners = ownerService.findAllActive()
                 .stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());

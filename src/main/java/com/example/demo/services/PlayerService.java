@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -73,16 +74,31 @@ public class PlayerService {
 
     public PlayerModel deleteById(Integer id) throws ElementNotFoundException {
         PlayerModel player = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
-        playerRepository.deleteById(id);
-        return player;
+        player.setActive(false);
+        return playerRepository.save(player);
     }
 
     public Optional<PlayerModel> findById(int id) {
+        Optional<PlayerModel> player = playerRepository.findById(id);
+        if (!player.isPresent() || !player.get().isActive())
+            return Optional.empty();
+        return player;
+    }
+
+    public List<PlayerModel> findAllActive() {
+        return playerRepository.findAll().stream().filter(player -> player.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<PlayerModel> findByIdForced(Integer id) {
         return playerRepository.findById(id);
     }
 
-    public List<PlayerModel> findAll() {
+    public List<PlayerModel> findAllForced() {
         return playerRepository.findAll();
+    }
+
+    public Optional<PlayerModel> findByPerson(PersonModel personModel) {
+        return playerRepository.findByPerson(personModel);
     }
 
     public PlayerAnonDTO filteredPlayer(PlayerModel player) {

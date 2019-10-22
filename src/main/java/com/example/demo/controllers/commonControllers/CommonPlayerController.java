@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -44,7 +43,7 @@ public class CommonPlayerController {
     @GetMapping("/get/player")
     public ResponseEntity<Resources<Resource<PlayerModel>>> getPlayers() {
 
-        List<Resource<PlayerModel>> players = playerService.findAll()
+        List<Resource<PlayerModel>> players = playerService.findAllActive()
                 .stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());

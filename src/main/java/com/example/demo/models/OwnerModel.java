@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.example.demo.interfaces.LivingHuman;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,10 @@ public class OwnerModel implements LivingHuman {
     @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
+
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
 
     public OwnerModel(PersonModel person) {
         this.person = person;

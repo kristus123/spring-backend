@@ -68,7 +68,7 @@ class PersonServiceTest {
 
     @Test
     void makePersonOwnerOf(){
-        PersonModel person = personService.findAll().get(0);
+        PersonModel person = personService.findAllActive().get(0);
         TeamModel team = teamService.findAllActive().get(0);
 
         team.setOwner(null);

@@ -32,10 +32,8 @@ public class MatchService {
 
 
     private MatchModel convert(MatchDTO input) {
-        // TODO PANDA: getting teams even when they are "deleted" from "all teams view"
-        Optional<TeamModel> homeTeam = teamService.findByIdForced(input.getHomeTeamId());
-        Optional<TeamModel> awayTeam = teamService.findByIdForced(input.getAwayTeamId());
-
+        Optional<TeamModel> homeTeam = teamService.findById(input.getHomeTeamId());
+        Optional<TeamModel> awayTeam = teamService.findById(input.getAwayTeamId());
         Optional<SeasonModel> season = seasonService.findById(input.getSeasonId());
         Optional<LocationModel> location = locationService.findById(input.getLocationId());
 

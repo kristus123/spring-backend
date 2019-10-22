@@ -1,20 +1,16 @@
 package com.example.demo.controllers;
 
 
-import com.example.demo.models.AddressModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.AddressService;
 import com.example.demo.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 @RestController
@@ -39,7 +35,7 @@ public class PublicController {
     public List<PersonModel> getInfo() {
 
         System.out.println("_________");
-        List<PersonModel> liste  = personService.findAll();
+        List<PersonModel> liste  = personService.findAllActive();
         liste.forEach(System.out::println);
         System.out.println("_________");
 

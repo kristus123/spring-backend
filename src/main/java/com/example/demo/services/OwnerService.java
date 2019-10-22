@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.security.acl.Owner;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OwnerService {
@@ -59,12 +60,15 @@ public class OwnerService {
     public OwnerModel deleteById(int id) throws ElementNotFoundException {
         OwnerModel owner = findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find owner with ID=" + id));
-        delete(ownerRepository.findById(id).get());
-        return owner;
+        owner.setActive(false);
+        return ownerRepository.save(owner);
     }
 
     public Optional<OwnerModel> findById(int id) {
-        return ownerRepository.findById(id);
+        Optional<OwnerModel> owner = ownerRepository.findById(id);
+        if (!owner.isPresent() || !owner.get().isActive())
+            return Optional.empty();
+        return owner;
     }
 
 
@@ -72,7 +76,15 @@ public class OwnerService {
         return ownerRepository.findByPerson(personModel);
     }
 
-    public List<OwnerModel> findAll() {
+    public List<OwnerModel> findAllActive() {
+        return ownerRepository.findAll().stream().filter(owner -> owner.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<OwnerModel> findByIdForced(Integer id) {
+        return ownerRepository.findById(id);
+    }
+
+    public List<OwnerModel> findAllForced() {
         return ownerRepository.findAll();
     }
 

@@ -58,6 +58,10 @@ public class PlayerModel implements LivingHuman {
     @Column(nullable = true)
     private String playerNumber;
 
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
+
 
     // Watchlist properties
     @JsonIgnore

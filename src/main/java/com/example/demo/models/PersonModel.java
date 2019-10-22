@@ -39,6 +39,10 @@ public class PersonModel implements LivingHuman { //
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
+
 
     public PersonModel(String firstName, String lastName, LocalDate dateOfBirth, AddressModel address) {
         this(firstName, lastName, dateOfBirth);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -72,34 +73,36 @@ public class PersonService {
 
     public PersonModel deleteById(Integer id) throws ElementNotFoundException {
         //slett andre ting
-        PersonModel personModel = findById(id)
+        PersonModel person = findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find person with ID=" + id));
 
-        Optional<CoachModel> coach = coachRepository.findByPerson(personModel);
-        Optional<OwnerModel> owner = ownerService.findByPerson(personModel);
+        // TODO PANDA: make sure you "delete" (inactivate) them from Coach / Owner / Player(?) tables as well
 
-        if (owner.isPresent()) {
-            ownerService.delete(owner.get());
-            return null; // TODO PANDA: hvorfor har vi dette?
-        }
+        coachService.findByPerson(person).ifPresent(coach -> coachService.deleteById(coach.getCoachId()));
+        ownerService.findByPerson(person).ifPresent(owner -> ownerService.deleteById(owner.getOwnerId()));
+        playerService.findByPerson(person).ifPresent(player -> playerService.deleteById(player.getPlayerId()));
 
-        if (coach.isPresent()) {
-            System.out.println("COACH ER PRESENT");
-            coachService.deleteById(coach.get().getCoachId());
-            return null; // TODO PANDA: hvorfor har vi dette?
-
-        }
-        personRepository.deleteById(id);
-        return personModel;
-
+        person.setActive(false);
+        return personRepository.save(person);
     }
 
-    public Optional<PersonModel> findById(Integer id) {return personRepository.findById(id);}
+    public Optional<PersonModel> findById(Integer id) {
+        Optional<PersonModel> person = personRepository.findById(id);
+        if (!person.isPresent() || !person.get().isActive())
+            return Optional.empty();
+        return person;
+    }
 
-    public List<PersonModel> findAll() {
-        List<PersonModel> liste = personRepository.findAll();
-        liste.forEach(System.out::println);
-        return liste;
+    public List<PersonModel> findAllActive() {
+        return personRepository.findAll().stream().filter(person -> person.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<PersonModel> findByIdForced(Integer id) {
+        return personRepository.findById(id);
+    }
+
+    public List<PersonModel> findAllForced() {
+        return personRepository.findAll();
     }
 
     public PersonModel create(PersonModel personModel) {

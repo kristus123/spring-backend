@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -45,7 +44,7 @@ public class CommonPersonController {
     @GetMapping("/get/person")
     public ResponseEntity<Resources<Resource<PersonModel>>> getPeople() {
 
-        List<Resource<PersonModel>> people = personService.findAll()
+        List<Resource<PersonModel>> people = personService.findAllActive()
                 .stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
