@@ -18,7 +18,7 @@ public class LocationModel {
     @Column(name = "location_id")
     private int locationId;
 
-    @OneToOne(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval=true) //endret fra CascadeType.ALL til MERGE
     // fetch = FetchType.EAGER
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;

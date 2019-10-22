@@ -50,6 +50,7 @@ public class MatchController {
     @GetMapping("/browse/matches")
     public Resources<Resource<MatchModel>> allMatches() {
 
+
         List<Resource<MatchModel>> matches = matchService.findAll()
                 .stream()
                 .map(matchResourceAssembler::toResource)

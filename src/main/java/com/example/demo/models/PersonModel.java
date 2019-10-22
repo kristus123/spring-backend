@@ -35,7 +35,7 @@ public class PersonModel implements LivingHuman { //
     private LocalDate dateOfBirth;
 
     //@Cascade(SAVE_UPDATE)
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 

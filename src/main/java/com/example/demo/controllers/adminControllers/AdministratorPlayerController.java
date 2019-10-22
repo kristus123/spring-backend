@@ -62,14 +62,10 @@ public class AdministratorPlayerController {
         return newPlayer;
     }
 
-    @PutMapping("/update/player/{playerId}")
-    public PlayerModel updatePlayer(@PathVariable int playerId, @RequestBody PlayerDTO playerModel) {
-        Optional<PlayerModel> oldPlayer = playerService.findById(playerId);
-        if(oldPlayer.isPresent()) {
-            PlayerModel updatedPlayer = playerService.update(playerModel, oldPlayer.get());
-            return updatedPlayer;
-        }
-        return null;
+    @PutMapping("/update/player")
+    public PlayerModel updatePlayer(@RequestBody PlayerModel playerModel) {
+        return playerService.save(playerModel);
+
     }
 
     @DeleteMapping("/delete/player/{playerId}")

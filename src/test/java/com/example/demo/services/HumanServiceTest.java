@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +44,7 @@ class HumanServiceTest {
     }
 
 
-    @Test
+    @Test @Disabled
     void delete() {
         Optional<CoachModel>  coach = coachService.findByPersonId(personId);
         assertTrue(coach.isPresent());
