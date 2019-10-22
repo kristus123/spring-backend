@@ -103,7 +103,7 @@ public class DummyDataService {
             while( (st = br.readLine()) != null) {
                 String [] sp = st.split(" ");
                 PersonModel personPlayer =  personService.create(new PersonModel(sp[0], sp[1], playerDate, playerAddress));
-                PlayerModel playerModel = new PlayerModel(personPlayer, team, sp[2], sp[3], sp[0] + " " + sp[1]);
+                PlayerModel playerModel = new PlayerModel(personPlayer, team, sp[2], sp[3], sp[0] + " " + sp[1], sp[4]);
                 playerModel.setTeamDateFrom(LocalDate.of(2010, 01, 01));
                 playerModel.setTeamDateTo(LocalDate.now());
                 playerService.save(playerModel);
