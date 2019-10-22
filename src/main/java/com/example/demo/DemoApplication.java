@@ -13,6 +13,7 @@ import java.time.Period;
 @SpringBootApplication
 public class DemoApplication {
 	public static void main(String[] args) {
+		System.out.println("START");
 		SpringApplication.run(DemoApplication.class, args);
 	}
 }
