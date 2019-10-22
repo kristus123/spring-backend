@@ -39,6 +39,9 @@ public class PlayerModel implements LivingHuman {
     @Column(name = "team_date_to")
     private LocalDate teamDateTo;
 
+    @Column(name ="image_url")
+    private String imageUrl;
+
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
@@ -64,6 +67,16 @@ public class PlayerModel implements LivingHuman {
     this.playername = playername;
   }
 
+    public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername, String imageUrl) {
+
+        this.person = person;
+        this.team = team;
+        this.normalPosition = normalPosition;
+        this.playerNumber = playerNumber;
+        this.playername = playername;
+        this.imageUrl = imageUrl;
+    }
+
   public PlayerModel(PersonModel person) {
         this.person = person;
         this.playername = person.getFirstName() + " " + person.getLastName();
@@ -77,6 +90,7 @@ public class PlayerModel implements LivingHuman {
         this.normalPosition = player.getNormalPosition();
         this.playerNumber = player.getPlayerNumber();
         this.playername = player.getPlayername();
+        this.imageUrl = player.getImageUrl();
   }
 
   @Override
