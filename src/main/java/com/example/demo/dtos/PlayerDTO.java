@@ -20,4 +20,5 @@ public class PlayerDTO {
     private Integer teamId;
     private String normalPosition;
     private String playerNumber;
+    private String imageUrl;
 }
