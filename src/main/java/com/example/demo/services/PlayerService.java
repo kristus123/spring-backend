@@ -5,6 +5,7 @@ import com.example.demo.dtos.PlayerDTO;
 import com.example.demo.models.MatchModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.models.PlayerModel;
+import com.example.demo.models.TeamModel;
 import com.example.demo.repositories.PlayerRepository;
 import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,18 @@ public class PlayerService {
             return player.get();
         }
         return playerRepository.save(new PlayerModel(person));
+    }
+
+
+    public List<PlayerModel> getAllPlayersOfTeam(TeamModel teamModel) {
+        return playerRepository.findByTeam(teamModel);
+
+    }
+    public List<PlayerModel> getAllPlayersOfTeam(int teamId) {
+        Optional<TeamModel> team =  teamService.findById(teamId);
+        if (team.isPresent()) return getAllPlayersOfTeam(team.get());
+
+        throw new RuntimeException("player Id Not found");
     }
 
     public PlayerModel update(PlayerDTO player, PlayerModel oldPlayer) {

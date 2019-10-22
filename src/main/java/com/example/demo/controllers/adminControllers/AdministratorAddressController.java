@@ -26,6 +26,11 @@ public class AdministratorAddressController {
             return null; //Oca syntax baby
     }
 
+    @DeleteMapping("/delete/address/{addressId}")
+    public boolean deleteAddress(@PathVariable int addressId) {
+       return addressService.delete(addressId);
+    }
+
     @PostMapping("/post/address")
     public AddressModel createAddress(@RequestBody AddressModel addressModel) {
         return addressService.save(addressModel);

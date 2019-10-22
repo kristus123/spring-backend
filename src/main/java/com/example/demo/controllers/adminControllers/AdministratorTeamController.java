@@ -3,11 +3,14 @@ package com.example.demo.controllers.adminControllers;
 import com.example.demo.dtos.TeamDTO;
 import com.example.demo.exceptions.InvalidTeamRequestException;
 import com.example.demo.exceptions.TeamNotFoundException;
+import com.example.demo.models.PlayerModel;
 import com.example.demo.models.TeamModel;
+import com.example.demo.services.PlayerService;
 import com.example.demo.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,11 +20,21 @@ public class AdministratorTeamController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    PlayerService playerService;
+
 
     @PostMapping("/post/team")
     public TeamModel newTeam(@RequestBody TeamDTO team) {
         return teamService.createTeam(team);
     }
+
+    @GetMapping("get/team/players/{teamId}")
+    public List<PlayerModel> getAllPlayersOfTeam(@PathVariable int teamId) {
+        return playerService.getAllPlayersOfTeam(teamId);
+
+    }
+
 
     @PutMapping("/update/team/{id}")
     public TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {

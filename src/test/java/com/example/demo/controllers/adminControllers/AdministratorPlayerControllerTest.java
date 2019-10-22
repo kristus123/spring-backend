@@ -99,7 +99,7 @@ public class AdministratorPlayerControllerTest {
                 .put("playerNumber", 21)
                 .put("playername", "Ronaldo");
 
-        mockMvc.perform(put("/v1/admin/update/player/1")
+        mockMvc.perform(put("/v1/admin/update/player")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.toString()))
                 .andDo(print())

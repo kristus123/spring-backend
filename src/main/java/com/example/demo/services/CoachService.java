@@ -26,6 +26,10 @@ public class CoachService {
 
     }
 
+    public Optional<CoachModel> findByPersonId(int id) {
+        return findAll().stream().filter(coach -> coach.getPerson().getPersonId() == id).findFirst();
+    }
+
 
     public CoachModel save(CoachModel coachModel) {return coachRepository.save(coachModel);}
     public CoachModel update(Integer id, CoachModel coachModel) {
