@@ -2,10 +2,10 @@ package com.example.demo.controllers.userControllers;
 
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
-import org.junit.Before;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
