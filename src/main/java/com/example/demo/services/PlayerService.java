@@ -64,6 +64,19 @@ public class PlayerService {
         return playerRepository.save(new PlayerModel(person));
     }
 
+
+
+    public List<PlayerModel> getAllPlayersOfTeam(TeamModel teamModel) {
+        return playerRepository.findByTeam(teamModel);
+
+    }
+    public List<PlayerModel> getAllPlayersOfTeam(int teamId) {
+        Optional<TeamModel> team =  teamService.findById(teamId);
+        if (team.isPresent()) return getAllPlayersOfTeam(team.get());
+
+        throw new RuntimeException("player Id Not found");
+    }
+
     public PlayerModel update(Integer id, PlayerDTO player) throws ElementNotFoundException {
         findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 

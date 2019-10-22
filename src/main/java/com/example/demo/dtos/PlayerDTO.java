@@ -20,6 +20,7 @@ public class PlayerDTO {
     private Integer teamId;
     private String normalPosition;
     private String playerNumber;
+    private String imageUrl;
 
     // MANDATORY FIELDS
     public PlayerDTO(Integer personId, Integer teamId, String playername) {
@@ -27,4 +28,5 @@ public class PlayerDTO {
         this.teamId = teamId;
         this.playername = playername;
     }
+
 }

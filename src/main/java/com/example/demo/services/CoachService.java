@@ -32,6 +32,11 @@ public class CoachService {
 
     }
 
+    // TODO PANDA: vil finne alle Coaches som har eksistert ever? Eller bare aktive??
+    public Optional<CoachModel> findByPersonId(int id) {
+        return findAllActive().stream().filter(coach -> coach.getPerson().getPersonId() == id).findFirst();
+    }
+
     private CoachModel convert(CoachDTO input) {
         Optional<PersonModel> person = personService.findById(input.getPersonId());
 

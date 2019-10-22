@@ -38,11 +38,14 @@ public class PlayerModel implements LivingHuman {
     @Column(nullable = false)
     private String playername;
 
-    @Column(name = "team_date_from", nullable = true)
+    @Column(name = "team_date_from")
     private LocalDate teamDateFrom;
 
-    @Column(name = "team_date_to", nullable = true)
+    @Column(name = "team_date_to")
     private LocalDate teamDateTo;
+
+    @Column(name ="image_url")
+    private String imageUrl;
 
     @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
@@ -95,7 +98,17 @@ public class PlayerModel implements LivingHuman {
         this.playername = playername;
     }
 
-    public PlayerModel(PersonModel person) {
+    public PlayerModel(PersonModel person, TeamModel team, String normalPosition, String playerNumber, String playername, String imageUrl) {
+
+        this.person = person;
+        this.team = team;
+        this.normalPosition = normalPosition;
+        this.playerNumber = playerNumber;
+        this.playername = playername;
+        this.imageUrl = imageUrl;
+    }
+
+  public PlayerModel(PersonModel person) {
         this.person = person;
         this.playername = person.getFirstName() + " " + person.getLastName();
 
@@ -108,14 +121,14 @@ public class PlayerModel implements LivingHuman {
         this.normalPosition = player.getNormalPosition();
         this.playerNumber = player.getPlayerNumber();
         this.playername = player.getPlayername();
-    }
+        this.imageUrl = player.getImageUrl();
+  }
 
-    /*
-    @Override
-    public String toString() {
-      return person.getFirstName() + " spiller for " + team.getAssociation().getName() + " : posisjonen hans er " + normalPosition + " og spillernummer er " + playerNumber;
-    }
-  */
+  @Override
+  public String toString() {
+    return person.getFirstName() + " spiller for " + team.getAssociation().getName() + " : posisjonen hans er " + normalPosition + " og spillernummer er " + playerNumber;
+  }
+
     // TODO PANDA: for testing purposes
     public PlayerModel(Integer id, String name) {
         this.playerId = id;

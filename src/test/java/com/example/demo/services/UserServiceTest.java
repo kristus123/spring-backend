@@ -3,7 +3,6 @@ package com.example.demo.services;
 import com.example.demo.enums.UserRole;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.UserRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
