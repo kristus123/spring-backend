@@ -21,6 +21,7 @@ public class AssociationService {
 
     public AssociationModel update(Integer id, AssociationModel association) throws ElementNotFoundException {
         findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
+        association.setAssociationId(id);
         return save(association);
     }
 

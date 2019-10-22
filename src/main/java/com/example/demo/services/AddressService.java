@@ -24,9 +24,10 @@ public class AddressService {
         return addressRepository.save(addressModel);
     }
 
-    public AddressModel update(Integer id, AddressModel season) throws ElementNotFoundException {
+    public AddressModel update(Integer id, AddressModel address) throws ElementNotFoundException {
         findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + id));
-        return save(season);
+        address.setAddressId(id);
+        return save(address);
     }
 
     public AddressModel deleteById(Integer id) throws ElementNotFoundException {
