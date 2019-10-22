@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @Table (name = "RESULT_MODEL")
 @Getter
 @Setter
+@NoArgsConstructor
 public class ResultModel implements Serializable {
 
     @Id
@@ -31,9 +33,6 @@ public class ResultModel implements Serializable {
 
     @Column (nullable = false)
     private String result;
-
-    public ResultModel() {
-    }
 
     public ResultModel(MatchModel match, TeamModel team, Integer score, String result) {
         this.match = match;

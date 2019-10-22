@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResultDTO {
 
+    private Integer matchId;
     private Integer teamId;
     private Integer score;
     private String result;
