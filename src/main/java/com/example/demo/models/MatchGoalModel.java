@@ -4,11 +4,14 @@ package com.example.demo.models;
 import com.example.demo.enums.GoalType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="MATCH_GOAL")
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Getter
 @Setter
 public class MatchGoalModel {
