@@ -29,6 +29,11 @@ public class AdministratorMatchGoalController {
         return matchGoalService.findByMatchId(matchId);
     }
 
+    @GetMapping("/get/matchgoal/{playerId}/byPlayerId")
+    public List<MatchGoalModel> getMatchGoalsGivenByPlayerId(@PathVariable Integer playerId) {
+        return matchGoalService.findByPlayerId(playerId);
+    }
+
     @PostMapping("/post/matchgoal")
     public MatchGoalModel createMatchGoal(@RequestBody MatchGoalModel matchGoal) {
         return matchGoalService.save(matchGoal);

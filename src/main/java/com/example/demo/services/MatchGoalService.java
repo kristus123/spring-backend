@@ -18,6 +18,9 @@ public class MatchGoalService {
     private MatchGoalRepository matchGoalRepository;
 
     @Autowired
+    private PlayerService playerService;
+
+    @Autowired
     private MatchService matchService;
 
     public MatchGoalModel save(MatchGoalModel matchGoalModel) {return matchGoalRepository.save(matchGoalModel);}
@@ -34,6 +37,11 @@ public class MatchGoalService {
 
     public List<MatchGoalModel> findByPlayer(PlayerModel player) {
         return matchGoalRepository.findByPlayer(player);
+    }
+
+    public List<MatchGoalModel> findByPlayerId(Integer playerId) {
+        Optional<PlayerModel> player = playerService.findById(playerId);
+        return player.map(this::findByPlayer).orElse(null);
     }
 
     public List<MatchGoalModel> findByMatch(MatchModel match) {
