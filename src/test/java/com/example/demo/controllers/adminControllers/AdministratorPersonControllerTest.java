@@ -4,7 +4,6 @@ import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PersonModel;
 import com.example.demo.services.PersonService;
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

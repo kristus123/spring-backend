@@ -12,7 +12,6 @@ import org.hibernate.envers.query.AuditQueryCreator;
 
  */
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
