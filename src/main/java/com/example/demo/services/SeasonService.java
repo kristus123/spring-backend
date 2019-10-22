@@ -21,6 +21,7 @@ public class SeasonService {
 
     public SeasonModel update(Integer id, SeasonModel season) throws ElementNotFoundException {
         findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find season with ID=" + id));
+        season.setSeasonId(id);
         return save(season);
     }
 

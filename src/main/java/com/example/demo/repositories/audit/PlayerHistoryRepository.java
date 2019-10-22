@@ -4,10 +4,10 @@ import com.example.demo.envers.AuditQueryResult;
 import com.example.demo.envers.AuditQueryUtils;
 import com.example.demo.models.PlayerHistoryModel;
 import com.example.demo.models.PlayerModel;
-//import org.hibernate.envers.AuditReader;
-//import org.hibernate.envers.AuditReaderFactory;
-//import org.hibernate.envers.query.AuditEntity;
-//import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class PlayerHistoryRepository {//implements IPlayerHistoryRepository {
-/*
+public class PlayerHistoryRepository implements IPlayerHistoryRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -51,6 +50,5 @@ public class PlayerHistoryRepository {//implements IPlayerHistoryRepository {
     public void findAll() {}
 
 
- */
 
 }

@@ -4,7 +4,7 @@ import com.example.demo.dtos.PlayerHistoryDTO;
 import com.example.demo.dtos.PlayerTeamHistoryDTO;
 import com.example.demo.models.PlayerHistoryModel;
 import com.example.demo.models.PlayerModel;
-import com.example.demo.repositories.audit.IPlayerHistoryRepository;
+import com.example.demo.repositories.audit.PlayerHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,8 @@ import java.util.List;
 @Service
 public class PlayerHistoryService {
 
-    /*
     @Autowired
-    private IPlayerHistoryRepository playerHistoryRepository;
+    private PlayerHistoryRepository playerHistoryRepository;
 
     public PlayerHistoryDTO getPlayerAndPreviousTeams(PlayerModel playerModel) {
         PlayerHistoryDTO playerHistoryDTO = new PlayerHistoryDTO();
@@ -43,8 +42,6 @@ public class PlayerHistoryService {
         }
         return previousTeams;
     }
-
-     */
 
 
 }
