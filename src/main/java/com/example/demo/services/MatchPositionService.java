@@ -35,22 +35,24 @@ public class MatchPositionService {
         Optional<MatchModel> match = matchService.findById(input.getMatchId());
 
         if ( !player.isPresent() || !match.isPresent() )
-            return null;
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new MatchPositionModel(player.get(), match.get(), input.getPosition());
     }
 
     public MatchPositionModel create(MatchPositionDTO input) throws ElementNotFoundException {
-
         MatchPositionModel converted = convert(input);
-        if (converted == null)
-            throw new ElementNotFoundException("Could not locate one or several IDs in database");
-
         return save(converted);
     }
 
     public void delete(MatchPositionModel matchPositionModel) {
         matchPositionRepository.delete(matchPositionModel);
+    }
+
+    public MatchPositionModel deleteById(MatchPositionId id) {
+        MatchPositionModel matchPosition = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find match position"));
+        matchPositionRepository.deleteById(id);
+        return matchPosition;
     }
 
     public Optional<MatchPositionModel> findById(MatchPositionId id) {
@@ -67,5 +69,16 @@ public class MatchPositionService {
             updatedMatchPosition = save(matchPosition);
         }
         return updatedMatchPosition;
+    }
+
+    public MatchPositionModel update(MatchPositionDTO input) throws ElementNotFoundException {
+
+        MatchPositionId id = new MatchPositionId(input.getPlayerId(), input.getMatchId());
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find match position"));
+
+        MatchPositionModel updatedTeam = convert(input);
+        updatedTeam.setId(id);
+        return save(updatedTeam);
+
     }
 }

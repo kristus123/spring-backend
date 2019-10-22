@@ -18,4 +18,9 @@ public class PersonDTO {
     private String lastName;
     private LocalDate dateOfBirth;
 
+    public PersonDTO(String firstName, String lastName, LocalDate dateOfBirth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+    }
 }
