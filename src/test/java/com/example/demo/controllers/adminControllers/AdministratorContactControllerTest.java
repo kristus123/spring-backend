@@ -2,7 +2,7 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.models.ContactModel;
 import com.example.demo.services.ContactService;
-import org.junit.BeforeClass;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
