@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+            //hei
         //Her er koden fra den guiedn som setter opp JPA-auth
         http.authorizeRequests().and().cors().and().csrf().disable()
                 .authorizeRequests()
