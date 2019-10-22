@@ -78,7 +78,4 @@ public class AdministratorPlayerController {
         return ResponseEntity.ok(player);
     }
 
-
-
-
 }
