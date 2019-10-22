@@ -2,7 +2,11 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.assembler.PlayerResourceAssembler;
 import com.example.demo.dtos.PlayerDTO;
+import com.example.demo.dtos.PlayerHistoryDTO;
+import com.example.demo.dtos.PlayerTeamHistoryDTO;
+import com.example.demo.models.PlayerHistoryModel;
 import com.example.demo.models.PlayerModel;
+import com.example.demo.repositories.audit.IPlayerHistoryRepository;
 import com.example.demo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController @RequestMapping("/v1/admin")
 public class AdministratorPlayerController {
@@ -19,8 +24,6 @@ public class AdministratorPlayerController {
 
     @Autowired
     PlayerResourceAssembler assembler;
-
-    /*
 
     private final IPlayerHistoryRepository playerHistoryRepository;
 
@@ -49,8 +52,6 @@ public class AdministratorPlayerController {
         }
         return playerHistoryDTO;
     }
-
-     */
 
     @PostMapping("/post/player")
     public ResponseEntity<Resource<PlayerModel>> addPlayer(@RequestBody PlayerDTO playerModel) throws URISyntaxException {
