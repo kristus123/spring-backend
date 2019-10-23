@@ -48,7 +48,8 @@ public class PlayerModel implements LivingHuman {
     @Column(name ="image_url")
     private String imageUrl;
 
-    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 
