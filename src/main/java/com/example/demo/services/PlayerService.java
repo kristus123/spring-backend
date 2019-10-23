@@ -113,10 +113,10 @@ public class PlayerService {
     public Optional<PlayerModel> findByPerson(PersonModel personModel) {
         return playerRepository.findByPerson(personModel);
     }
-
-    public PlayerAnonDTO filteredPlayer(PlayerModel player) {
-        return new PlayerAnonDTO(player, player.getPlayername(), player.getTeam().toString());
+    public PlayerAnonDTO filteredPlayer(Optional<PlayerModel> player) {
+        return new PlayerAnonDTO(player.get(), player.get().getPlayername(), player.get().getTeam().toString());
 
     }
+
 
 }
