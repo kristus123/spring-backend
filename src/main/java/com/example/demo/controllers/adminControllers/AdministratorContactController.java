@@ -1,16 +1,17 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.ContactResourceAssembler;
+import com.example.demo.dtos.ContactDTO;
 import com.example.demo.models.ContactModel;
-import com.example.demo.models.PersonModel;
 import com.example.demo.services.ContactService;
-import com.example.demo.services.PersonService;
-import org.omg.SendingContext.RunTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/admin")
@@ -20,42 +21,36 @@ public class AdministratorContactController {
     ContactService contactService;
 
     @Autowired
-    PersonService personService;
+    ContactResourceAssembler assembler;
 
-    @GetMapping("/get/contact/{id}")
-    public ContactModel getContact(@PathVariable Integer id) {
-        ContactModel contactModel = contactService.findById(id).orElseGet(null);
-        return contactModel;
-    }
-
-    @GetMapping("/get/contact")
-    public List<ContactModel> getAllContacts() {
-        return contactService.findAll();
-    }
 
     @PostMapping("/post/contact")
-    public ContactModel createContact(@RequestBody Map<String, String> response) {
-        Optional<PersonModel> person = personService.findById(Integer.parseInt(response.get("personId")));
-        if (person.isPresent()) {
-            ContactModel contactModel = new ContactModel();
-            contactModel.setContactType(response.get("contactType"));
-            contactModel.setContactDetail(response.get("contactDetail"));
+    public ResponseEntity<Resource<ContactModel>> createContact(@RequestBody ContactDTO contact) throws URISyntaxException {
 
-            contactModel.setPerson(person.get());
-            return contactService.save(contactModel);
-        }
-        throw new RuntimeException("person ID not found");
+        ContactModel contactModel = contactService.create(contact);
+        Resource<ContactModel> resource = assembler.toResource(contactModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
 
     }
 
     @PutMapping("/update/contact/{id}")
-    public ContactModel updateContact(@PathVariable Integer id, @RequestBody ContactModel contact) {
-        return contactService.update(id, contact);
+    public ResponseEntity<Resource> updateContact(@PathVariable Integer id, @RequestBody ContactDTO contact) throws URISyntaxException {
+
+        ContactModel updated = contactService.update(id, contact);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/contact/{id}")
-    public void deleteContact(@PathVariable Integer id) {
-        contactService.delete(id);
+    public ResponseEntity<ContactModel> deleteContact(@PathVariable Integer id) {
+        ContactModel contact = contactService.deleteById(id);
+        return ResponseEntity.ok(contact);
     }
 
 }

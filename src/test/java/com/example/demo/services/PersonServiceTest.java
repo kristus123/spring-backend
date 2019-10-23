@@ -35,7 +35,9 @@ class PersonServiceTest {
     @Test
     void testCreatePerson() {
         PersonModel person = new PersonModel("kristian", "lavik", LocalDate.of(2015, 1, 2));
-        person.setAddress(new AddressModel("D", "C" ,"B" ,"A"));
+        AddressModel addressModel = new AddressModel("D", "C" ,"B" ,"A");
+        addressService.save(addressModel);
+        person.setAddress(addressModel);
         personService.save(person);
 
         int x = 5_______________________________________5;
@@ -50,7 +52,7 @@ class PersonServiceTest {
 
     @Test
     void makePersonPlayerOf() {
-        int teamId = teamService.findAll().get(0).getTeamId();
+        int teamId = teamService.findAllActive().get(0).getTeamId();
 
         PlayerModel player =  personService.makePersonPlayerOf(teamId, 1);
         System.out.println(player.getPlayerId());
@@ -66,10 +68,8 @@ class PersonServiceTest {
 
     @Test
     void makePersonOwnerOf(){
-        PersonModel person = personService.findAll().get(0);
-        // Let's make a new team instead
-        TeamModel team = new TeamModel();
-        //TeamModel team = teamService.findAll().get(0);
+        PersonModel person = personService.findAllActive().get(0);
+        TeamModel team = teamService.findAllActive().get(0);
 
         team.setOwner(null);
         teamService.save(team);
@@ -101,7 +101,7 @@ class PersonServiceTest {
         CoachModel coach = coachService.makePersonCoach(person);
         System.out.println(person.getPersonId());
         System.out.println("________");
-        personService.delete(person.getPersonId());
+        personService.deleteById(person.getPersonId());
         assertFalse(personService.findById(person.getPersonId()).isPresent());
 
     }

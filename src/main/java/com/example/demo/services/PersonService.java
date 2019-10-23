@@ -1,46 +1,58 @@
 package com.example.demo.services;
 
-import com.example.demo.exceptions.PersonNotFoundException;
+import com.example.demo.dtos.PersonDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
 
-    @Autowired PersonService personService;
+    @Autowired PersonRepository personRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+    @Autowired OwnerService ownerService;
 
-    @Autowired
-    OwnerService ownerService;
+    @Autowired AddressService addressService;
 
     @Autowired TeamRepository teamRepository;
 
     @Autowired CoachService coachService;
 
-    @Autowired
-    AddressRepository addressRepository;
+    @Autowired AddressRepository addressRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
+    @Autowired CoachRepository coachRepository;
 
-    @Autowired
-    PlayerRepository playerRepository;
+    @Autowired PlayerRepository playerRepository;
 
     @Autowired PlayerService playerService;
 
+    private PersonModel convert(PersonDTO input) {
+        Optional<AddressModel> address = addressService.findById(input.getAddressId());
+
+        if (!address.isPresent())
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
+
+        return new PersonModel(
+                input.getFirstName(),
+                input.getLastName(),
+                input.getDateOfBirth(),
+                address.get()
+        );
+    }
+
     public PersonModel save(PersonModel personModel) {
-        if (personModel.getAddress() != null) {
-            addressRepository.save(personModel.getAddress());
-        }
         return personRepository.save(personModel);
+    }
+
+    public PersonModel create(PersonDTO input) {
+        PersonModel converted = convert(input);
+        return save(converted);
     }
 
     public Optional<PersonModel> findByFirstName(String firstName) {
@@ -48,56 +60,53 @@ public class PersonService {
     }
 
 
-    public PersonModel update(Integer id, PersonModel personModel) {
-        if(!findById(id).isPresent())
-            return null;
-        // This must be set if the id is not set in the json
-        personModel.setPersonId(id);
-        return save(personModel);
+    public PersonModel update(Integer id, PersonDTO input) throws ElementNotFoundException {
+
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find person with ID=" + id));
+
+        PersonModel updatedPerson = convert(input);
+        updatedPerson.setPersonId(id);
+        return save(updatedPerson);
 
     }
 
 
-    public PersonModel delete(Integer id) {
+    public PersonModel deleteById(Integer id) throws ElementNotFoundException {
         //slett andre ting
-        Optional<PersonModel> personModel = personRepository.findById(id);
-        if (personModel.isPresent()) {
-            System.out.println("DEN ER PRESENT" + personModel.isPresent());
-            Optional<CoachModel> coach = coachRepository.findByPerson(personModel.get());
-            Optional<OwnerModel> owner = ownerService.findByPerson(personModel.get());
+        PersonModel person = findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find person with ID=" + id));
 
-            if (owner.isPresent()) {
-                ownerService.delete(owner.get());
-                return null;
-            }
+        // TODO PANDA: make sure you "delete" (inactivate) them from Coach / Owner / Player(?) tables as well
 
-            if (coach.isPresent()) {
-                System.out.println("COACH ER PRESENT");
-                coachService.delete(coach.get().getCoachId());
-                return null;
+        coachService.findByPerson(person).ifPresent(coach -> coachService.deleteById(coach.getCoachId()));
+        ownerService.findByPerson(person).ifPresent(owner -> ownerService.deleteById(owner.getOwnerId()));
+        playerService.findByPerson(person).ifPresent(player -> playerService.deleteById(player.getPlayerId()));
 
-            }
-            personRepository.deleteById(id);
-            return personModel.get();
-
-        }
-        else {
-            System.out.println("user not found");
-            return null;
-        }
-
+        person.setActive(false);
+        return personRepository.save(person);
     }
 
-    public Optional<PersonModel> findById(Integer id) {return personRepository.findById(id);}
+    public Optional<PersonModel> findById(Integer id) {
+        Optional<PersonModel> person = personRepository.findById(id);
+        if (!person.isPresent() || !person.get().isActive())
+            return Optional.empty();
+        return person;
+    }
 
-    public List<PersonModel> findAll() {
-        List<PersonModel> liste = personRepository.findAll();
-        liste.forEach(System.out::println);
-        return liste;
+    public List<PersonModel> findAllActive() {
+        return personRepository.findAll().stream().filter(person -> person.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<PersonModel> findByIdForced(Integer id) {
+        return personRepository.findById(id);
+    }
+
+    public List<PersonModel> findAllForced() {
+        return personRepository.findAll();
     }
 
     public PersonModel create(PersonModel personModel) {
-        System.out.println("saving in database + " + personModel);
+        //System.out.println("saving in database + " + personModel);
         personRepository.save(personModel);
         return personModel;
     }

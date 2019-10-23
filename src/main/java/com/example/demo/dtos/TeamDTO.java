@@ -1,18 +1,19 @@
 package com.example.demo.dtos;
 
-import com.example.demo.models.TeamModel;
-import com.example.demo.services.TeamService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class TeamDTO {
-    private int ownerId;
-    private int locationId;
-    private int associationId;
-    private int coachId;
+
+    private Integer associationId;
+    private Integer coachId;
+    private Integer ownerId;
+    private Integer locationId;
+
 }

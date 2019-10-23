@@ -44,7 +44,7 @@ class AddressServiceTest {
 
     @Test
     void findall() {
-        assertFalse(addressService.findall().isEmpty());
+        assertFalse(addressService.findAll().isEmpty());
     }
 
     @Test

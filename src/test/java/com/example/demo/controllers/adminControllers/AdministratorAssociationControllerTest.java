@@ -31,40 +31,29 @@ public class AdministratorAssociationControllerTest {
     @Test
     void runTests() throws Exception {
         addAssociation();
-        getAssociation();
         updateAssociation();
         //deleteAssociation();
     }
 
 
     void addAssociation() throws Exception {
-        String json = "{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\" }";
+        String json = "{\"name\" : \"This name\", \"description\" : \"This description\" }";
         mockMvc.perform(post("/v1/admin/post/association")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
-
-
-    void getAssociation() throws Exception {
-        mockMvc.perform(get("/v1/admin/get/association/1"))
-                .andDo(print())
-                .andExpect(content().json("{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\"}"))
-                .andExpect(status().isOk());
-    }
-
 
     void updateAssociation() throws Exception {
         String json = new JSONObject()
-                .put("associationId", 1)
                 .put("name", "Updated name")
                 .put("description", "Updated description").toString();
-        mockMvc.perform(put("/v1/admin/update/association")
+        mockMvc.perform(put("/v1/admin/update/association/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     void deleteAssociation() throws Exception {

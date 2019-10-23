@@ -32,46 +32,33 @@ public class AdministratorOwnerControllerTest {
     @Autowired
     OwnerRepository ownerRepository;
 
-    //@Test
+    @Test
     void runTests() throws Exception {
         addOwner();
-        getOwner();
         updateOwner();
         deleteOwner(); //COMMENTING THIS OUT FOR NOW
     }
 
-    void getOwner() throws Exception {
-        JSONObject json = new JSONObject()
-            .put("ownerId", 1)
-            .put("person", new JSONObject());
 
-        System.out.println("____________");
-        mockMvc.perform(get("/v1/admin/get/owner/1"))
-                .andDo(print())
-                .andExpect(content().json(json.toString()))
-                .andExpect(status().isOk());
-
-        System.out.println("____________");
-    }
 
     void addOwner() throws Exception {
-        String json = new JSONObject().put("person_id", 2).toString();
+        String json = new JSONObject().put("personId", 2).toString();
 
         mockMvc.perform(post("/v1/admin/post/owner")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     //This endpoint is difficult to test because of the table structure.
     void updateOwner() throws Exception {
-        String json = "{\"ownerId\" : 1, \"person\" : null}";
+        String json = new JSONObject().put("personId", 1).toString();
         mockMvc.perform(put("/v1/admin/update/owner/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     void deleteOwner() throws Exception {

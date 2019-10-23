@@ -44,7 +44,7 @@ class HumanServiceTest {
     }
 
 
-    @Test @Disabled
+    //@Test
     void delete() {
         Optional<CoachModel>  coach = coachService.findByPersonId(personId);
         assertTrue(coach.isPresent());

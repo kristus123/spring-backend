@@ -2,16 +2,17 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.models.PlayerModel;
 import com.example.demo.repositories.PlayerRepository;
+/*
 import com.vladmihalcea.hibernate.type.range.Range;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.internal.reader.AuditReaderImpl;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.AuditQueryCreator;
+
+ */
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AdministratorPlayerControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -40,7 +40,7 @@ public class AdministratorPlayerControllerTest {
     @Autowired
     PlayerRepository playerRepository;
 
-    @BeforeAll
+    //@Before
     void addDummyData() throws Exception {
         //String json = "{\"personId\" : 2, \"teamId\" : 3, \"normalPosition\" : \"Attacker\", \"playerNumber\" : 7 }";
         String json = new JSONObject()
@@ -56,11 +56,11 @@ public class AdministratorPlayerControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    //@Test
     void addPlayer() throws Exception {
         JSONObject json = new JSONObject()
-                .put("personId", 3)
-                .put("teamId", 3)
+                .put("personId", 1)
+                .put("teamId", 1)
                 .put("normalPosition", "Shooter")
                 .put("playerNumber", 11)
                 .put("playername", "Ramoirs");
@@ -69,46 +69,28 @@ public class AdministratorPlayerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.toString()))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
-    @Test
-    void getPlayer() throws Exception {
-        JSONObject json = new JSONObject()
-                .put("personId", 3)
-                .put("teamId", 3)
-                .put("normalPosition", "Shooter")
-                .put("playerNumber", 11)
-                .put("playername", "Ramoirs");
-
-        System.out.println(json.toString());
-
-        mockMvc.perform(get("/v1/admin/get/player/1"))
-                .andDo(print())
-                .andDo(p -> {
-                    System.out.println(content());
-                });
-                //.andExpect(content().json(json.toString()));
-    }
-
-    @Test
+    //@Test
     void updatePlayer() throws Exception {
         JSONObject json = new JSONObject()
-                .put("playerId", 1)
+                .put("personId", 1)
+                .put("teamId", 1)
                 .put("normalPosition", "Defender")
                 .put("playerNumber", 21)
                 .put("playername", "Ronaldo");
 
-        mockMvc.perform(put("/v1/admin/update/player")
+        mockMvc.perform(put("/v1/admin/update/player/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.toString()))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
     void deletePlayer() throws Exception {
-        mockMvc.perform(delete("/v1/admin/delete/player/1"))
+        mockMvc.perform(delete("/v1/admin/delete/player/2"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

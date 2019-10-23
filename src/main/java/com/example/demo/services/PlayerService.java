@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.dtos.PlayerAnonDTO;
 import com.example.demo.dtos.PlayerDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.MatchModel;
 import com.example.demo.models.PersonModel;
 import com.example.demo.models.PlayerModel;
@@ -13,32 +14,45 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    PlayerRepository playerRepository;
 
     @Autowired
-    private TeamService teamService;
+    TeamService teamService;
 
     @Autowired
-    private PersonService personService;
+    PersonService personService;
+
+
+    private PlayerModel convert(PlayerDTO input) {
+        Optional<PersonModel> person = personService.findById(input.getPersonId());
+        Optional<TeamModel> team = teamService.findById(input.getTeamId());
+
+        if ( !person.isPresent() || !team.isPresent() )
+            throw new ElementNotFoundException("Could not locate one or several IDs in database");
+
+        return new PlayerModel(
+                person.get(),
+                team.get(),
+                input.getNormalPosition(),
+                input.getPlayerNumber(),
+                input.getTeamDateFrom(),
+                input.getTeamDateTo(),
+                input.getPlayername());
+    }
 
     public PlayerModel save(PlayerModel player) {
         return playerRepository.save(player);
     }
 
-    public PlayerModel savePlayerDTO(PlayerDTO player) {
-        PlayerModel playerModel = new PlayerModel(player);
-        if(!teamService.findById(player.getTeamId()).isPresent())
-            return null;
-//        if(!personService.findById(player.getPersonId()).isPresent())
-//            return null;
-//        playerModel.setPerson(personService.findById(player.getPersonId()).get());
-        playerModel.setTeam(teamService.findById(player.getTeamId()).get());
-        return playerRepository.save(playerModel);
+    public PlayerModel create(PlayerDTO input) {
+        PlayerModel converted = convert(input);
+        return save(converted);
     }
 
     public PlayerModel turnIntoPlayer(PersonModel person) {
@@ -49,6 +63,7 @@ public class PlayerService {
         }
         return playerRepository.save(new PlayerModel(person));
     }
+
 
 
     public List<PlayerModel> getAllPlayersOfTeam(TeamModel teamModel) {
@@ -62,30 +77,45 @@ public class PlayerService {
         throw new RuntimeException("player Id Not found");
     }
 
-    public PlayerModel update(PlayerDTO player, PlayerModel oldPlayer) {
+    public PlayerModel update(Integer id, PlayerDTO player) throws ElementNotFoundException {
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
-        PlayerModel updatedPlayer = null;
-        if(oldPlayer.getPlayerId() == player.getPlayerId()){
-            System.out.println("Do we even try to update?");
-            updatedPlayer = savePlayerDTO(player);
-        }
-        return updatedPlayer;
+        PlayerModel updatedPlayer = convert(player);
+        updatedPlayer.setPlayerId(id);
+        return save(updatedPlayer);
     }
 
-    public void delete(PlayerModel player) {
-        playerRepository.delete(player);
+    public PlayerModel deleteById(Integer id) throws ElementNotFoundException {
+        PlayerModel player = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
+        player.setActive(false);
+        return playerRepository.save(player);
     }
 
     public Optional<PlayerModel> findById(int id) {
+        Optional<PlayerModel> player = playerRepository.findById(id);
+        if (!player.isPresent() || !player.get().isActive())
+            return Optional.empty();
+        return player;
+    }
+
+    public List<PlayerModel> findAllActive() {
+        return playerRepository.findAll().stream().filter(player -> player.isActive()).collect(Collectors.toList());
+    }
+
+    public Optional<PlayerModel> findByIdForced(Integer id) {
         return playerRepository.findById(id);
     }
 
-    public List<PlayerModel> findAll() {
+    public List<PlayerModel> findAllForced() {
         return playerRepository.findAll();
     }
 
-    public PlayerAnonDTO filteredPlayer(Optional<PlayerModel> player) {
-        return new PlayerAnonDTO(player.get(), player.get().getPlayername(), player.get().getTeam().toString());
+    public Optional<PlayerModel> findByPerson(PersonModel personModel) {
+        return playerRepository.findByPerson(personModel);
+    }
+
+    public PlayerAnonDTO filteredPlayer(PlayerModel player) {
+        return new PlayerAnonDTO(player, player.getPlayername(), player.getTeam().toString());
 
     }
 

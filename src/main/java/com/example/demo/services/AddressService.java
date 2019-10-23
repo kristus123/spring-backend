@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.AddressModel;
 import com.example.demo.models.LocationModel;
 import com.example.demo.models.PersonModel;
@@ -28,7 +29,7 @@ public class AddressService {
         return addressRepository.findById(id);
     }
 
-    public List<    AddressModel> findall() {return addressRepository.findAll();}
+    public List<AddressModel> findAll() {return addressRepository.findAll();}
 
     public AddressModel save(AddressModel addressModel) {
         return addressRepository.save(addressModel);
@@ -59,6 +60,18 @@ public class AddressService {
             return true;
         }
         throw new RuntimeException("address Id not found");
+    }
+
+    public AddressModel update(Integer id, AddressModel address) throws ElementNotFoundException {
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + id));
+        address.setAddressId(id);
+        return save(address);
+    }
+
+    public AddressModel deleteById(Integer id) throws ElementNotFoundException {
+        AddressModel address = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + id));
+        addressRepository.deleteById(id);
+        return address;
     }
 
     public AddressModel createAddress(AddressModel addressModel) {

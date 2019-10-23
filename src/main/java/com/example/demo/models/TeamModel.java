@@ -1,16 +1,25 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@DynamicUpdate
 @Table(name="TEAM")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TeamModel {
     @Id
     @GeneratedValue
@@ -32,6 +41,16 @@ public class TeamModel {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
+
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
+
+    // Watchlist properties
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "teams")
+    private Set<UserModel> users = new HashSet<>();
 
 
     // TODO PANDA: for testing purposes

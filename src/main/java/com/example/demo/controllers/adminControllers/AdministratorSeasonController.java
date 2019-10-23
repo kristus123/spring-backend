@@ -1,10 +1,15 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.SeasonResourceAssembler;
 import com.example.demo.models.SeasonModel;
 import com.example.demo.services.SeasonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
@@ -13,32 +18,37 @@ public class AdministratorSeasonController {
 
 
     @Autowired
-    private SeasonService seasonService;
+    SeasonService seasonService;
+
+    @Autowired
+    SeasonResourceAssembler assembler;
 
 
     @PostMapping("/post/season")
-    public SeasonModel newSeason(@RequestBody SeasonModel seasonModel) {
-        return seasonService.save(seasonModel);
+    public ResponseEntity<Resource<SeasonModel>> addSeason(@RequestBody SeasonModel season) throws URISyntaxException {
+
+        SeasonModel teamModel = seasonService.save(season);
+        Resource<SeasonModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/update/season/{id}")
-    public SeasonModel updateMatch(@PathVariable Integer id, @RequestBody SeasonModel seasonModel) {
-        if (seasonModel.getSeasonId() != id || !seasonService.findById(id).isPresent()) {
-            return null;
-        }
+    public ResponseEntity<Resource> updateSeason(@PathVariable Integer id, @RequestBody SeasonModel season) throws URISyntaxException {
 
-        return seasonService.save(seasonModel);
+        SeasonModel updated = seasonService.update(id, season);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/season/{id}")
-    public SeasonModel deleteMatch(@PathVariable Integer id) {
-        Optional<SeasonModel> season = seasonService.findById(id);
-        if (!season.isPresent()) {
-            return null;
-        }
-
-        seasonService.deleteById(id);
-
-        return season.get();
+    public ResponseEntity<SeasonModel> deleteSeason(@PathVariable Integer id) {
+        SeasonModel season = seasonService.deleteById(id);
+        return ResponseEntity.ok(season);
     }
 }

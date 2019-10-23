@@ -1,11 +1,18 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.MatchGoalResourceAssembler;
+import com.example.demo.assembler.MatchPositionResourceAssembler;
+import com.example.demo.dtos.MatchPositionDTO;
 import com.example.demo.models.MatchPositionId;
 import com.example.demo.models.MatchPositionModel;
 import com.example.demo.services.MatchPositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
@@ -15,42 +22,34 @@ public class AdministratorMatchPositionController {
     @Autowired
     MatchPositionService matchPositionService;
 
-    @GetMapping("/get/matchPosition")
-    public MatchPositionModel getMatchPosition(@RequestBody MatchPositionId matchPositionId) {
-        Optional<MatchPositionModel> matchPositionModel = matchPositionService.findById(matchPositionId);
-        if(matchPositionModel.isPresent()) {
-            return matchPositionModel.get();
-        }
-        return null;
-    }
+    @Autowired
+    MatchPositionResourceAssembler assembler;
+
 
     @PostMapping("post/matchPosition")
-    public MatchPositionModel addMatchPosition(@RequestBody MatchPositionModel matchPositionModel) {
-        MatchPositionModel newMatchPosition = matchPositionService.save(matchPositionModel);
-        return newMatchPosition;
+    public ResponseEntity<Resource<MatchPositionModel>> addMatchPosition(@RequestBody MatchPositionDTO matchPosition) throws URISyntaxException {
+        MatchPositionModel matchPositionModel = matchPositionService.create(matchPosition);
+        Resource<MatchPositionModel> resource = assembler.toResource(matchPositionModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/update/matchPosition")
-    public MatchPositionModel updateMatchPosition(@RequestBody MatchPositionModel matchPositionModel) {
-        MatchPositionId matchPositionId = null;
-        matchPositionId.setPlayer(matchPositionModel.getPlayer());
-        matchPositionId.setMatch(matchPositionModel.getMatch());
-        Optional<MatchPositionModel> oldMatchPosition = matchPositionService.findById(matchPositionId);
-        if(oldMatchPosition.isPresent()) {
-            MatchPositionModel updatedMatchPositionModel = matchPositionService.update(matchPositionModel, oldMatchPosition.get());
-            return updatedMatchPositionModel;
-        }
-        return null;
+    public ResponseEntity<Resource> updateMatchPosition(@RequestBody MatchPositionDTO matchPosition) throws URISyntaxException {
+
+        MatchPositionModel updated = matchPositionService.update(matchPosition);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/matchPosition")
-    public MatchPositionModel deleteMatchPosition(@RequestBody MatchPositionId id) {
-        Optional<MatchPositionModel> matchPositionModel = matchPositionService.findById(id);
-        if(matchPositionModel.isPresent()) {
-            MatchPositionModel tempMatchPosition = matchPositionModel.get();
-            matchPositionService.delete(matchPositionModel.get());
-            return tempMatchPosition;
-        }
-        return null;
+    public ResponseEntity<MatchPositionModel> deleteMatchPosition(@RequestBody MatchPositionId id) {
+        MatchPositionModel matchPosition = matchPositionService.deleteById(id);
+        return ResponseEntity.ok(matchPosition);
     }
 }

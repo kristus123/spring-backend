@@ -1,11 +1,9 @@
 package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.exceptions.PersonNotFoundException;
-import com.example.demo.models.AddressModel;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.PersonModel;
 import com.example.demo.services.PersonService;
 import org.assertj.core.api.Assertions;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.assertj.core.api.Assertions.*;
-
-import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,9 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@AutoConfigureMockMvc
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 class AdministratorPersonControllerTest {
 
     @Autowired
@@ -48,7 +43,7 @@ class AdministratorPersonControllerTest {
     }
 
 
-    //@Test @Ignore
+    //@Test
     void testThatCanGetPersonAfterPost() throws Exception {
         String json = "{\"firstName\":\"haadasdaskon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
@@ -56,16 +51,16 @@ class AdministratorPersonControllerTest {
                 content(json)).
                 andExpect(status().isOk());
 
-        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(json));
+        mockMvc.perform(get("/v1/common/get/person/" + ID++)).andExpect(content().json(json));
     }
 
     /*
     * There is no easy way to capture nested exceptions
     */
     //@Test @Ignore
-    void testThatExceptionIsThrownIfPersonDoesNotExist() throws PersonNotFoundException  {
+    void testThatExceptionIsThrownIfPersonDoesNotExist() throws ElementNotFoundException {
         String personId = "10";
-        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + personId)));
+        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + personId)));
         org.junit.jupiter.api.Assertions.assertEquals(
                 "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
@@ -73,7 +68,7 @@ class AdministratorPersonControllerTest {
 
     //@Test @Ignore
     void testThatPersonIsDeleted() throws Exception {
-        String json = "{\"firstName\":\"haakdsadason\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
+        String json = "{\"addressId\":1, \"firstName\":\"haakdsadason\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 
 
 
@@ -99,21 +94,12 @@ class AdministratorPersonControllerTest {
 
         // Check that person is not present
         String personId = "1";
-        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/admin/get/person/" + ID++)));
+        Throwable t = Assertions.catchThrowable(() -> mockMvc.perform(get("/v1/common/get/person/" + ID++)));
         org.junit.jupiter.api.Assertions.assertEquals(
-                "Request processing failed; nested exception is com.example.demo.exceptions.PersonNotFoundException: Could not find person with ID=" + personId,
+                "Request processing failed; nested exception is com.example.demo.exceptions.ElementNotFoundException: Could not find person with ID=" + personId,
                 t.getMessage());
     }
 
-    //@Test @Ignore
-    void testThatCanGetAllPersons() throws Exception {
-        String json = "{\"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
-        mockMvc.perform(post("/v1/admin/post/person").contentType(MediaType.APPLICATION_JSON).
-                content(json)).
-                andExpect(status().isOk());
-        ID++;
-        mockMvc.perform(get("/v1/admin/get/person/")).andExpect(jsonPath("$", hasSize(1)));
-    }
 
     //@Test @Ignore
     void testThatPersonIsUpdated() throws Exception {
@@ -127,6 +113,6 @@ class AdministratorPersonControllerTest {
         mockMvc.perform(put("/v1/admin/update/person/" + ID).contentType(MediaType.APPLICATION_JSON).
                 content(jsonUpdated));
 
-        mockMvc.perform(get("/v1/admin/get/person/" + ID++)).andExpect(content().json(jsonUpdated));
+        mockMvc.perform(get("/v1/common/get/person/" + ID++)).andExpect(content().json(jsonUpdated));
     }
 }

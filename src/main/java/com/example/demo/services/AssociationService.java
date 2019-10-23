@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.repositories.AssociationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,27 +13,26 @@ import java.util.Optional;
 public class AssociationService {
 
     @Autowired
-    private AssociationRepository associationRepository;
+    AssociationRepository associationRepository;
 
-    /** TODO PANDA: remove comment
-        calling save() on an object with predefined id will update the corresponding database record
-        rather than insert a new one, and also explains why save() is not called create()
-     */
     public AssociationModel save(AssociationModel association) {
         return associationRepository.save(association);
     }
 
-    public void deleteById(int id) {
-        associationRepository.deleteById(id);
+    public AssociationModel update(Integer id, AssociationModel association) throws ElementNotFoundException {
+        findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
+        association.setAssociationId(id);
+        return save(association);
     }
 
-    public AssociationModel update(AssociationModel associationModel, AssociationModel oldAssociationModel) {
-        AssociationModel updatedAssociation = null;
-        if(oldAssociationModel.getAssociationId() == associationModel.getAssociationId()) {
-            updatedAssociation = save(associationModel);
-        }
+    public void delete(AssociationModel association) {
+        associationRepository.delete(association);
+    }
 
-        return updatedAssociation;
+    public AssociationModel deleteById(int id) {
+        AssociationModel association = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
+        associationRepository.deleteById(id);
+        return association;
     }
 
     public Optional<AssociationModel> findById(int id) {

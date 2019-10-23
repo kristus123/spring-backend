@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerDTO {
-    private Integer playerId;
+
     private LocalDate teamDateFrom;
     private LocalDate teamDateTo;
     private String playername;
@@ -21,4 +21,12 @@ public class PlayerDTO {
     private String normalPosition;
     private String playerNumber;
     private String imageUrl;
+
+    // MANDATORY FIELDS
+    public PlayerDTO(Integer personId, Integer teamId, String playername) {
+        this.personId = personId;
+        this.teamId = teamId;
+        this.playername = playername;
+    }
+
 }
