@@ -32,6 +32,7 @@ public class DummyDataFiller {
                                           MatchGoalService matchGoalService) {
         return args -> {
 
+
             //Lag en standard person med
             AddressModel address = addressService.createAddress(new AddressModel("5306", "Erdal", "Norway", "Vestre 30"));
             LocationModel location = locationService.save(new LocationModel(address, "Macnhester stadium", "it's in Kristian's backyard"));

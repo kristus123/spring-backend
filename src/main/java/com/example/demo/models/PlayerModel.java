@@ -8,6 +8,7 @@ import com.vladmihalcea.hibernate.type.range.Range;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.envers.Audited;
 
@@ -51,7 +52,8 @@ public class PlayerModel implements LivingHuman {
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 
-    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "team_id", referencedColumnName = "team_id")
     private TeamModel team;
 
