@@ -1,11 +1,15 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.AssociationResourceAssembler;
 import com.example.demo.models.AssociationModel;
 import com.example.demo.services.AssociationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController @RequestMapping("/v1/admin")
@@ -13,46 +17,35 @@ public class AdministratorAssociationController {
     @Autowired
     AssociationService associationService;
 
-    @GetMapping("/get/association/{associationId}")
-    public AssociationModel getAssociation(@PathVariable int associationId) {
-        Optional<AssociationModel> associationModel = associationService.findById(associationId);
-        if(associationModel.isPresent()) {
-            return associationModel.get();
-        }
-        return null;
-    }
+    @Autowired
+    AssociationResourceAssembler assembler;
 
-    @GetMapping("/get/association")
-    public List<AssociationModel> getAll() {
-        return associationService.findAll();
-    }
 
     @PostMapping("/post/association")
-    public AssociationModel addAssociation(@RequestBody AssociationModel associationModel) {
-        AssociationModel newAssociation = associationService.save(associationModel);
-        return newAssociation;
+    public ResponseEntity<Resource<AssociationModel>> addAssociation(@RequestBody AssociationModel association) throws URISyntaxException  {
+
+        AssociationModel teamModel = associationService.save(association);
+        Resource<AssociationModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-    @PutMapping("/update/association")
-    public AssociationModel updateAssociation(@RequestBody AssociationModel associationModel) {
-        Optional<AssociationModel> oldAssociation = associationService.findById(associationModel.getAssociationId());
-        if(oldAssociation.isPresent()) {
-            AssociationModel updatedAssociation = associationService.update(associationModel, oldAssociation.get());
-            return updatedAssociation;
-        }
+    @PutMapping("/update/association/{associationId}")
+    public ResponseEntity<Resource> updateAssociation(@PathVariable int associationId, @RequestBody AssociationModel association) throws URISyntaxException {
 
-        return null;
+        AssociationModel updated = associationService.update(associationId, association);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/association/{associationId}")
-    public AssociationModel deleteAssociation(@PathVariable int associationId) {
-        Optional<AssociationModel> associationModel = associationService.findById(associationId);
-        if(associationModel.isPresent()) {
-            AssociationModel tempAssociation = associationModel.get();
-            associationService.deleteById(associationModel.get().getAssociationId());
-            return tempAssociation;
-        }
-
-        return null;
+    public ResponseEntity<AssociationModel> deleteAssociation(@PathVariable int associationId) {
+        AssociationModel association = associationService.deleteById(associationId);
+        return ResponseEntity.ok(association);
     }
 }

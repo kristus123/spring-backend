@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +21,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
+    public List<UserModel> findAll() {
+        return userRepository.findAll();
+    }
 
     public UserModel signup(String username, String password) {
         Optional<UserModel> u = userRepository.findByUsername(username);
@@ -76,4 +80,21 @@ public class UserService {
 
         return passwordEncoder.matches(PASSWORD_HASH, password);
     }
+
+    public UserModel getUser(Principal principal) {
+        System.out.println("++++++++");
+        findAll().forEach(u -> System.out.println(u.getUsername()));
+        System.out.println("TEST: " + principal.getName());
+        Optional<UserModel> user = findByUsername(principal.getName());
+        if (user.isPresent()) {
+            System.out.println("TEST: han finnes");
+            return user.get();
+        }
+        return null;
+    }
+
+    public UserModel getMe(Principal principal) {
+        return findByUsername(principal.getName()).get();
+    }
+
 }

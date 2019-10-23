@@ -1,65 +1,55 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.MatchResourceAssembler;
+import com.example.demo.dtos.MatchDTO;
 import com.example.demo.models.MatchModel;
 import com.example.demo.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping ("/v1/admin")
+@RequestMapping("/v1/admin")
 public class AdministratorMatchController {
 
 
     @Autowired
-    private MatchService matchService;
+    MatchService matchService;
 
+    @Autowired
+    MatchResourceAssembler assembler;
 
-    @PostMapping ("/post/match")
-    public MatchModel newMatch(@RequestBody MatchModel matchModel) {
-        return matchService.save(matchModel);
+    @PostMapping("/post/match")
+    public ResponseEntity<Resource<MatchModel>> addMatch(@RequestBody MatchDTO match) throws URISyntaxException {
+
+        MatchModel teamModel = matchService.create(match);
+        Resource<MatchModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-    /*
-    A method to create a match somewhat simplified.
-    Postman complained when i tried to create a new Match (a 'POST' first to test a 'GET').
-    On Kristian's advice I created DTO's for LocalDate, Season and Team.
-    Didn't work quite as planned. However this was to test anonymous end points, which is not really necessary,
-    because I think the anonymous code is good.
-    @PostMapping ("/post/match/{id}")
-    public MatchModel newMatch(@PathVariable Integer id) {}
+    @PutMapping("/update/match/{id}")
+    public ResponseEntity<Resource> updateMatch(@PathVariable Integer id, @RequestBody MatchDTO match) throws URISyntaxException {
 
-       // MatchModel newMatch = new MatchModel(LocalDate, TeamModel homeTeamDTO, TeamModel awayTeamDTO, SeasonModel seasonDTO, );
-*/
+        MatchModel updated = matchService.update(id, match);
+        Resource resource = assembler.toResource(updated);
 
-    @PutMapping ("/update/match/{id}")
-    public MatchModel updateMatch(@PathVariable Integer id, @RequestBody MatchModel matchModel) {
-        if (matchModel.getMatchId() != id || !matchService.findById(id).isPresent()) {
-            return null;
-        }
-
-        return matchService.save(matchModel);
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-    @DeleteMapping ("/delete/match/{id}")
-    public MatchModel deleteMatch(@PathVariable Integer id) {
-        Optional<MatchModel> match = matchService.findById(id);
-        if (!match.isPresent()) {
-            return null;
-        }
-
-        matchService.deleteById(id);
-
-        return match.get();
+    @DeleteMapping("/delete/match/{id}")
+    public ResponseEntity<MatchModel> deleteMatch(@PathVariable Integer id) {
+        MatchModel match = matchService.deleteById(id);
+        return ResponseEntity.ok(match);
     }
 
-    @GetMapping ("/get/match/{matchId}")
-    public MatchModel getMatch(@PathVariable int matchId) {
-        Optional<MatchModel> match = matchService.findById(matchId);
-        if (match.isPresent()) {
-            return match.get();
-        }
-        return null;
-    }
 }

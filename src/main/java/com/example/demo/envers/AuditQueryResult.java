@@ -26,4 +26,5 @@ public class AuditQueryResult<T> {
     public RevisionType getType() {
         return type;
     }
+
 }

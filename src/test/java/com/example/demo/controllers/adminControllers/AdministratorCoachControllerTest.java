@@ -58,8 +58,8 @@ class AdministratorCoachControllerTest {
         //        mockMvc.perform(get("/v1/admin/get/coach/" + ID)));
     //}
 
-    @Test
-    public void testThatCoachIsUpdated() throws Exception {
+    //@Test
+    public void testThatCoachIsUpdated() {
         // TODO: Add person object to coach
 //        String person_json = "{\"addressId\":\"1\", \"firstName\":\"haakon\", \"lastName\":\"underdal\", \"dateOfBirth\":\"1994-05-01\"}";
 //

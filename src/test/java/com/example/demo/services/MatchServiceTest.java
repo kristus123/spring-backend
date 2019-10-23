@@ -2,9 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.enums.GoalType;
 import com.example.demo.models.*;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,7 +60,7 @@ class MatchServiceTest {
 
 
 
-        team = teamService.findAll().stream().filter(t -> t.getAssociation().getName().equals(teamName)).findFirst().get();
+        team = teamService.findAllActive().stream().filter(t -> t.getAssociation().getName().equals(teamName)).findFirst().get();
         assertTrue(team.getAssociation().getName().equals(teamName));
 
         PlayerModel player = personService.makePersonPlayerOf(person, team);
@@ -83,7 +79,7 @@ class MatchServiceTest {
     }
 
     void createAMatch() {
-        List<TeamModel> listOfTeams = teamService.findAll();
+        List<TeamModel> listOfTeams = teamService.findAllActive();
 
         SeasonModel season = seasonService.save(new SeasonModel(
                 LocalDate.now(),

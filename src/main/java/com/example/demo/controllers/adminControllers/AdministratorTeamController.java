@@ -1,49 +1,64 @@
 package com.example.demo.controllers.adminControllers;
 
+import com.example.demo.assembler.TeamResourceAssembler;
 import com.example.demo.dtos.TeamDTO;
-import com.example.demo.exceptions.InvalidTeamRequestException;
-import com.example.demo.exceptions.TeamNotFoundException;
+import com.example.demo.exceptions.ElementBadRequestException;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.TeamModel;
 import com.example.demo.services.TeamService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/v1/admin")
 public class AdministratorTeamController {
 
     @Autowired
-    private TeamService teamService;
+    TeamService teamService;
+
+    @Autowired
+    TeamResourceAssembler assembler;
 
 
     @PostMapping("/post/team")
-    public TeamModel newTeam(@RequestBody TeamDTO team) {
-        return teamService.createTeam(team);
+    public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody TeamDTO team) throws URISyntaxException {
+        /*
+        if (team == null)
+            throw new ElementBadRequestException("Empty JSON object provided");
+         */
+
+        TeamModel teamModel = teamService.create(team);
+        Resource<TeamModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/update/team/{id}")
-    public TeamModel updateTeam(@PathVariable Integer id, @RequestBody TeamModel teamModel) {
-        if (id != teamModel.getTeamId()) {
-            return null;
-        }
-        if (!teamService.findById(id).isPresent()) {
-            return null;
-        }
+    public ResponseEntity<Resource> updateTeam(@PathVariable Integer id, @RequestBody TeamDTO team) throws URISyntaxException {
+        /*
+        if (team == null)
+            throw new ElementBadRequestException("Empty JSON object provided");
+         */
 
-        return teamService.save(teamModel);
+        TeamModel updated = teamService.update(id, team);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/team/{id}")
-    public TeamModel deleteTeam(@PathVariable Integer id) {
-        Optional<TeamModel> team = teamService.findById(id);
-        if (!team.isPresent()) {
-            return null;
-        }
-
-        teamService.deleteById(id);
-
-        return team.get();
+    public ResponseEntity<TeamModel> deleteTeam(@PathVariable Integer id) {
+        TeamModel team = teamService.deleteById(id);
+        return ResponseEntity.ok(team);
     }
 }

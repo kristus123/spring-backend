@@ -119,15 +119,15 @@ public class DummyDataService {
      * Note: The goals are assigned to random players across both teams.
      *      The location will be the stadium of the home team
      * </p>
-    * @Param season The season which the matches was played
-    * @Param team1 Home team
-    * @Param team2 Away team
-    * @Param goals A text file with goals
-    *
-    * */
+     * @Param season The season which the matches was played
+     * @Param team1 Home team
+     * @Param team2 Away team
+     * @Param goals A text file with goals
+     *
+     * */
     public void createMatch(SeasonModel season, TeamModel homeTeam, TeamModel awayTeam, String filePathToGoals) {
         seasonService.save(season);
-        MatchModel match = new MatchModel(LocalDate.now(), homeTeam, awayTeam, season, homeTeam.getLocation());
+        MatchModel match = new MatchModel(LocalDate.of(2015,10,10), homeTeam, awayTeam, season, homeTeam.getLocation());
         matchService.save(match);
         getRandomPlayer(homeTeam, awayTeam);
         try {
@@ -137,7 +137,7 @@ public class DummyDataService {
             while( (st = br.readLine()) != null) {
                 String[] sp = st.split(" ");
                 MatchGoalModel matchGoalModel = new MatchGoalModel(getRandomPlayer(homeTeam, awayTeam),
-                       GoalType.valueOf(sp[1]),
+                        GoalType.valueOf(sp[1]),
                         match,
                         sp[0].replaceAll("[-]", " "));
                 matchGoalService.save(matchGoalModel);
@@ -149,16 +149,14 @@ public class DummyDataService {
     }
 
     /*
-    * Get a random player from two teams
-    * */
+     * Get a random player from two teams
+     * */
     private PlayerModel getRandomPlayer(TeamModel homeTeam, TeamModel awayTeam) {
-
         List<PlayerModel> allPlayers =  playerService.findAll().stream()
                 .filter(player ->
                         player.getTeam().getTeamId() == awayTeam.getTeamId() ||
-                        player.getTeam().getTeamId() == homeTeam.getTeamId())
+                                player.getTeam().getTeamId() == homeTeam.getTeamId())
                 .collect(Collectors.toList());
-
         Random random = new Random();
         Integer r = random.nextInt(allPlayers.size() - 1 - 0 + 1) + 0;
 
@@ -240,5 +238,4 @@ public class DummyDataService {
     }
 
 }
-
 

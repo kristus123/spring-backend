@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface CoachRepository extends JpaRepository<CoachModel, Integer> {
     Optional<CoachModel> findByPerson(PersonModel personModel);
+
 }

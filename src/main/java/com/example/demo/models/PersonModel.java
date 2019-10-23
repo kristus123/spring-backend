@@ -35,9 +35,13 @@ public class PersonModel implements LivingHuman { //
     private LocalDate dateOfBirth;
 
     //@Cascade(SAVE_UPDATE)
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
+
+    @JsonIgnore
+    @Column(name = "active")
+    private boolean active = true;
 
 
     public PersonModel(String firstName, String lastName, LocalDate dateOfBirth, AddressModel address) {

@@ -1,14 +1,16 @@
 package com.example.demo.controllers.adminControllers;
 
-import com.example.demo.dtos.OwnerModelDTO;
+import com.example.demo.assembler.OwnerResourceAssembler;
+import com.example.demo.dtos.OwnerDTO;
 import com.example.demo.models.OwnerModel;
-import com.example.demo.models.PersonModel;
-import com.example.demo.models.TeamModel;
 import com.example.demo.services.OwnerService;
-import com.example.demo.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.acl.Owner;
 import java.util.Optional;
 
@@ -18,41 +20,34 @@ public class AdministratorOwnerController {
     OwnerService ownerService;
 
     @Autowired
-    PersonService personService;
+    OwnerResourceAssembler assembler;
 
-    @GetMapping("/get/owner/{ownerId}")
-    public OwnerModel getOwner(@PathVariable int ownerId) {
-        Optional<OwnerModel> ownerModel = ownerService.findById(ownerId);
-        if(ownerModel.isPresent()) {
-            return ownerModel.get();
-        }
-        return null;
-    }
 
     @PostMapping("/post/owner")
-    public TeamModel addOwner(@RequestBody OwnerModelDTO ownerModel) {
-        System.out.println(ownerModel.getPersonId());
-        return personService.makePersonOwnerOf(ownerModel.getPersonId(), ownerModel.getTeamId());
+    public ResponseEntity<Resource<OwnerModel>> addOwner(@RequestBody OwnerDTO owner) throws URISyntaxException {
+
+        OwnerModel teamModel = ownerService.create(owner);
+        Resource<OwnerModel> resource = assembler.toResource(teamModel);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/update/owner/{ownerId}")
-    public OwnerModel updateOwner(@PathVariable int ownerId, @RequestBody OwnerModel ownerModel) {
-        Optional<OwnerModel> oldOwner = ownerService.findById(ownerId);
-        if(oldOwner.isPresent()) {
-            OwnerModel updatedOwner = ownerService.update(ownerModel, ownerModel);
-            return updatedOwner;
-        }
-        return null;
+    public ResponseEntity<Resource> updateOwner(@PathVariable int ownerId, @RequestBody OwnerDTO owner) throws URISyntaxException {
+
+        OwnerModel updated = ownerService.update(ownerId, owner);
+        Resource resource = assembler.toResource(updated);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/delete/owner/{ownerId}")
-    public OwnerModel deleteOwner(@PathVariable int ownerId) {
-        Optional<OwnerModel> owner = ownerService.findById(ownerId);
-        if(owner.isPresent()) {
-            OwnerModel tempOwner = owner.get();
-            ownerService.delete(owner.get());
-            return tempOwner;
-        }
-        return null;
+    public ResponseEntity<OwnerModel> deleteOwner(@PathVariable int ownerId) {
+        OwnerModel owner = ownerService.deleteById(ownerId);
+        return ResponseEntity.ok(owner);
     }
 }

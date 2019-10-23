@@ -1,6 +1,6 @@
 package com.example.demo.assembler;
 
-import com.example.demo.controllers.userControllers.UserAssociationController;
+import com.example.demo.controllers.commonControllers.CommonAssociationController;
 import com.example.demo.models.AssociationModel;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 public class AssociationResourceAssembler implements ResourceAssembler<AssociationModel, Resource<AssociationModel>> {
 
     @Override
-    public Resource<AssociationModel> toResource(AssociationModel associationModel) {
-        return new Resource<AssociationModel>(associationModel,
-                linkTo(methodOn(UserAssociationController.class).oneAssociation(associationModel.getAssociationId())).withSelfRel(),
-                linkTo(methodOn(UserAssociationController.class).allAssociations()).withRel("associations"));
+    public Resource<AssociationModel> toResource(AssociationModel association) {
+        return new Resource<AssociationModel>(association,
+                linkTo(methodOn(CommonAssociationController.class).getAssociation(association.getAssociationId())).withSelfRel(),
+                linkTo(methodOn(CommonAssociationController.class).getAssociations()).withRel("associations"));
     }
 }

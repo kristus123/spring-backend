@@ -14,4 +14,5 @@ public class PlayerHistoryModel {
         this.playerModel = playerModel;
         this.revisionType = revisionType;
     }
+
 }

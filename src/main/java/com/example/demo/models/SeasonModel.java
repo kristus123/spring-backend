@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Table(name = "SEASON")
 @Getter
 @Setter
+@NoArgsConstructor
 public class SeasonModel {
 
     @Id
@@ -28,9 +30,6 @@ public class SeasonModel {
 
     private String description;
 
-
-    public SeasonModel() {
-    }
 
     public SeasonModel(LocalDate startDate, LocalDate endDate, String name, String description) {
         this.startDate = startDate;

@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class PlayerHistoryRepository implements IPlayerHistoryRepository {
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -44,10 +43,12 @@ public class PlayerHistoryRepository implements IPlayerHistoryRepository {
         return new PlayerHistoryModel(
                 auditQueryResult.getEntity(),
                 auditQueryResult.getType()
-                /*auditQueryResult.getRevision().getRevisionNumber() NOT WORKING FOR SOME REASON!!!*/
+                //auditQueryResult.getRevision().getRevisionNumber() NOT WORKING FOR SOME REASON!!!
         );
     }
 
     public void findAll() {}
+
+
 
 }

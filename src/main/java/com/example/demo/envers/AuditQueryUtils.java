@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AuditQueryUtils {
-
     private AuditQueryUtils() {
     }
 
@@ -36,4 +35,5 @@ public class AuditQueryUtils {
                 // And collect the Results into a List:
                 .collect(Collectors.toList());
     }
+
 }
