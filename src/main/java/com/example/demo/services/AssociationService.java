@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.AssociationModel;
+import com.example.demo.models.TeamModel;
 import com.example.demo.repositories.AssociationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class AssociationService {
-
+    @Autowired TeamService teamService;
     @Autowired
     AssociationRepository associationRepository;
 
@@ -30,9 +31,18 @@ public class AssociationService {
     }
 
     public AssociationModel deleteById(int id) {
+
         AssociationModel association = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
+        /*
+        Optional<TeamModel> team = teamService.findByAssociation(association);
+        if (team.isPresent()) {
+            teamService.deleteById(team.get().getTeamId());
+        }
+
         associationRepository.deleteById(id);
+         */
         return association;
+
     }
 
     public Optional<AssociationModel> findById(int id) {

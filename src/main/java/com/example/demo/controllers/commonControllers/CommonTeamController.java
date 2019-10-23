@@ -41,6 +41,11 @@ public class CommonTeamController {
                 .ok(resource);
     }
 
+    @GetMapping("/get/team/thatHasCoach/{coachId}")
+    public List<TeamModel> getAllTeamThatHasCoach(@PathVariable int coachId ) {
+        return teamService.findByCoach(coachId);
+    }
+
     @GetMapping("/get/team")
     public ResponseEntity<Resources<Resource<TeamModel>>> getTeams() {
 

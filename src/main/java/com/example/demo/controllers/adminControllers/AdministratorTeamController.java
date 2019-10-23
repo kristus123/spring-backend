@@ -41,6 +41,26 @@ public class AdministratorTeamController {
                 .body(resource);
     }
 
+
+    //Ikke en så god convention. lar den være for nå lolololl lalaLALALALALSLASDALSDLASLDALSDLASKDASDKLASKLDSDJKLFDJKLSFGDKLFGHDFGHFJKL
+    @PutMapping("/modify/team/{teamId}/removeCoach")
+    public boolean removeCoachFromTeam(@PathVariable int teamId) {
+        TeamModel team = teamService.findById(teamId).orElseThrow(() -> new RuntimeException("team not found"));
+        team.setCoach(null);
+        teamService.save(team);
+        return true;
+    }
+
+    //Dette er en bedre convention enn den over
+    @PutMapping("/put/team/{teamId}/removeOwner")
+    public boolean removeOwnerFromTeam(@PathVariable int teamId) {
+        TeamModel team = teamService.findById(teamId).orElseThrow(() -> new ElementNotFoundException("ESUPER ERROR AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+        team.setOwner(null);
+        teamService.save(team);
+        return true;
+    }
+
+
     @PutMapping("/update/team/{id}")
     public ResponseEntity<Resource> updateTeam(@PathVariable Integer id, @RequestBody TeamDTO team) throws URISyntaxException {
         /*

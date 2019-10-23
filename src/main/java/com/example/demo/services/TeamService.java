@@ -7,6 +7,7 @@ import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.Element;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,21 @@ public class TeamService {
     @Autowired OwnerService ownerService;
 
     @Autowired LocationService locationService;
+
+
+    public Optional<TeamModel> findByAssociation(AssociationModel associationModel) {
+        return teamRepository.findByAssociation(associationModel);
+    }
+
+    public List<TeamModel> findByCoach(CoachModel coach) {
+        return teamRepository.findByCoach(coach);
+    }
+
+    public List<TeamModel> findByCoach(int coachId) {
+        CoachModel coach = coachService.findById(coachId).orElseThrow(() -> new ElementNotFoundException("did not find this coach"));
+
+        return teamRepository.findByCoach(coach);
+    }
 
     public TeamModel save(TeamModel teamModel) {
         return teamRepository.save(teamModel);

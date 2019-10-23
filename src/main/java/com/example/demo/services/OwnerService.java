@@ -4,7 +4,9 @@ import com.example.demo.dtos.OwnerDTO;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.OwnerModel;
 import com.example.demo.models.PersonModel;
+import com.example.demo.models.TeamModel;
 import com.example.demo.repositories.OwnerRepository;
+import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ public class OwnerService {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    TeamRepository teamRepository;
+
     private OwnerModel convert(OwnerDTO input) {
         Optional<PersonModel> person = personService.findById(input.getPersonId());
 
@@ -29,6 +34,16 @@ public class OwnerService {
             throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
         return new OwnerModel(person.get());
+    }
+
+    public List<TeamModel> findAllOwnedTeams(OwnerModel owner) {
+        return teamRepository.findByOwner(owner);
+    }
+
+    public List<TeamModel> findAllOwnedTeams(int id) {
+        return findAllOwnedTeams(
+                findById(id).orElseThrow(() -> new ElementNotFoundException("did not find coach by ID"))
+        );
     }
 
     public OwnerModel save(OwnerModel owner) {

@@ -2,8 +2,14 @@ package com.example.demo.controllers.adminControllers;
 
 import com.example.demo.assembler.OwnerResourceAssembler;
 import com.example.demo.dtos.OwnerDTO;
+import com.example.demo.exceptions.ElementNotFoundException;
+import com.example.demo.models.CoachModel;
 import com.example.demo.models.OwnerModel;
+import com.example.demo.models.TeamModel;
+import com.example.demo.services.CoachService;
 import com.example.demo.services.OwnerService;
+import com.example.demo.services.PersonService;
+import com.example.demo.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
@@ -12,26 +18,26 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.acl.Owner;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController @RequestMapping("/v1/admin")
 public class AdministratorOwnerController {
-    @Autowired
-    OwnerService ownerService;
-
-    @Autowired
-    OwnerResourceAssembler assembler;
-
+    @Autowired OwnerService ownerService;
+    @Autowired PersonService personService;
+    @Autowired CoachService coachService;
+    @Autowired TeamService teamService;
+    @Autowired OwnerResourceAssembler assembler;
 
     @PostMapping("/post/owner")
-    public ResponseEntity<Resource<OwnerModel>> addOwner(@RequestBody OwnerDTO owner) throws URISyntaxException {
+    public TeamModel addOwner(@RequestBody Map<String, Integer> body) throws URISyntaxException {
+        return personService.makePersonOwnerOf(body.get("personId"), body.get("teamId"));
+    }
 
-        OwnerModel teamModel = ownerService.create(owner);
-        Resource<OwnerModel> resource = assembler.toResource(teamModel);
-
-        return ResponseEntity
-                .created(new URI(resource.getId().expand().getHref()))
-                .body(resource);
+    @GetMapping("/get/owner/{ownerId}/allTeams")
+    public List<TeamModel> getAllTeamsOfOwner(@PathVariable int ownerId) {
+        return ownerService.findAllOwnedTeams(ownerId);
     }
 
     @PutMapping("/update/owner/{ownerId}")
