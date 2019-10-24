@@ -62,7 +62,7 @@ public class DummyDataService {
 
     @Autowired PlayerService playerService;
 
-    @Autowired GoalTypeService goalTypeService;
+    @Autowired public GoalTypeService goalTypeService;
 
     // Creates a team with stadium and given players that are attached to the team
     public TeamModel createTeam(String teamName, String stadiumName, String filePathToPlayerNames) {

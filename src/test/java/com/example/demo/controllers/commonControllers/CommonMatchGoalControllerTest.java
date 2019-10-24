@@ -28,7 +28,7 @@ class CommonMatchGoalControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonBody = "{\"playerId\": 2,\"goalType\": \"SCORPION_KICK\", \"matchId\": 1, \"description\": \"Incredible goal!\" }";
+        jsonBody = "{\"playerId\": 2,\"goalTypeId\": 13, \"matchId\": 1, \"description\": \"Incredible goal!\" }";
 
         mockMvc.perform(post("/v1/admin/post/matchgoal").contentType(MediaType.APPLICATION_JSON).
                 content(jsonBody)).
@@ -51,6 +51,6 @@ class CommonMatchGoalControllerTest {
 
     @Test
     void testThatCanGetAllMatchGoals() throws Exception {
-        mockMvc.perform(get("/v1/common/get/matchgoal/")).andExpect(jsonPath("$").isNotEmpty());
+        mockMvc.perform(get("/v1/common/get/matchgoal")).andExpect(jsonPath("$").isNotEmpty());
     }
 }
