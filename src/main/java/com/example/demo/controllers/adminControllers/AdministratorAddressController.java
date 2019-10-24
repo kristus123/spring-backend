@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
 
 @RestController @RequestMapping("/v1/admin")
 public class AdministratorAddressController {
@@ -46,10 +44,9 @@ public class AdministratorAddressController {
     }
 
     @DeleteMapping("/delete/address/{id}")
-    public boolean deleteAddress(@PathVariable Integer id) {
-        if (addressService.delete(id)) return true;
-
-        return false;
+    public ResponseEntity<AddressModel> deleteAddress(@PathVariable Integer id) {
+        AddressModel address = addressService.deleteById(id);
+        return ResponseEntity.ok(address);
     }
 
 }

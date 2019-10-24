@@ -30,17 +30,14 @@ public class AssociationService {
         associationRepository.delete(association);
     }
 
+
+    public boolean deleteAll() {
+        findAll().forEach(e -> deleteById(e.getAssociationId()));
+        return findAll().isEmpty();
+    }
+
     public AssociationModel deleteById(int id) {
-
         AssociationModel association = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find association with ID=" + id));
-        /*
-        Optional<TeamModel> team = teamService.findByAssociation(association);
-        if (team.isPresent()) {
-            teamService.deleteById(team.get().getTeamId());
-        }
-
-        associationRepository.deleteById(id);
-         */
         return association;
 
     }

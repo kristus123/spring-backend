@@ -37,48 +37,38 @@ public class AddressService {
         return addressRepository.save(addressModel);
     }
 
-    public boolean delete(int addressId) {
-        Optional<AddressModel> address = addressRepository.findById(addressId);
 
-        if (address.isPresent()) {
-            Optional< List<PersonModel> > person = personRepository.findByAddress(address.get());
-            if (person.isPresent()) {
-                person.get().forEach(p -> {
-                    p.setAddress(null);
-                    personRepository.save(p);
-                });
+    public AddressModel deleteById(int addressId) {
+        AddressModel address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + addressId));
 
-            }
-
-            List<LocationModel> locations = locationRepository.findByAddress(address.get());
-            locations.forEach(location -> {
-                location.setAddress(null);
-                locationRepository.save(location);
+        Optional< List<PersonModel> > person = personRepository.findByAddress(address);
+        if (person.isPresent()) {
+            person.get().forEach(p -> {
+                p.setAddress(null);
+                personRepository.save(p);
             });
-
-            addressRepository.delete(address.get());
-            return true;
         }
-        throw new RuntimeException("address Id not found");
+
+        List<LocationModel> locations = locationRepository.findByAddress(address);
+        locations.forEach(location -> {
+            location.setAddress(null);
+            locationRepository.save(location);
+        });
+
+        addressRepository.delete(address);
+        return address;
+    }
+
+    public boolean deleteAll() {
+        findAll().forEach(addr -> deleteById(addr.getAddressId()));
+        return findAll().isEmpty();
     }
 
     public AddressModel update(Integer id, AddressModel address) throws ElementNotFoundException {
         findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + id));
         address.setAddressId(id);
         return save(address);
-    }
-
-    //KAN DENNE SLETTES //DENNE VIL LITTERALLY IKKE FUNGERE. BRU KHELLER METODEN OVER
-    // JEG ER LAT OG HAR IKKE LYST Å ENDRE ALLE STEDENE HVOR DENNE BLIR BRUKT
-    public AddressModel deleteById(Integer id) throws ElementNotFoundException { //KAN DENNE SLETTES
-        AddressModel address = findById(id).orElseThrow(() -> new ElementNotFoundException("Could not find address with ID=" + id)); //KAN DENNE SLETTES
-        //KAN DENNE SLETTES
-        //KAN DENNE SLETTES
-        //KAN DENNE SLETTES
-        //KAN DENNE SLETTES
-        //KAN DENNE SLETTES
-        addressRepository.deleteById(id); //KAN DENNE SLETTES
-        return address; //KAN DENNE SLETTES
     }
 
     public AddressModel createAddress(AddressModel addressModel) {

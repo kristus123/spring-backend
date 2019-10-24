@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.MatchGoalDTO;
-import com.example.demo.exceptions.ElementBadRequestException;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.GoalTypeModel;
 import com.example.demo.models.MatchGoalModel;
@@ -32,12 +31,10 @@ public class MatchGoalService {
     private MatchGoalModel convert(MatchGoalDTO input) {
         Optional<PlayerModel> player = playerService.findById(input.getPlayerId());
         Optional<MatchModel> match = matchService.findById(input.getMatchId());
-        Optional<GoalTypeModel> goalType = goalTypeService.findByName(input.getGoalType());
+        Optional<GoalTypeModel> goalType = goalTypeService.findById(input.getGoalTypeId());
 
-        if ( !player.isPresent() || !match.isPresent() )
+        if ( !player.isPresent() || !match.isPresent() || !goalType.isPresent() )
             throw new ElementNotFoundException("Could not locate one or several IDs in database");
-        if (!goalType.isPresent())
-            throw new ElementNotFoundException("Could not find goal type with name=" + input.getGoalType());
 
         return new MatchGoalModel(
                 player.get(),
