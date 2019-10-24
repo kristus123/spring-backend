@@ -6,11 +6,13 @@ import com.example.demo.enums.GoalType;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.MatchRepository;
+import org.hibernate.criterion.MatchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -84,6 +86,16 @@ public class MatchService {
 
     public List<MatchModel> findAll() {
         return matchRepository.findAll();
+    }
+
+    public List<MatchModel> findByTeam(Integer teamId) {
+        Optional<TeamModel> team = teamService.findById(teamId);
+        if(!team.isPresent()) {
+            return null;
+        }
+
+        return findAll().stream().filter(match -> match.getHomeTeam().getTeamId().equals(teamId) ||
+                match.getAwayTeam().getTeamId().equals(teamId)).collect(Collectors.toList());
     }
 
     public MatchGoalModel playerScorePoint(MatchModel match, PlayerModel player, String description) {

@@ -32,27 +32,6 @@ public class AdministratorPlayerController {
         this.playerHistoryRepository = repo;
     }
 
-    @GetMapping("/get/player/{playerId}/history")
-    public PlayerHistoryDTO getPlayerHistory(@PathVariable int playerId) {
-        if(!playerService.findById(playerId).isPresent())
-            return null;
-        PlayerHistoryDTO playerHistoryDTO = new PlayerHistoryDTO();
-        playerHistoryDTO.setPlayer(playerService.findById(playerId).get());
-        List<PlayerHistoryModel> list = playerHistoryRepository.listPlayerHistoryRevisions(playerId);
-        Integer tempTeamId = -1;
-        for(PlayerHistoryModel player_hist : list) {
-            if(player_hist.getPlayerModel().getTeam().getTeamId() != tempTeamId) {
-                playerHistoryDTO.getPlayerTeamHistory().add(new PlayerTeamHistoryDTO(
-                        player_hist.getPlayerModel().getTeamDateFrom(),
-                        player_hist.getPlayerModel().getTeamDateTo(),
-                        player_hist.getPlayerModel().getTeam().getTeamId()
-                ));
-                tempTeamId = player_hist.getPlayerModel().getTeam().getTeamId();
-            }
-        }
-        return playerHistoryDTO;
-    }
-
     @PostMapping("/post/player")
     public ResponseEntity<Resource<PlayerModel>> addPlayer(@RequestBody PlayerDTO playerModel) throws URISyntaxException {
         PlayerModel newPlayer = playerService.create(playerModel);

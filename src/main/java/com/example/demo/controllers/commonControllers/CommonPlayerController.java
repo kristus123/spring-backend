@@ -1,8 +1,13 @@
 package com.example.demo.controllers.commonControllers;
 
 import com.example.demo.assembler.PlayerResourceAssembler;
+import com.example.demo.dtos.PlayerHistoryDTO;
+import com.example.demo.dtos.PlayerStatsDTO;
+import com.example.demo.dtos.PlayerTeamHistoryDTO;
 import com.example.demo.exceptions.ElementNotFoundException;
+import com.example.demo.models.PlayerHistoryModel;
 import com.example.demo.models.PlayerModel;
+import com.example.demo.repositories.audit.IPlayerHistoryRepository;
 import com.example.demo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +32,13 @@ public class CommonPlayerController {
     @Autowired
     PlayerResourceAssembler assembler;
 
+
+    private final IPlayerHistoryRepository playerHistoryRepository;
+
+    @Autowired
+    CommonPlayerController(IPlayerHistoryRepository playerHistoryRepository) {
+        this.playerHistoryRepository = playerHistoryRepository;
+    }
 
     @GetMapping("/get/player/{id}")
     public ResponseEntity<Resource<PlayerModel>> getPlayer(@PathVariable Integer id) {
@@ -57,6 +69,14 @@ public class CommonPlayerController {
                         linkTo(methodOn(CommonPlayerController.class).getPlayers()).withSelfRel()));
     }
 
+    @GetMapping("/get/player/{playerId}/history")
+    public PlayerHistoryDTO getPlayerHistory(@PathVariable int playerId) {
+        return playerService.getPlayerHistory(playerId);
+    }
 
+    @GetMapping("/get/player/{playerId}/stats")
+    public PlayerStatsDTO getPlayerStats(@PathVariable int playerId) {
+        return playerService.getPlayerStats(playerId);
+    }
 
 }
