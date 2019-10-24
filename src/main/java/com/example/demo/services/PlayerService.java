@@ -203,6 +203,7 @@ public class PlayerService {
             // We have found a season which is currently active
             if( !(LocalDate.now().isBefore(season.getStartDate()) || LocalDate.now().isAfter(season.getEndDate())) )
             {
+                seasonGoals = 0;
 
                 /*
                 * Oh no!! The player has been participated in multiple season that are currently active

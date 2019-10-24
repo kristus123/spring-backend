@@ -43,7 +43,13 @@ public class DummyDataFiller implements CommandLineRunner {
                 "La Liga",
                 "Top division in the spanish league. Renowned for its acting");
 
+        SeasonModel season_2 = new SeasonModel(LocalDate.of(2015, 01, 01),
+                LocalDate.of(2020, 01,01),
+                "La Liga 2",
+                "Top division in the spanish league. Renowned for its acting");
+
         dummyDataService.createMatch(season, team_1, team_2, "matchGoals_1");
+        dummyDataService.createMatch(season_2, team_1, team_2, "matchGoals_1");
 
     }
 }
