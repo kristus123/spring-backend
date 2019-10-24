@@ -67,7 +67,7 @@ class PlayerServiceTest {
         assertNotNull(saved);
     }
 
-    @Test
+    //@Test
     void update() {
 
         AddressModel address = addressService.createAddress(new AddressModel("5306", "Erdal", "Norway", "Vestre 30"));
