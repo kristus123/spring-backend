@@ -46,9 +46,10 @@ public class AdministratorAddressController {
     }
 
     @DeleteMapping("/delete/address/{id}")
-    public ResponseEntity<AddressModel> deleteAddress(@PathVariable Integer id) {
-        AddressModel address = addressService.deleteById(id);
-        return ResponseEntity.ok(address);
+    public boolean deleteAddress(@PathVariable Integer id) {
+        if (addressService.delete(id)) return true;
+
+        return false;
     }
 
 }

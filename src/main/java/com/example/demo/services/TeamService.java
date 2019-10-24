@@ -7,6 +7,7 @@ import com.example.demo.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.Element;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,21 @@ public class TeamService {
     @Autowired OwnerService ownerService;
 
     @Autowired LocationService locationService;
+
+
+    public Optional<TeamModel> findByAssociation(AssociationModel associationModel) {
+        return teamRepository.findByAssociation(associationModel);
+    }
+
+    public List<TeamModel> findByCoach(CoachModel coach) {
+        return teamRepository.findByCoach(coach);
+    }
+
+    public List<TeamModel> findByCoach(int coachId) {
+        CoachModel coach = coachService.findById(coachId).orElseThrow(() -> new ElementNotFoundException("did not find this coach"));
+
+        return teamRepository.findByCoach(coach);
+    }
 
     public TeamModel save(TeamModel teamModel) {
         return teamRepository.save(teamModel);
@@ -60,6 +76,7 @@ public class TeamService {
         We would like to keep our teams in DB for the sake of information in matches.
         Hence only updating a variable regarding the team's active-status
      */
+    // that some fancy englihsh.
 
     public TeamModel deleteById(Integer id) throws ElementNotFoundException {
         TeamModel team = findById(id)
@@ -82,6 +99,11 @@ public class TeamService {
 
     public List<TeamModel> findAllActive() {
         return teamRepository.findAll().stream().filter(team -> team.isActive()).collect(Collectors.toList());
+    }
+
+
+    public List<TeamModel> findTeamsWithNoOwner() {
+        return teamRepository.findAll().stream().filter(team -> team.getOwner() == null).collect(Collectors.toList());
     }
 
     public TeamModel createTeam(AssociationModel associationModel, CoachModel coachModel, OwnerModel ownerModel, LocationModel locationModel) {

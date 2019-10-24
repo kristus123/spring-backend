@@ -29,8 +29,14 @@ public class CoachService {
         } else {
             return save(new CoachModel(person));
         }
-
     }
+
+    public CoachModel makePersonCoach(int personId) {
+
+        PersonModel person = personService.findById(personId).orElseThrow(() -> new ElementNotFoundException("did not find user"));
+        return makePersonCoach(person);
+    }
+
 
     // TODO PANDA: vil finne alle Coaches som har eksistert ever? Eller bare aktive??
     public Optional<CoachModel> findByPersonId(int id) {
