@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -26,19 +27,23 @@ public class TeamModel {
     @Column(name = "team_id")
     private Integer teamId;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "association_id", referencedColumnName = "association_id")
     private AssociationModel association;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "coach_id", referencedColumnName = "coach_id")
     private CoachModel coach;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
     private OwnerModel owner;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 

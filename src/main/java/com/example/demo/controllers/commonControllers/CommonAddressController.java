@@ -59,10 +59,13 @@ public class CommonAddressController {
                         linkTo(methodOn(CommonAddressController.class).getAddresses()).withSelfRel()));
     }
 
+    /*
     @GetMapping("/get/address/{addressId}")
     public AddressModel findById(@PathVariable int addressId) {
         Optional<AddressModel> address = addressService.findById(addressId);
         if (address.isPresent()) return address.get();
         return null; //Oca syntax baby
     }
+
+     */
 }

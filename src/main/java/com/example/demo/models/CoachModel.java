@@ -6,6 +6,7 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ public class CoachModel implements LivingHuman {
     @Column(name = "coach_id")
     private Integer coachId;
 
-    @OneToOne(cascade = CascadeType.MERGE,  orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE,  orphanRemoval = true)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonModel person;
 

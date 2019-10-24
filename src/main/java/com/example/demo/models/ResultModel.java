@@ -4,6 +4,7 @@ package com.example.demo.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,12 +20,14 @@ public class ResultModel implements Serializable {
     @Column (name = "match_id")
     private Integer matchId; // NB!! Should not be auto-generated! Foreign-key to MatchModel.matchId
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn (name = "match_id", referencedColumnName = "match_id")
     @MapsId
     private MatchModel match;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn (name = "team_id", referencedColumnName = "team_id")
     private TeamModel team;
 

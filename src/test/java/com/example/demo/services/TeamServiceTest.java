@@ -32,7 +32,7 @@ class TeamServiceTest {
 
         assertNotNull(saved);
         assertEquals(2, saved.getAssociation().getAssociationId());
-        assertEquals("Juventus", saved.getAssociation().getName());
+        assertEquals("Real Madrid", saved.getAssociation().getName());
     }
 
     @Test
@@ -51,7 +51,7 @@ class TeamServiceTest {
 
         assertNotNull(updated);
         assertEquals(2, updated.getAssociation().getAssociationId());
-        assertEquals("Juventus", updated.getAssociation().getName());
+        assertEquals("Real Madrid", updated.getAssociation().getName());
     }
 
     @Test
