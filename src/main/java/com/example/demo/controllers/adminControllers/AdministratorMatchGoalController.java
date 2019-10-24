@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin")
@@ -22,13 +23,9 @@ public class AdministratorMatchGoalController {
     @Autowired
     MatchGoalResourceAssembler assembler;
 
-/*
-    @GetMapping("/get/matchgoal/{matchId}/byMatchId")
-    public List<MatchGoalModel> getMatchGoalsGivenByMatchId(@PathVariable Integer matchId) {
-        return matchGoalService.findByMatchId(matchId);
-    }
 
- */
+
+
 
     @PostMapping("/post/matchgoal")
     public ResponseEntity<Resource<MatchGoalModel>> createMatchGoal(@RequestBody MatchGoalDTO matchGoal) throws URISyntaxException {

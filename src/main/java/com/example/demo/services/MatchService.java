@@ -6,11 +6,13 @@ import com.example.demo.enums.GoalType;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.MatchRepository;
+import org.hibernate.criterion.MatchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -86,6 +88,16 @@ public class MatchService {
         return matchRepository.findAll();
     }
 
+    public List<MatchModel> findByTeam(Integer teamId) {
+        Optional<TeamModel> team = teamService.findById(teamId);
+        if(!team.isPresent()) {
+            return null;
+        }
+
+        return findAll().stream().filter(match -> match.getHomeTeam().getTeamId().equals(teamId) ||
+                match.getAwayTeam().getTeamId().equals(teamId)).collect(Collectors.toList());
+    }
+
     public MatchGoalModel playerScorePoint(MatchModel match, PlayerModel player, String description) {
         return matchGoalService.save(new MatchGoalModel(
                 player, //player,
@@ -127,26 +139,26 @@ public class MatchService {
 
 
     }
-
-
-    public MatchResultDTO getFilteredMatchStats(MatchModel match) {
+    public MatchResultDTO getFilteredMatchStats(Optional <MatchModel> match) {
         String result;
-        List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
+        List<MatchGoalModel> goals = matchGoalService.findByMatch(match.get());
         long home = 0;
         long away = 0;
         home = goals.stream()
-                .filter(g -> match.getHomeTeam()
+                .filter(g -> match.get().getHomeTeam()
                         .getAssociation()
                         .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
 
         away = goals.size() - home;
 
         if (home > away) {
-            result = match.getHomeTeam().getAssociation().getName().toString();
-        } else if (home == away) result = "Uavgjort";
+            result = match.get().getHomeTeam().getAssociation().getName().toString();
+        } else if (home == away) result = "Draw";
         else {
-            result = match.getAwayTeam().getAssociation().getName().toString();
+            result = match.get().getAwayTeam().getAssociation().getName().toString();
         }
-        return new MatchResultDTO(match, match.getHomeTeam(), match.getAwayTeam(), result);
+        return new MatchResultDTO(match.get(), match.get().getHomeTeam(), match.get().getAwayTeam(), result);
     }
+
+
 }

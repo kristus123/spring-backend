@@ -1,17 +1,17 @@
 package com.example.demo.services;
 
-import com.example.demo.dtos.PlayerAnonDTO;
-import com.example.demo.dtos.PlayerDTO;
+import com.example.demo.dtos.*;
 import com.example.demo.exceptions.ElementNotFoundException;
-import com.example.demo.models.MatchModel;
-import com.example.demo.models.PersonModel;
-import com.example.demo.models.PlayerModel;
-import com.example.demo.models.TeamModel;
+import com.example.demo.models.*;
 import com.example.demo.repositories.PlayerRepository;
 import com.example.demo.repositories.TeamRepository;
+import com.example.demo.repositories.audit.IPlayerHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +27,18 @@ public class PlayerService {
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    MatchGoalService matchGoalService;
+
+    @Autowired
+    MatchService matchService;
+
+    @Autowired
+    SeasonService seasonService;
+
+    @Autowired
+    private IPlayerHistoryRepository playerHistoryRepository;
 
 
     private PlayerModel convert(PlayerDTO input) {
@@ -113,10 +125,127 @@ public class PlayerService {
     public Optional<PlayerModel> findByPerson(PersonModel personModel) {
         return playerRepository.findByPerson(personModel);
     }
+    public PlayerAnonDTO filteredPlayer(Optional<PlayerModel> player) {
+        return new PlayerAnonDTO(player.get(), player.get().getPlayername(), player.get().getTeam().toString());
 
-    public PlayerAnonDTO filteredPlayer(PlayerModel player) {
-        return new PlayerAnonDTO(player, player.getPlayername(), player.getTeam().toString());
+    }
 
+
+    /*
+    * This method calculates and returns an object containing:
+    * Goals for the newest season
+    * Total goals scored
+    * Average goals per game
+    * Average goal for all player per game
+    *
+    * */
+    public PlayerStatsDTO getPlayerStats(Integer playerId) {
+        PlayerStatsDTO playerStatsDTO = new PlayerStatsDTO();
+        Optional<PlayerModel> player = playerRepository.findById(playerId);
+        if(!player.isPresent()) {
+            return null;
+        }
+        // Get total goals
+        Integer totGoals = matchGoalService.findByPlayerId(playerId).size();
+        Integer seasonGoal;
+
+        /*
+        * Get all teams the player has been in and find all games which has been played when he
+        * has been in the team
+        * */
+
+        Double avgGoals = (double)totGoals / (double)getAverageGoalsPerGame(playerId);
+        playerStatsDTO.
+                setAverageGoal(avgGoals).
+                setTotalGoals(totGoals).
+                setSeasonGoals(getCurrentSeasonGoals(playerId)).
+                setGoalTypes(getGoals(playerId));
+        return playerStatsDTO;
+    }
+
+    private Integer getAverageGoalsPerGame(int playerId) {
+        List<MatchModel> playerMatches = new ArrayList<>();
+        // All teams player has been in
+        for(PlayerTeamHistoryDTO team : getPlayerHistory(playerId).getPlayerTeamHistory()) {
+            // All matches the team has played while the player was present (FP solution???)
+            System.out.println(matchService.findByTeam(team.getTeamId()).get(0).getMatchDate());
+            System.out.println(team.getTeamDateFrom());
+            System.out.println(team.getTeamDateTo());
+            playerMatches = matchService.findByTeam(team.getTeamId()).stream().filter(match -> !(match.getMatchDate().
+                    isBefore(team.getTeamDateFrom() )  ||
+                    match.getMatchDate().isAfter(team.getTeamDateTo()) )).collect(Collectors.toList());
+        }
+        return playerMatches.size();
+    }
+
+    private HashMap<String, Integer> getGoals(int playerId) {
+        List<MatchGoalModel> playerGoals = matchGoalService.findByPlayerId(playerId);
+        HashMap<String, Integer> goalTypes = new HashMap<>();
+        // Get all goal types
+        for(MatchGoalModel goal : playerGoals) {
+            goalTypes.put(goal.getGoalType().toString(), 0);
+        }
+        // Increment number of each goal type
+        for(MatchGoalModel goal : playerGoals) {
+            goalTypes.put(goal.getGoalType().toString(), goalTypes.get(goal.getGoalType().toString()) + 1);
+        }
+        return goalTypes;
+    }
+
+    private Integer getCurrentSeasonGoals(int playerId) {
+        // Check if current date is within a season
+        // Check if match has player with playerId
+        // PROFIT!?!?!
+        Integer seasonGoals = 0;
+        Boolean foundSeason = false;
+        for(SeasonModel season : seasonService.findAll()) {
+
+            // We have found a season which is currently active
+            if( !(LocalDate.now().isBefore(season.getStartDate()) || LocalDate.now().isAfter(season.getEndDate())) )
+            {
+                seasonGoals = 0;
+
+                /*
+                * Oh no!! The player has been participated in multiple season that are currently active
+                * Just take the latest found for now
+                * Should find the most recent*/
+
+                // Get all within that season
+                List<MatchModel> matches = matchService.findAll().stream().filter(match -> match.getSeason().getSeasonId().equals(season.getSeasonId())).collect(Collectors.toList());
+                /*Now we need to check if a player has been participating in these matches,
+                and count how many goals he scored*/
+                for(MatchModel match : matches) {
+                    if(match.getHomeTeam().getTeamId().equals(findById(playerId).get().getTeam().getTeamId()) || match.getAwayTeam().getTeamId().equals(findById(playerId).get().getTeam().getTeamId())) {
+                        seasonGoals += (int)matchGoalService.findByMatch(match).stream().filter(goal -> goal.getPlayer().getPlayerId() == playerId).count();
+                    }
+                }
+            }
+        }
+        return seasonGoals;
+    }
+
+    public PlayerHistoryDTO getPlayerHistory(int playerId) {
+        if(!findById(playerId).isPresent())
+            return null;
+        PlayerHistoryDTO playerHistoryDTO = new PlayerHistoryDTO();
+        playerHistoryDTO.setPlayer(findById(playerId).get());
+        List<PlayerHistoryModel> list = playerHistoryRepository.listPlayerHistoryRevisions(playerId);
+        Integer tempTeamId = -1;
+        for(PlayerHistoryModel player_hist : list) {
+            if(player_hist.getPlayerModel().getTeam().getTeamId() != tempTeamId) {
+                playerHistoryDTO.getPlayerTeamHistory().add(new PlayerTeamHistoryDTO(
+                        player_hist.getPlayerModel().getTeamDateFrom(),
+                        player_hist.getPlayerModel().getTeamDateTo(),
+                        player_hist.getPlayerModel().getTeam().getTeamId()
+                ));
+                tempTeamId = player_hist.getPlayerModel().getTeam().getTeamId();
+            }
+        }
+        return playerHistoryDTO;
+    }
+
+    public List<PlayerModel> findAll() {
+        return playerRepository.findAll();
     }
 
 }

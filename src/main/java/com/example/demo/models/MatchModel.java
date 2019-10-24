@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,19 +27,23 @@ public class MatchModel {
 
     private LocalDate matchDate;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "home_team_id", referencedColumnName = "team_id")
     private TeamModel homeTeam;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "away_team_id", referencedColumnName = "team_id")
     private TeamModel awayTeam;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "season_id", referencedColumnName = "season_id")
     private SeasonModel season;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne//(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private LocationModel location;
 

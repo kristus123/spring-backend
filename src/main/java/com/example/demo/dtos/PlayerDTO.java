@@ -28,5 +28,4 @@ public class PlayerDTO {
         this.teamId = teamId;
         this.playername = playername;
     }
-
 }

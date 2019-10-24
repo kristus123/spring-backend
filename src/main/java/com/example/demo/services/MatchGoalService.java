@@ -69,8 +69,18 @@ public class MatchGoalService {
         return matchGoalRepository.findByPlayer(player);
     }
 
+    public List<MatchGoalModel> findByPlayerId(Integer playerId) {
+        Optional<PlayerModel> player = playerService.findById(playerId);
+        return player.map(this::findByPlayer).orElse(null);
+    }
+
     public List<MatchGoalModel> findByMatch(MatchModel match) {
         return matchGoalRepository.findByMatch(match);
+    }
+
+    public List<MatchGoalModel> findByMatchId(Integer matchId) {
+        Optional<MatchModel> match = matchService.findById(matchId);
+        return match.map(this::findByMatch).orElseThrow(() -> new ElementNotFoundException("Could not find any match goals with match id" + matchId));
     }
 
 }

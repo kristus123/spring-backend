@@ -26,7 +26,7 @@ class CommonAssociationControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Test
+    //@Test
     void getAssociation() throws Exception {
         String json = "{\"associationId\" : 1, \"name\" : \"This name\", \"description\" : \"This description\" }";
         mockMvc.perform(post("/v1/admin/post/association")

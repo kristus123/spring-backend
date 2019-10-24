@@ -60,5 +60,15 @@ public class CommonMatchGoalController {
                 .ok(new Resources<>(matchGoals,
                         linkTo(methodOn(CommonMatchGoalController.class).getMatchGoals()).withSelfRel()));
     }
+
+    @GetMapping("/get/matchgoal/{matchId}/byMatchId")
+    public List<MatchGoalModel> getMatchGoalsGivenByMatchId(@PathVariable Integer matchId) {
+        return matchGoalService.findByMatchId(matchId);
+    }
+
+    @GetMapping("/get/matchgoal/{playerId}/byPlayerId")
+    public List<MatchGoalModel> getMatchGoalsGivenByPlayerId(@PathVariable Integer playerId) {
+        return matchGoalService.findByPlayerId(playerId);
+    }
 }
 
