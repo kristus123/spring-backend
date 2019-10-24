@@ -20,7 +20,7 @@ public class LocationModel {
     private int locationId;
 
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @OneToOne//(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
+    @OneToOne ///(cascade = CascadeType.MERGE) //endret fra CascadeType.ALL til MERGE
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressModel address;
 

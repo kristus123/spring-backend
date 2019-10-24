@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/admin")
@@ -43,12 +44,12 @@ public class AdministratorTeamController {
 
 
     //Ikke en så god convention. lar den være for nå lolololl lalaLALALALALSLASDALSDLASLDALSDLASKDASDKLASKLDSDJKLFDJKLSFGDKLFGHDFGHFJKL
-    @PutMapping("/modify/team/{teamId}/removeCoach")
-    public boolean removeCoachFromTeam(@PathVariable int teamId) {
+    @PutMapping("/put/team/{teamId}/removeCoach")
+    public TeamModel removeCoachFromTeam(@PathVariable int teamId) {
         TeamModel team = teamService.findById(teamId).orElseThrow(() -> new RuntimeException("team not found"));
         team.setCoach(null);
         teamService.save(team);
-        return true;
+        return team;
     }
 
     //Dette er en bedre convention enn den over
@@ -57,7 +58,17 @@ public class AdministratorTeamController {
         TeamModel team = teamService.findById(teamId).orElseThrow(() -> new ElementNotFoundException("ESUPER ERROR AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         team.setOwner(null);
         teamService.save(team);
+
+
+
         return true;
+    }
+
+
+
+    @GetMapping("/get/team/with-no-owner")
+    public List<TeamModel> getTeamWithNoOwner() {
+        return teamService.findTeamsWithNoOwner();
     }
 
 

@@ -40,6 +40,15 @@ public class OwnerService {
         return teamRepository.findByOwner(owner);
     }
 
+    public boolean makeOwnerOf(int ownerId, int teamId) {
+        OwnerModel owner = findById(ownerId).orElseThrow(() -> new ElementNotFoundException("did not find"));
+        TeamModel team = teamRepository.findById(teamId).orElseThrow(() -> new ElementNotFoundException("did not find"));
+
+        team.setOwner(owner);
+        teamRepository.save(team);
+        return true;
+    }
+
     public List<TeamModel> findAllOwnedTeams(int id) {
         return findAllOwnedTeams(
                 findById(id).orElseThrow(() -> new ElementNotFoundException("did not find coach by ID"))

@@ -35,8 +35,16 @@ public class AdministratorOwnerController {
         return personService.makePersonOwnerOf(body.get("personId"), body.get("teamId"));
     }
 
+    @PutMapping("/post/owner/assign-as-Owner-of-Team")
+    public boolean makeOwnerOwnerOf(@RequestBody Map<String, Integer> request) {
+        teamService.findById(request.get("ownerId"));
+        ownerService.makeOwnerOf(request.get("ownerId"), request.get("teamId"));
+        return true;
+    }
+
     @GetMapping("/get/owner/{ownerId}/allTeams")
     public List<TeamModel> getAllTeamsOfOwner(@PathVariable int ownerId) {
+        System.out.println(ownerService.findAllOwnedTeams(ownerId));
         return ownerService.findAllOwnedTeams(ownerId);
     }
 

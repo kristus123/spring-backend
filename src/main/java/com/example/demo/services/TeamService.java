@@ -76,6 +76,7 @@ public class TeamService {
         We would like to keep our teams in DB for the sake of information in matches.
         Hence only updating a variable regarding the team's active-status
      */
+    // that some fancy englihsh.
 
     public TeamModel deleteById(Integer id) throws ElementNotFoundException {
         TeamModel team = findById(id)
@@ -98,6 +99,11 @@ public class TeamService {
 
     public List<TeamModel> findAllActive() {
         return teamRepository.findAll().stream().filter(team -> team.isActive()).collect(Collectors.toList());
+    }
+
+
+    public List<TeamModel> findTeamsWithNoOwner() {
+        return teamRepository.findAll().stream().filter(team -> team.getOwner() == null).collect(Collectors.toList());
     }
 
     public TeamModel createTeam(AssociationModel associationModel, CoachModel coachModel, OwnerModel ownerModel, LocationModel locationModel) {

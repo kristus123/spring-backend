@@ -42,21 +42,15 @@ public class AdministratorCoachController {
 
     @PutMapping("/update/coach")
     public TeamModel updateCoach(@RequestBody Map<String, String> response) throws URISyntaxException {
-        /*
         CoachModel coach = coachService.findById( Integer.valueOf(response.get("coachId"))).orElseThrow(() -> new ElementNotFoundException("did not find coach"));
-        TeamModel team = teamService.findByCoach(coach).orElseThrow(() -> new ElementNotFoundException("did not find a team that has this coach"));
+        TeamModel team = teamService.findById(Integer.valueOf(response.get("newTeamId"))).orElseThrow(() -> new ElementNotFoundException("did not find"));
         team.setCoach(null);
         teamService.save(team);
-
         team = teamService.findById( Integer.valueOf(response.get("newTeamId")) ).orElseThrow(() -> new ElementNotFoundException("did not find the team that the new coach is supposed to play on"));
-
         team.setCoach(coach);
-
         teamService.save(team);
 
-
-         */
-        return null; //team;
+        return team; //team;
 
     }
 

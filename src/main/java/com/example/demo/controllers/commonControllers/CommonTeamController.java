@@ -22,12 +22,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/common")
 public class CommonTeamController {
 
-    @Autowired
-    TeamService teamService;
+    @Autowired TeamService teamService;
 
-    @Autowired
-    TeamResourceAssembler assembler;
-
+    @Autowired TeamResourceAssembler assembler;
 
     @GetMapping("/get/team/{id}")
     public ResponseEntity<Resource<TeamModel>> getTeam(@PathVariable Integer id) {
@@ -47,19 +44,12 @@ public class CommonTeamController {
     }
 
     @GetMapping("/get/team")
-    public ResponseEntity<Resources<Resource<TeamModel>>> getTeams() {
+    public List<TeamModel> getTeams() {
+        return teamService.findAllActive();
+    }
 
-        List<Resource<TeamModel>> teams = teamService.findAllActive()
-                .stream()
-                .map(assembler::toResource)
-                .collect(Collectors.toList());
-
-        // TODO PANDA: throw exception or return ResponseEntity.ok()?
-        if (teams.isEmpty())
-            throw new ElementNotFoundException("No teams registered");
-
-        return ResponseEntity
-                .ok(new Resources<>(teams,
-                        linkTo(methodOn(CommonTeamController.class).getTeams()).withSelfRel()));
+    @GetMapping("/get/team/with-no-coach")
+    public List<TeamModel> getTeamsWithNoCoach() {
+        return teamService.findAllActive().stream().filter(team -> team.getCoach() == null).collect(Collectors.toList());
     }
 }
