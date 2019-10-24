@@ -1,6 +1,6 @@
 package com.example.demo.dtos;
 
-import com.example.demo.enums.GoalType;
+import com.example.demo.models.GoalTypeModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +15,12 @@ import java.time.LocalDate;
 public class MatchGoalDTO {
 
     private Integer playerId;
-    private GoalType goalType;
+    private String goalType;
     private Integer matchId;
     private String description;
 
     // MANDATORY
-    public MatchGoalDTO(Integer playerId, GoalType goalType, Integer matchId) {
+    public MatchGoalDTO(Integer playerId, String goalType, Integer matchId) {
         this.playerId = playerId;
         this.goalType = goalType;
         this.matchId = matchId;

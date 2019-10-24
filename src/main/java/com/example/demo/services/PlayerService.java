@@ -4,7 +4,6 @@ import com.example.demo.dtos.*;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.PlayerRepository;
-import com.example.demo.repositories.TeamRepository;
 import com.example.demo.repositories.audit.IPlayerHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -183,11 +182,11 @@ public class PlayerService {
         HashMap<String, Integer> goalTypes = new HashMap<>();
         // Get all goal types
         for(MatchGoalModel goal : playerGoals) {
-            goalTypes.put(goal.getGoalType().toString(), 0);
+            goalTypes.put(goal.getGoalType().getTypeName(), 0);
         }
         // Increment number of each goal type
         for(MatchGoalModel goal : playerGoals) {
-            goalTypes.put(goal.getGoalType().toString(), goalTypes.get(goal.getGoalType().toString()) + 1);
+            goalTypes.put(goal.getGoalType().getTypeName(), goalTypes.get(goal.getGoalType().getTypeName()) + 1);
         }
         return goalTypes;
     }

@@ -62,6 +62,8 @@ public class DummyDataService {
 
     @Autowired PlayerService playerService;
 
+    @Autowired GoalTypeService goalTypeService;
+
     // Creates a team with stadium and given players that are attached to the team
     public TeamModel createTeam(String teamName, String stadiumName, String filePathToPlayerNames) {
         /* -------------- CREATE COACH -------------- */
@@ -137,7 +139,7 @@ public class DummyDataService {
             while( (st = br.readLine()) != null) {
                 String[] sp = st.split(" ");
                 MatchGoalModel matchGoalModel = new MatchGoalModel(getRandomPlayer(homeTeam, awayTeam),
-                        GoalType.valueOf(sp[1]),
+                        goalTypeService.save(new GoalTypeModel(sp[1])),
                         match,
                         sp[0].replaceAll("[-]", " "));
                 matchGoalService.save(matchGoalModel);

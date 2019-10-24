@@ -5,6 +5,4 @@ public enum  GoalType {
     PENALTY,
     HEADER,
     FREE_KICK;
-
-
 }
