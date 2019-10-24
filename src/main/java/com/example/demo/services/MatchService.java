@@ -6,7 +6,6 @@ import com.example.demo.enums.GoalType;
 import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.*;
 import com.example.demo.repositories.MatchRepository;
-import org.hibernate.criterion.MatchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +30,8 @@ public class MatchService {
 
     @Autowired
     LocationService locationService;
+
+    @Autowired GoalTypeService goalTypeService;
 
 
     private MatchModel convert(MatchDTO input) {
@@ -101,7 +102,7 @@ public class MatchService {
     public MatchGoalModel playerScorePoint(MatchModel match, PlayerModel player, String description) {
         return matchGoalService.save(new MatchGoalModel(
                 player, //player,
-                GoalType.SCORPION_KICK,
+                goalTypeService.save(new GoalTypeModel("SCORPION_KICK")),
                 match,
                 description
         ));
@@ -124,7 +125,7 @@ public class MatchService {
 
 
         goals.forEach(g -> {
-            System.out.println(g.getPlayer().getPerson().getFirstName() + " scorte en " + g.getGoalType() + " og han spiller for " + g.getPlayer().getTeam());
+            System.out.println(g.getPlayer().getPerson().getFirstName() + " scorte en " + g.getGoalType().getTypeName() + " og han spiller for " + g.getPlayer().getTeam());
         });
 
         System.out.println("___");

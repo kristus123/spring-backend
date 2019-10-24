@@ -130,7 +130,7 @@ class MatchServiceTest {
 
         MatchGoalModel matchGoal = matchGoalService.findByPlayer(player).get(0);
 
-        assertEquals(matchGoal.getGoalType(), GoalType.SCORPION_KICK);
+        assertEquals(matchGoal.getGoalType().getTypeName(), "SCORPION_KICK");
 
         assertEquals(matchGoal.getMatch().getMatchId(), match.getMatchId());
 
