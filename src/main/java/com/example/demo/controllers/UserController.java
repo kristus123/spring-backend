@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping("/me")
     public UserModel getMe(Principal principal) {
         if (principal == null) return null;
-        
+
         return userService.findByUsername(principal.getName()).get();
     }
 
