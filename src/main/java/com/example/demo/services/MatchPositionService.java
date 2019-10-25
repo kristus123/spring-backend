@@ -37,7 +37,7 @@ public class MatchPositionService {
         if ( !player.isPresent() || !match.isPresent() )
             throw new ElementNotFoundException("Could not locate one or several IDs in database");
 
-        return new MatchPositionModel(player.get(), match.get(), input.getPosition());
+        return new MatchPositionModel(new MatchPositionId(player.get().getPlayerId(), match.get().getMatchId()), player.get(), match.get(), input.getPosition());
     }
 
     public MatchPositionModel create(MatchPositionDTO input) throws ElementNotFoundException {
