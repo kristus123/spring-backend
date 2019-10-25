@@ -16,7 +16,7 @@ public class MatchPositionResourceAssembler implements ResourceAssembler<MatchPo
     @Override
     public Resource<MatchPositionModel> toResource(MatchPositionModel matchPosition) {
         return new Resource<>(matchPosition,
-                linkTo(methodOn(CommonMatchPositionController.class).getMatchPosition(new MatchPositionDTO(matchPosition.getPlayer().getPlayerId(), matchPosition.getMatch().getMatchId()))).withSelfRel(),
+                linkTo(methodOn(CommonMatchPositionController.class).getMatchPosition(matchPosition.getMatch().getMatchId(), matchPosition.getPlayer().getPlayerId())).withSelfRel(),
                 linkTo(methodOn(CommonMatchPositionController.class).getMatchPositions()).withRel("matchPositions")
                 // TODO PANDA: how to include position type?
         );
