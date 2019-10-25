@@ -14,5 +14,11 @@ public class AdministratorController {
         return userService.elevateUserToAdmin(userId);
     }
 
+    @PutMapping("/giveUserStandard/{userId}")
+    public boolean elevateUserToStandard(@PathVariable int userId) {
+        return userService.elevateUserToStandard(userId);
+    }
+
+
 
 }

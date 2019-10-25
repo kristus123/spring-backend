@@ -24,12 +24,8 @@ public class UserManagementController {
     @Autowired
     private UserResourceAssembler assembler;
 
-    /*
-    @GetMapping("/elevateUser/{userId}/{role}")
-    public String elevateUser(@PathVariable Integer userId, @PathVariable String role) {
-        return "elevated";
-    }
-     */
+
+
 
     @PostMapping("/update/{username}")
     public Resource<UserModel> updateInfo(@PathVariable String username, @RequestBody UserModel updatedUser) throws URISyntaxException {
