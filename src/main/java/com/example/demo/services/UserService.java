@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.enums.UserRole;
+import com.example.demo.exceptions.ElementNotFoundException;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class UserService {
         return dbUser;
     }
 
+    public UserModel findById(int id) {
+        return userRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("did not find user"));
+    }
+
     public boolean elevateUserToAdmin(int id) {
         Optional<UserModel> userModel = userRepository.findById(id);
         if (userModel.isPresent()) {
@@ -60,7 +65,9 @@ public class UserService {
         return false;
     }
 
-
+    public void delete(UserModel usermodel) {
+        userRepository.delete(usermodel);
+    }
 
     public boolean elevateUserToAdmin(UserModel user) {
         return elevateUserToAdmin(user.getId());

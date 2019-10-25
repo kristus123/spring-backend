@@ -29,10 +29,6 @@ public class AdministratorTeamController {
 
     @PostMapping("/post/team")
     public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody TeamDTO team) throws URISyntaxException {
-        /*
-        if (team == null)
-            throw new ElementBadRequestException("Empty JSON object provided");
-         */
 
         TeamModel teamModel = teamService.create(team);
         Resource<TeamModel> resource = assembler.toResource(teamModel);
