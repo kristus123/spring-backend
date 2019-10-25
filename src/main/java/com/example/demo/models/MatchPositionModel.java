@@ -29,10 +29,10 @@ public class MatchPositionModel {
     @JoinColumn(name = "match_id")
     private MatchModel match;
 
-    @Enumerated(EnumType.STRING)
-    private PositionType position;
+    @Column(name = "position")
+    private String position;
 
-    public MatchPositionModel(PlayerModel player, MatchModel match, PositionType position) {
+    public MatchPositionModel(PlayerModel player, MatchModel match, String position) {
         this.player = player;
         this.match = match;
         this.position = position;
