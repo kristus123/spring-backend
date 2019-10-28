@@ -21,6 +21,10 @@ import java.time.Month;
 @Component
 @Profile("!test")
 public class DummyDataFiller implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("hei");
+    }
     /*
 
 
