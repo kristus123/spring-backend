@@ -9,6 +9,7 @@ import com.example.demo.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -140,6 +141,43 @@ public class MatchService {
 
 
     }
+
+    public HashMap<String,Object> getFilteredMatchStats(MatchModel match, int teamId) {
+        HashMap<String, Object> map = new HashMap<>();
+        String result = "";
+        List<MatchGoalModel> goals = matchGoalService.findByMatch(match);
+        long home = 0;
+        long away = 0;
+        home = goals.stream()
+                .filter(g -> match.getHomeTeam()
+                        .getAssociation()
+                        .getName().equals(g.getPlayer().getTeam().getAssociation().getName())).count();
+
+        away = goals.size() - home;
+        if(match.getHomeTeam().getTeamId().equals(teamId)) {
+            if (home > away)
+                result = "win";
+            else if (home < away)
+                result = "lost";
+            else
+                result = "draw";
+        }
+        else {
+            if (home < away)
+                result = "win";
+            else if (home > away)
+                result = "lost";
+            else
+                result = "draw";
+        }
+        map.put("home", home);
+        map.put("away", away);
+        map.put("result", result);
+        map.put("homeTeam", match.getHomeTeam().getAssociation().getName());
+        map.put("awayTeam", match.getAwayTeam().getAssociation().getName());
+        return map;
+    }
+
     public MatchResultDTO getFilteredMatchStats(Optional <MatchModel> match) {
         String result;
         List<MatchGoalModel> goals = matchGoalService.findByMatch(match.get());
