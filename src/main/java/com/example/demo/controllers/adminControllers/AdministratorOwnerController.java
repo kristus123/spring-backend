@@ -31,8 +31,8 @@ public class AdministratorOwnerController {
     @Autowired OwnerResourceAssembler assembler;
 
     @PostMapping("/post/owner")
-    public TeamModel addOwner(@RequestBody Map<String, Integer> body) throws URISyntaxException {
-        return personService.makePersonOwnerOf(body.get("personId"), body.get("teamId"));
+    public OwnerModel addOwner(@RequestBody OwnerDTO owner) throws URISyntaxException {
+        return ownerService.create(owner);
     }
 
     @PutMapping("/post/owner/assign-as-Owner-of-Team")

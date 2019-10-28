@@ -31,26 +31,28 @@ public class AdministratorCoachController {
     CoachResourceAssembler assembler;
 
     @PostMapping("/post/coach")
-    public CoachModel createCoach(@RequestBody Map<String, Integer> body) throws URISyntaxException {
+    public CoachModel createCoach(@RequestBody CoachDTO coach) throws URISyntaxException {
 
-        CoachModel coachModel = coachService.makePersonCoach(body.get("personId"));
-        TeamModel team = teamService.findById(body.get("teamId")).orElseThrow(() -> new ElementNotFoundException("team not found"));
-        team.setCoach(coachModel);
-        teamService.save(team);
+        CoachModel coachModel = coachService.makePersonCoach(coach.getPersonId());
+        //TeamModel team = teamService.findById(body.get("teamId")).orElseThrow(() -> new ElementNotFoundException("team not found"));
+        //team.setCoach(coachModel);
+        //teamService.save(team);
         return coachModel;
     }
 
-    @PutMapping("/update/coach")
-    public TeamModel updateCoach(@RequestBody Map<String, String> response) throws URISyntaxException {
-        CoachModel coach = coachService.findById( Integer.valueOf(response.get("coachId"))).orElseThrow(() -> new ElementNotFoundException("did not find coach"));
-        TeamModel team = teamService.findById(Integer.valueOf(response.get("newTeamId"))).orElseThrow(() -> new ElementNotFoundException("did not find"));
+    @PutMapping("/update/coach/{id}")
+    public CoachModel updateCoach(@PathVariable Integer id, @RequestBody CoachDTO coach) throws URISyntaxException {
+        //CoachModel c = coachService.findById(id).orElseThrow(() -> new ElementNotFoundException("did not find coach"));
+
+        /*TeamModel team = teamService.findById(Integer.valueOf(response.get("newTeamId"))).orElseThrow(() -> new ElementNotFoundException("did not find"));
         team.setCoach(null);
         teamService.save(team);
         team = teamService.findById( Integer.valueOf(response.get("newTeamId")) ).orElseThrow(() -> new ElementNotFoundException("did not find the team that the new coach is supposed to play on"));
         team.setCoach(coach);
-        teamService.save(team);
+        teamService.save(team);*/
+        CoachModel updatedCoach = coachService.update(id, coach);
 
-        return team; //team;
+        return updatedCoach; //team;
 
     }
 
