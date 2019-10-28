@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.Element;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +27,14 @@ public class TeamService {
     @Autowired OwnerService ownerService;
 
     @Autowired LocationService locationService;
+
+    @Autowired PlayerService playerService;
+
+    @Autowired MatchService matchService;
+
+    @Autowired MatchGoalService matchGoalService;
+
+    @Autowired SeasonService seasonService;
 
 
     public Optional<TeamModel> findByAssociation(AssociationModel associationModel) {
@@ -114,6 +125,48 @@ public class TeamService {
         return teamRepository.save(teamModel);
     }
 
+    public HashMap<String, Object> getTeamStats(int teamId) {
+        Long numberOfPlayers = 0L;
+        int goalThisSeason = 0;
+        Long totalGoals = 0L;
+        PlayerModel playerWithMostGoals = null;
+        String current_season = "";
+        HashMap<String, Object> map = new HashMap<>();
+        numberOfPlayers = playerService.findAll().stream().filter(player -> player.getTeam().getTeamId().equals(teamId)).collect(Collectors.counting());
+        totalGoals = matchGoalService.findAll().stream().filter(goal -> goal.getPlayer().getTeam().getTeamId().equals(teamId)).collect(Collectors.counting());
+
+
+        map.put("numberOfPlayers", numberOfPlayers);
+        map.put("totalGoals", totalGoals);
+        map.put("playerWithMostGoals", getPlayerWithMostGoalsGivenTeam(teamId));
+        map.put("activeSeason", getCurrentSeason(teamId));
+        return map;
+    }
+
+    private HashMap<String,Object> getPlayerWithMostGoalsGivenTeam(int teamId) {
+        HashMap<String, Object > map = new HashMap<>();
+        List<PlayerModel> playerList = playerService.findAll().stream().filter(player -> player.getTeam().getTeamId().equals(teamId)).collect(Collectors.toList());
+        int goals = 0;
+        PlayerModel playerRef = null;
+        for(PlayerModel player : playerList) {
+            int temp = matchGoalService.findByPlayer(player).size();
+            if(temp > goals) {
+                goals = temp;
+                playerRef = player;
+            }
+        }
+        map.put("player", playerRef);
+        map.put("goals", goals);
+        return map;
+    }
+
+    private SeasonModel getCurrentSeason(int teamId) {
+        // All of these matches are within the same season which is currently active
+        List<MatchModel> matches = matchService.findByTeam(teamId).stream().filter(match ->
+                !(LocalDate.now().isBefore(match.getSeason().getStartDate()) ||
+                  LocalDate.now().isAfter(match.getSeason().getEndDate()))).collect(Collectors.toList());
+        return matches.get(0).getSeason();
+    }
     // including inactive
     public List<TeamModel> findAllForced() {
         return teamRepository.findAll();
