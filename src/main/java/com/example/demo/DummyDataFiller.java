@@ -21,6 +21,13 @@ import java.time.Month;
 @Component
 @Profile("!test")
 public class DummyDataFiller implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("hei");
+    }
+    /*
+
+
 
     @Autowired
     DummyDataService dummyDataService;
@@ -53,4 +60,5 @@ public class DummyDataFiller implements CommandLineRunner {
         dummyDataService.createMatch(season_2, team_1, team_2, "matchGoals_1");
 
     }
+ */
 }
