@@ -25,7 +25,7 @@ class TeamServiceTest {
     /**
      * https://stackoverflow.com/questions/34793104/what-is-the-best-way-to-test-controllers-and-services-with-junit
      */
-    @Test
+    //@Test
     void testThatTeamIsSaved() {
 
         TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
@@ -35,7 +35,7 @@ class TeamServiceTest {
         assertEquals("Real Madrid", saved.getAssociation().getName());
     }
 
-    @Test
+    //@Test
     void testThatSaveFailsForFaultyInput() {
 
         assertThrows(ElementNotFoundException.class, () ->
@@ -43,7 +43,7 @@ class TeamServiceTest {
         );
     }
 
-    @Test
+    //@Test
     void testThatTeamIsUpdated() {
 
         TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
@@ -54,7 +54,7 @@ class TeamServiceTest {
         assertEquals("Real Madrid", updated.getAssociation().getName());
     }
 
-    @Test
+    //@Test
     void testThatUpdateFailsForNonExistingTeam() {
 
         assertThrows(ElementNotFoundException.class, () ->
@@ -63,7 +63,7 @@ class TeamServiceTest {
     }
 
 
-    @Test
+    //@Test
     void testThatTeamIsDeleted() {
 
         TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
@@ -73,7 +73,7 @@ class TeamServiceTest {
         assertFalse(deleted.isActive());
     }
 
-    @Test
+    //@Test
     void testThatDeleteFailsForNonExistingTeam() {
 
         assertThrows(ElementNotFoundException.class, () ->
@@ -81,7 +81,7 @@ class TeamServiceTest {
         );
     }
 
-    @Test
+    //@Test
     void testThatTeamIsFound() {
 
         TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
@@ -92,14 +92,14 @@ class TeamServiceTest {
     }
 
 
-    @Test
+    //@Test
     void testThatFindFailsForNonExistingTeam() {
 
         Optional<TeamModel> found = teamService.findById(-1);
         assertFalse(found.isPresent());
     }
 
-    @Test
+    //@Test
     void testThatTeamIsFoundAfterDeletion() {
         TeamModel saved = teamService.create(new TeamDTO(2, 1, 1, 1));
         TeamModel deleted = teamService.deleteById(saved.getTeamId());
@@ -109,14 +109,14 @@ class TeamServiceTest {
         assertEquals(deleted.getAssociation().getName(), found.get().getAssociation().getName());
     }
 
-    @Test
+    //@Test
     void testThatAllTeamsAreFound() {
 
         List<TeamModel> teams = teamService.findAllActive();
         assertFalse(teams.isEmpty());
     }
 
-    @Test
+    //@Test
     void testThatFindAllFailsForNonExistingTeams() {
 
         teamService.findAllActive().forEach(team -> teamService.deleteById(team.getTeamId()));
@@ -125,7 +125,7 @@ class TeamServiceTest {
         assertTrue(teams.isEmpty());
     }
 
-    @Test
+    //@Test
     void testThatAllTeamsAreFoundAfterDeletion() {
 
         teamService.findAllActive().forEach(team -> teamService.deleteById(team.getTeamId()));
