@@ -26,17 +26,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserModel signup(String username, String password) {
+
+    public UserModel signup(String username, String password, UserRole role) {
         Optional<UserModel> u = userRepository.findByUsername(username);
         if (u.isPresent()) { //finn bedre løsning her
             return u.get();
         }
 
         final String PASSWORD = passwordEncoder.encode(password);
-        UserModel user = new UserModel(username, PASSWORD, UserRole.STANDARD);
+        UserModel user = new UserModel(username, PASSWORD, role);
         UserModel dbUser = userRepository.save(user);
         System.out.println(userRepository.findByUsername(username).get().getPassword());
         return dbUser;
+    }
+
+    public UserModel signup(String username, String password) {
+        return signup(username, password, UserRole.STANDARD);
     }
 
     public UserModel findById(int id) {
