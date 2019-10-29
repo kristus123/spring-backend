@@ -42,7 +42,7 @@ public class DummyDataFiller implements CommandLineRunner {
         //userRepository.save(new UserModel("krispetter@gmail.com", "" ,"ADMINISTRATOR"))
         userService.signup("krispetter@gmail.com", "krispetter@gmail.com", UserRole.ADMINISTRATOR);
 
-        // ------------------ CREATING TEAMS ------------------ //
+        // -------/----------- CREATING TEAMS ------------------ //
         TeamModel team_1 = dummyDataService.createTeam("Barcelona", "Camp Nou", "persons_barcelona");
         TeamModel team_2 =  dummyDataService.createTeam("Real Madrid", "Estadio Santiago Bernabéu", "persons_madrid");
 
