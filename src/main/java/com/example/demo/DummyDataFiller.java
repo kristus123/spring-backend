@@ -3,9 +3,11 @@ package com.example.demo;
 import com.example.demo.dtos.*;
 import com.example.demo.enums.ContactType;
 import com.example.demo.enums.GoalType;
+import com.example.demo.enums.UserRole;
 import com.example.demo.models.*;
 import com.example.demo.repositories.PlayerRepository;
 import com.example.demo.repositories.TeamRepository;
+import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,9 +33,15 @@ public class DummyDataFiller implements CommandLineRunner {
     @Autowired
     PlayerRepository playerRepository;
 
+    @Autowired
+    UserService userService;
+
 
     @Override
     public void run(String...args) throws Exception {
+        //userRepository.save(new UserModel("krispetter@gmail.com", "" ,"ADMINISTRATOR"))
+        userService.signup("krispetter@gmail.com", "krispetter@gmail.com", UserRole.ADMINISTRATOR);
+
         // ------------------ CREATING TEAMS ------------------ //
         TeamModel team_1 = dummyDataService.createTeam("Barcelona", "Camp Nou", "persons_barcelona");
         TeamModel team_2 =  dummyDataService.createTeam("Real Madrid", "Estadio Santiago Bernabéu", "persons_madrid");
