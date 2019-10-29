@@ -175,6 +175,7 @@ public class MatchService {
         map.put("result", result);
         map.put("homeTeam", match.getHomeTeam().getAssociation().getName());
         map.put("awayTeam", match.getAwayTeam().getAssociation().getName());
+        map.put("matchId", match.getMatchId());
         return map;
     }
 
