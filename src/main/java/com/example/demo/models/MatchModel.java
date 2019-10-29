@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="MATCH")
+@Table(name="match")
 @Getter
 @Setter
 @NoArgsConstructor
