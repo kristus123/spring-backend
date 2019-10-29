@@ -23,9 +23,10 @@ import java.time.Month;
 public class DummyDataFiller implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("hei");
+
     }
-    /*
+
+/*
 
 
 
@@ -60,5 +61,6 @@ public class DummyDataFiller implements CommandLineRunner {
         dummyDataService.createMatch(season_2, team_1, team_2, "matchGoals_1");
 
     }
+
  */
 }
