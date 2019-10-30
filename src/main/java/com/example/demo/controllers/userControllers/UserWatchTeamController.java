@@ -40,14 +40,22 @@ public class UserWatchTeamController {
     @GetMapping("/get/team/{id}")
     public ResponseEntity<Resource<TeamModel>> getTeam(@PathVariable Integer id, Principal principal) {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
+
 
         TeamModel team = teamService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find team with ID=" + id));
 
         if (!user.getTeams().contains(team))
-            throw new ElementNotFoundException("Team with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
+            //throw new ElementNotFoundException("Team with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
+            throw new ElementNotFoundException("Team with ID=" + id + " is not present in watchlist");
+
 
         assembler.setPrincipal(principal);
         Resource<TeamModel> resource = assembler.toResource(team);
@@ -60,8 +68,12 @@ public class UserWatchTeamController {
     @GetMapping("/get/team")
     public ResponseEntity<Resources<Resource<TeamModel>>> getTeams(Principal principal) {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         List<Resource<TeamModel>> teams = user.getTeams()
                 .stream()
@@ -69,7 +81,8 @@ public class UserWatchTeamController {
                 .collect(Collectors.toList());
 
         if (teams.isEmpty())
-            throw new ElementNotFoundException("No teams in watchlist for user with username=" + principal.getName());
+            //throw new ElementNotFoundException("No teams in watchlist for user with username=" + principal.getName());
+            throw new ElementNotFoundException("No teams in watchlist");
 
         return ResponseEntity
                 .ok(new Resources<>(teams,
@@ -79,15 +92,22 @@ public class UserWatchTeamController {
     @PostMapping("/post/team")
     public ResponseEntity<Resource<TeamModel>> addTeam(@RequestBody UserTeamDTO dto, Principal principal) throws URISyntaxException {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
+        System.out.println("Trying to add teamId=" + dto.getTeamId());
         TeamModel team = teamService.findById(dto.getTeamId())
                 .orElseThrow(() -> new ElementNotFoundException("Team with ID=" + dto.getTeamId() + " does not exist"));
 
+        System.out.println("TEST: før adding");
         // Add player to watchlist
         if(!user.addTeam(team))
             return null;
+        System.out.println("TEST: etter adding");
 
         userService.save(user);
         teamService.save(team);
@@ -111,9 +131,13 @@ public class UserWatchTeamController {
         TeamModel team = teamService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Team with ID=" + id + " does not exist"));
 
+        /*
         // User exists?
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         if (!user.deleteTeam(team))
             return null;

@@ -41,14 +41,18 @@ public class UserWatchPlayerController {
     @GetMapping("/get/player/{id}")
     public ResponseEntity<Resource<PlayerModel>> getPlayer(@PathVariable Integer id, Principal principal) {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         PlayerModel player = playerService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not find player with ID=" + id));
 
         if (!user.getPlayers().contains(player))
-            throw new ElementNotFoundException("Player with ID=" + id + " is not present in watchlist for user with username=" + principal.getName());
+            throw new ElementNotFoundException("Player with ID=" + id + " is not present in watchlist");
 
         assembler.setPrincipal(principal);
         Resource<PlayerModel> resource = assembler.toResource(player);
@@ -60,8 +64,12 @@ public class UserWatchPlayerController {
     @GetMapping("/get/player")
     public ResponseEntity<Resources<Resource<PlayerModel>>> getPlayers(Principal principal) {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         List<Resource<PlayerModel>> players = user.getPlayers()
                 .stream()
@@ -69,7 +77,7 @@ public class UserWatchPlayerController {
                 .collect(Collectors.toList());
 
         if (players.isEmpty())
-            throw new ElementNotFoundException("No players in watchlist for user with username=" + principal.getName());
+            throw new ElementNotFoundException("No players in watchlist");
 
         return ResponseEntity
                 .ok(new Resources<>(players,
@@ -80,8 +88,12 @@ public class UserWatchPlayerController {
     @PostMapping("/post/player")
     public ResponseEntity<Resource<PlayerModel>> addPlayer(@RequestBody UserPlayerDTO dto, Principal principal) throws URISyntaxException {
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         PlayerModel player = playerService.findById(dto.getPlayerId())
                 .orElseThrow(() -> new ElementNotFoundException("Player with ID=" + dto.getPlayerId() + " does not exist"));
@@ -111,8 +123,12 @@ public class UserWatchPlayerController {
         PlayerModel player = playerService.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Player with ID=" + id + " does not exist"));
 
+        /*
         UserModel user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new ElementNotFoundException("Could not find user with username=" + principal.getName()));
+         */
+        UserModel user = userService.findById(1);
+        if (user == null) throw new ElementNotFoundException("Could not find user with ID=1");
 
         if (!user.deletePlayer(player))
             return null;
